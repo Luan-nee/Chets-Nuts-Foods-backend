@@ -20,21 +20,32 @@ VALUES (
     '170101', 
     'Av. Principal 123, Urb. Los Álamos', 
     'juan.perez@ejemplo.com', 
-    'hash_contrasenia_segura_123'
+    'juan123'
 );
 
-INSERT INTO `t_motivo_guia` (motivo) VALUES
-('Venta'),
-('Compra'),
-('Venta con entrega a terceros'),
-('Traslado entre establecimientos de la misma empresa'),
-('Consignación'),
-('Devolución'),
-('Recojo de bienes transformados'),
-('Venta sujeta a confirmación del comprador'),
-('Traslado de bienes para transformación'),
-('Traslado emisor itinerante de comprobantes de pago'),
-('Otros (no especificados en los anteriores)');
+INSERT INTO `t_motivo_guia` (motivo, esta_disponible) VALUES
+('Venta', TRUE),
+('Compra', FALSE),
+('Venta con entrega a terceros', FALSE),
+('Traslado entre establecimientos de la misma empresa', FALSE),
+('Consignación', FALSE),
+('Devolución', FALSE),
+('Recojo de bienes transformados', FALSE),
+('Venta sujeta a confirmación del comprador', FALSE),
+('Traslado de bienes para transformación', FALSE),
+('Traslado emisor itinerante de comprobantes de pago', FALSE),
+('Otros (no especificados en los anteriores)', FALSE);
+
+INSERT INTO `t_tipos_documentos_tributarios` (tipo, esta_disponible) VALUES
+('Factura', TRUE),
+('Boleta de Venta', TRUE),
+('Guía de Remisión Remitente', FALSE),
+('Ticket o cinta emitido por máquina registradora', FALSE),
+('Constancia de Depósito - IVAP (Ley 28211)', FALSE),
+('Constancia de Depósito - Detracción', FALSE),
+('Código de autorización emitida por el SCOP', FALSE),
+('Otros, de acuerdo con selección', FALSE);
+
 
 INSERT INTO `t_tipo_documento_identificacion` (tipo_documento) VALUES
 ('REGISTRO ÚNICO DE CONTRIBUYENTES'),
