@@ -130,6 +130,30 @@ A continuación, se listan las entidades emisoras de autorización que se han in
 | 12 | MTC - Ministerio de Transportes y Com... |
 ";
 
+-- ATOMIZANDO LA TABLA PRINCIPAL DE GUÍA DE REMISIÓN
+CREATE TABLE `t_punto_direccion` (
+		id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    tipo_direccion ENUM('remitente','tercero','otra_direccion') NOT NULL COMMENT "Indica si el punto pertenece al remitente, a un tercero o a otra dirección",
+		
+    -- DIRECCIÓN DEL REMITENTE
+    id_remitente INT NULL COMMENT "Clave foranea que hace referencia la información del administrador",
+    
+    -- DIRECCIÓN DE UN TERCERO CON RUC
+    ruc_tercero VARCHAR(11) NULL COMMENT "RUC del otra persona tercera",
+    tipo_domicilio VARCHAR(100) NULL DEFAULT 'Domicilio fiscal' COMMENT "Tipo de domicilio del tercero.",
+    ubigeo VARCHAR(6) NULL COMMENT "UBIGEO del domicilio del tercero, ejemplo: 170101.",
+    
+    -- OTRA DIRECCIÓN
+    departamento VARCHAR(150) NULL COMMENT "Departamento de la dirección no definida.",
+    provincia VARCHAR(150) NULL COMMENT "Provincia de la dirección no definida.",
+    distrito VARCHAR(150) NULL COMMENT "Distrito de la dirección no definida.",
+    
+    direccion_detallada VARCHAR(150) NULL COMMENT "Descripción detallada de la Dirección. Es obligatorio rellenar este campo si el tipo de dirección es 'tercero' o 'otra_direccion'.",
+    FOREIGN KEY (id_remitente) REFERENCES `usuarios_admin`(id) 
+			ON UPDATE CASCADE
+);
+
+
 CREATE TABLE `t_guia_remision` (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT "Identificador único de la Guía de Remisión.",
     esComercioExterior BOOLEAN DEFAULT FALSE COMMENT "Indica si la guía corresponde a una operación de comercio exterior.",
@@ -139,46 +163,24 @@ CREATE TABLE `t_guia_remision` (
     id_remitente INT NOT NULL COMMENT "Clave foránea al usuario administrador (usuarios_admin) que remite.",
     id_destinatario INT NOT NULL COMMENT "Clave foránea al destinatario (t_destinatario) de los bienes.",
     
-    -- INFORMACIÓN DE PESO
+    
+    -- PESO TOTAL DE LA CARGA
     unidad_medida_peso_bruto ENUM('kilogramo', 'toneladas') NOT NULL COMMENT "Unidad de medida del peso bruto total (KG o TON).",
     medida_peso_bruto DECIMAL(6,2) NOT NULL COMMENT "Peso bruto total de los bienes a trasladar.",
     
-    -- TIPO DE PUNTOS (LÓGICA CONDICIONAL)
-    tipo_punto_partida ENUM('remitente','tercero','otra_direccion') NOT NULL COMMENT "Define el tipo de dirección de partida (si es la del remitente, un tercero o una dirección no definida).",
-    tipo_punto_llegada ENUM('tercero','otra_direccion') NOT NULL COMMENT "Define el tipo de dirección de llegada (tercero o una dirección no definida).",
-    
-    -- PUNTO DE PARTIDA DE UN TERCERO CON RUC (USADO si tipo_punto_partida = 'tercero')
-    tipo_domicilio_partida VARCHAR(100) NULL DEFAULT 'Domicilio fiscal' COMMENT "Tipo de domicilio si la partida es un tercero.",
-    ubigeo_partida VARCHAR(6) NULL DEFAULT '170101' COMMENT "UBIGEO del punto de partida si es un tercero.",
-    direccion_detallada_partida VARCHAR(150) NULL COMMENT "Dirección detallada del punto de partida si es un tercero.",
-    
-    -- PUNTO DE PARTIDA SIN RUC (USADO si tipo_punto_partida = 'otra_direccion')
-    departamento_partida_nuevo VARCHAR(150) NULL COMMENT "Departamento si el punto de partida es una dirección no definida.",
-    provincia_partida_nuevo VARCHAR(150) NULL COMMENT "Provincia si el punto de partida es una dirección no definida.",
-    distrito_partida_nuevo VARCHAR(150) NULL COMMENT "Distrito si el punto de partida es una dirección no definida.",
-    direccion_detallada_partida_nuevo VARCHAR(150) NULL COMMENT "Dirección detallada si el punto de partida es una dirección no definida.",
-    
-    -- PUNTO DE LLEGADA DE UN TERCERO CON RUC (USADO si tipo_punto_llegada = 'tercero')
-    tipo_domicilio_llegada VARCHAR(100) NULL DEFAULT 'Domicilio fiscal' COMMENT "Tipo de domicilio si la llegada es un tercero.",
-    ubigeo_llegada VARCHAR(6) NULL DEFAULT '170101' COMMENT "UBIGEO del punto de llegada si es un tercero.",
-    direccion_detallada_llegada VARCHAR(150) NULL COMMENT "Dirección detallada del punto de llegada si es un tercero.",
-    
-    -- PUNTO DE LLEGADA SIN RUC (USADO si tipo_punto_llegada = 'otra_direccion')
-    departamento_llegada_nuevo VARCHAR(150) NULL COMMENT "Departamento si el punto de llegada es una dirección no definida.",
-    provincia_llegada_nuevo VARCHAR(150) NULL COMMENT "Provincia si el punto de llegada es una dirección no definida.",
-    distrito_llegada_nuevo VARCHAR(150) NULL COMMENT "Distrito si el punto de llegada es una dirección no definida.",
-    direccion_detallada_llegada_nuevo VARCHAR(150) NULL COMMENT "Dirección detallada si el punto de llegada es una dirección no definida.",
+    id_punto_partida INT NOT NULL COMMENT "Clave foranea que se relaciona con la tabla `t_punto_direccion` que contienen la información de la dirección del punto de partida",
+    id_punto_llegada INT NOT NULL COMMENT "Clave foranea que se relaciona con la tabla `t_punto_direccion` que contienen la información de la dirección del punto de llegada",
     
     -- MODALIDAD DE TRASLADO
     tipo_transporte ENUM('privado', 'publico') NOT NULL DEFAULT 'privado' COMMENT "Define si el transporte es privado o público.",
     esTransbordoProgramado BOOLEAN NOT NULL DEFAULT FALSE COMMENT "Indica si se requiere transbordo programado.",
     esVehiculoCategoriaM1oL BOOLEAN NOT NULL DEFAULT FALSE COMMENT "Indica si se usa un vehículo de categoría M1 o L.",
     
-    -- INFORMACIÓN DE VEHÍCULO (si aplica)
+    -- INFORMACIÓN OBLIGATORIA SI EL CAMPO 'esVehiculoCategoriaM1oL' ES TRUE
     placa_vehiculo_M1_L VARCHAR(8) NULL COMMENT "Placa del vehículo si es de categoría M1 o L.",
     fecha_inicio_traslado DATE NOT NULL COMMENT "Fecha programada para el inicio del traslado.",
     
-    -- AUTORIZACIÓN ESPECIAL
+    -- AUTORIZACIÓN OBLIGATORIO SI LA CARGA ESTÁ SUJETA A REGLAS DE TRANSPORTE
     necesita_autorizacion BOOLEAN NOT NULL DEFAULT FALSE COMMENT "Indica si se requiere autorización especial para el traslado.",
     id_entidad_autorizacion_especial INT NULL COMMENT "Clave foránea a la entidad emisora de la autorización especial.",
     numero_autorizacion VARCHAR(100) NULL COMMENT "Número de la autorización especial de traslado de carga.",
