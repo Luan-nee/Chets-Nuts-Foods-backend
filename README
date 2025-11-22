@@ -1,0 +1,72 @@
+## 💻 CREACIÓN DE LA BASE DE DATOS EN MYSQL
+
+Los siguientes pasos te permitirán crear y levantar localmente la base de datos **MySQL** que necesita el backend, por lo tanto necesitaras el uso de tu **usuario** y **contraseña**.
+
+---
+
+### 1. ⚙️ Configuración Inicial del Entorno
+
+* Asegúrate de tener **Node.js** y **npm** instalados.
+* *Verificación:* Ejecuta `$ node -v` y `$ npm -v` para confirmar las versiones. Próximamente documentaremos qué versión de `node` y `npm` es necesario tener instalado.
+
+---
+
+### 2. Configuración de las variables de entorno
+
+* Las variables de entorno se encuentran dentro del archivo `.env` y a continuación te explicaremos para qué se usan y qué valores debes modificar en alguna de ellas.
+
+| Variable | Uso |
+| :--- | :--- |
+| **NAME_DATABASE** | Nombre de la base de datos, que en este caso siempre será `guia_remision` |
+| **USUARIO_DATABASE** | Nombre del usuario que usas para acceder a la base de datos. El más común es `root` pero eso depende de cómo se haya configurado la base de datos. |
+| **PASSWORD_DATABASE** | Contraseña que usas para acceder a la base de datos. Por defecto MySQL tiene un usuario `root` y su contraseña es `(vacío)`, es decir, no tiene contraseña. |
+
+---
+
+### 3. ✨ Creación de la base de datos MySQL
+
+* Para hacer uso de la base de datos primero tenemos que crearla, para ello debes seguir los siguientes pasos.
+
+    1.  **CREACIÓN DE LA BASE DE DATOS**
+
+        ```bash
+        npm run create-data-base 
+        ```
+
+    2.  **CREACIÓN DE LAS TABLAS**
+
+        ```bash
+        npm run create-tables 
+        ```
+
+    3.  **INSERTAR DATOS ESCENCIALES**
+
+        ```bash
+        npm run insert-data-main 
+        ```
+
+* **OPCIONAL:** Existe la opción de poblar la base de datos con datos de prueba, y para ello necesitas ejecutar el siguiente comando. Ojo, este comando debe ser ejecutado después de haber creado la base de datos **(paso 1)**, las tablas **(paso 2)** y la inserción de datos esenciales **(paso 3)**.
+
+    ```bash
+    npm run insert-data-example
+    ```
+
+---
+
+### 4. 🖼️ Ejecución del backend
+
+Después de crear la base de datos recién podemos levantar el backend y para ello necesitamos seguir los siguientes pasos.
+
+* **Iniciar el servidor backend:**
+
+    ```bash
+    npm run dev 
+    ```
+
+**Nota:** El terminal del backend mostrará todas las peticiones http, también se mostrará mensaje llamativos y descripciones si sucede algún error en dichas peticiones.
+
+---
+### 5. Códigos de respuésta (próximanente)
+---
+### 6. Bugs (próximanente)
+---
