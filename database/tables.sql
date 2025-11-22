@@ -130,7 +130,6 @@ A continuación, se listan las entidades emisoras de autorización que se han in
 | 12 | MTC - Ministerio de Transportes y Com... |
 ";
 
--- ATOMIZANDO LA TABLA PRINCIPAL DE GUÍA DE REMISIÓN
 CREATE TABLE `t_punto_direccion` (
 		id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     tipo_direccion ENUM('remitente','tercero','otra_direccion') NOT NULL COMMENT "Indica si el punto pertenece al remitente, a un tercero o a otra dirección",
@@ -151,7 +150,14 @@ CREATE TABLE `t_punto_direccion` (
     direccion_detallada VARCHAR(150) NULL COMMENT "Descripción detallada de la Dirección. Es obligatorio rellenar este campo si el tipo de dirección es 'tercero' o 'otra_direccion'.",
     FOREIGN KEY (id_remitente) REFERENCES `usuarios_admin`(id) 
 			ON UPDATE CASCADE
-);
+)COMMENT = "
+**Propósito:** Almacena los distintos puntos de salida y llegada de la carga (direcciones de origen y destino).
+
+### Restricciones Adicionales (Foreign Keys)
+
+* `FOREIGN KEY (id_remitente)` se refiere a la columna **id** de la tabla `usuarios_admin`.
+    * **Acción en UPDATE:** `CASCADE`
+";
 
 
 CREATE TABLE `t_guia_remision` (
@@ -168,17 +174,18 @@ CREATE TABLE `t_guia_remision` (
     unidad_medida_peso_bruto ENUM('kilogramo', 'toneladas') NOT NULL COMMENT "Unidad de medida del peso bruto total (KG o TON).",
     medida_peso_bruto DECIMAL(6,2) NOT NULL COMMENT "Peso bruto total de los bienes a trasladar.",
     
+    -- DEFINICIÓN DEL PUNTO DE PARTIDA Y LLEGADA DE LA CARGA
     id_punto_partida INT NOT NULL COMMENT "Clave foranea que se relaciona con la tabla `t_punto_direccion` que contienen la información de la dirección del punto de partida",
     id_punto_llegada INT NOT NULL COMMENT "Clave foranea que se relaciona con la tabla `t_punto_direccion` que contienen la información de la dirección del punto de llegada",
     
     -- MODALIDAD DE TRASLADO
+    fecha_inicio_traslado DATE NOT NULL COMMENT "Fecha programada para el inicio del traslado por el transporte.",
     tipo_transporte ENUM('privado', 'publico') NOT NULL DEFAULT 'privado' COMMENT "Define si el transporte es privado o público.",
     esTransbordoProgramado BOOLEAN NOT NULL DEFAULT FALSE COMMENT "Indica si se requiere transbordo programado.",
     esVehiculoCategoriaM1oL BOOLEAN NOT NULL DEFAULT FALSE COMMENT "Indica si se usa un vehículo de categoría M1 o L.",
     
     -- INFORMACIÓN OBLIGATORIA SI EL CAMPO 'esVehiculoCategoriaM1oL' ES TRUE
     placa_vehiculo_M1_L VARCHAR(8) NULL COMMENT "Placa del vehículo si es de categoría M1 o L.",
-    fecha_inicio_traslado DATE NOT NULL COMMENT "Fecha programada para el inicio del traslado.",
     
     -- AUTORIZACIÓN OBLIGATORIO SI LA CARGA ESTÁ SUJETA A REGLAS DE TRANSPORTE
     necesita_autorizacion BOOLEAN NOT NULL DEFAULT FALSE COMMENT "Indica si se requiere autorización especial para el traslado.",
@@ -186,8 +193,8 @@ CREATE TABLE `t_guia_remision` (
     numero_autorizacion VARCHAR(100) NULL COMMENT "Número de la autorización especial de traslado de carga.",
     
     -- OTROS DATOS LOGÍSTICOS
-    retorno_envases_embalajes_vacios BOOLEAN NULL DEFAULT FALSE COMMENT "Indica si la guía incluye el retorno de envases o embalajes vacíos.",
-    retorno_vehiculo_vacio BOOLEAN NULL DEFAULT FALSE COMMENT "Indica si el vehículo regresa vacío.",
+    retorno_vehiculo_con_envases_embalajes_vacios BOOLEAN NULL DEFAULT FALSE COMMENT "Indica si el vehículo regreserá con envases o embalajes vacíos.",
+    retorno_vehiculo_vacio BOOLEAN NULL DEFAULT FALSE COMMENT "Indica si el vehículo regresará vacío.",
     
     -- DEFINICIÓN DE CLAVES FORÁNEAS
     FOREIGN KEY (id_entidad_autorizacion_especial) REFERENCES `t_entidades_emisoras_autorizacion`(id)
@@ -219,16 +226,11 @@ CREATE TABLE `detalle_datos_vehículos_conductores` (
     id_guia_remision INT NOT NULL COMMENT "Clave foránea a la guía de remisión a la que pertenece este detalle.",
     modalidad_traslado_publico ENUM('privado','publico') NOT NULL COMMENT "Indica la modalidad de transporte para esta guía.",
     
-    -- AUTORIZACIÓN ESPECIAL (Nota: Estos campos están duplicados de t_guia_remision)
-    necesita_autorizacion BOOLEAN NOT NULL DEFAULT FALSE COMMENT "Indica si el traslado requiere autorización especial.",
-    id_entidad_autorizacion_especial INT NULL COMMENT "Clave foránea a la entidad emisora de la autorización especial.",
-    numero_autorizacion VARCHAR(100) NULL COMMENT "Número de la autorización especial de traslado de carga.",
-    
     -- DATOS PARA TRASLADO PRIVADO (Campos con valores si modalidad_traslado_publico = 'privado')
     numero_placa VARCHAR(8) NOT NULL COMMENT "Número de placa del vehículo usado en traslado privado.",
     numero_licencia_conducir VARCHAR(10) NOT NULL COMMENT "Número de licencia de conducir del conductor privado.",
     id_tipo_documento_identidad INT NOT NULL COMMENT "Tipo de documento de identificación del conductor privado (FK a t_tipo_documento_identificacion).",
-    numero_documento VARCHAR(100) NOT NULL COMMENT "Número de documento de identidad del conductor privado.",
+    numero_documento_identidad VARCHAR(100) NOT NULL COMMENT "Número de documento de identidad del conductor privado.",
     apellidos_nombres_razon_social VARCHAR(100) NOT NULL COMMENT "Apellidos y Nombres del conductor o Razón Social de la empresa privada.",
     
     -- DATOS PARA TRASLADO PÚBLICO (Campos con valores si modalidad_traslado_publico = 'publico')
@@ -237,8 +239,6 @@ CREATE TABLE `detalle_datos_vehículos_conductores` (
     numero_registro_MTC_publico VARCHAR(100) NULL COMMENT "Número de registro MTC del transportista público.",
     
     -- DEFINICIÓN DE CLAVES FORÁNEAS
-    FOREIGN KEY (id_entidad_autorizacion_especial) REFERENCES `t_entidades_emisoras_autorizacion`(id)
-        ON UPDATE CASCADE,
     FOREIGN KEY (id_tipo_documento_identidad) REFERENCES `t_tipo_documento_identificacion`(id)
         ON UPDATE CASCADE,
     FOREIGN KEY (id_guia_remision) REFERENCES `t_guia_remision`(id)
@@ -333,12 +333,6 @@ COMMENT = "
 
 * `FOREIGN KEY (id_usuario_admin)` se refiere a la columna **id** de la tabla `usuarios_admin`.
     * **Acción en UPDATE:** `CASCADE`
-
----
-
-### Valores Insertados
-
-*No se proporcionaron sentencias INSERT para esta tabla.*
 ";
 
 CREATE TABLE `t_detalle_documento_tributario` (
