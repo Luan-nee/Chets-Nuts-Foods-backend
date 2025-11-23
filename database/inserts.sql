@@ -60,7 +60,7 @@ INSERT INTO `t_tipo_documento_identificacion` (tipo_documento) VALUES
 ('PERMISO TEMPORAL DE PERMANENCIA - PTP'),
 ('SALVOCONDUCTO');
 
-INSERT INTO `t_productos` (sku, nombre, stock_actual, stock_minimo, procentaje_ganancia, precio_compra_proveedor, descripcion, id_usuario_admin) VALUES
+INSERT INTO `t_productos` (sku, nombre, stock_actual, stock_minimo, porcentaje_ganancia, precio_compra_proveedor, descripcion, id_usuario_admin) VALUES
 ('ELC0001', 'Smartphone Modelo X', 150, 20, 0.4500, 350.00, 'Teléfono móvil de alta gama con cámara de 108MP.', 1),
 ('INF0015', 'Disco Duro SSD 1TB', 80, 10, 0.2500, 75.50, 'Unidad de estado sólido para almacenamiento rápido.', 1),
 ('ROPA010', 'Camisa Algodón Azul', 200, 50, 0.6000, 15.99, 'Camisa de vestir 100% algodón, talla M.', 1),

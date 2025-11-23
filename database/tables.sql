@@ -318,7 +318,7 @@ CREATE TABLE `t_productos` (
     nombre VARCHAR(80) NOT NULL COMMENT "Nombre comercial del producto.",
     stock_actual INT NOT NULL COMMENT "Cantidad actual disponible del producto en inventario.",
     stock_minimo INT NOT NULL COMMENT "Umbral mínimo de stock que dispara una alerta de reposición.",
-    procentaje_ganancia DECIMAL(5,4) NOT NULL COMMENT "Porcentaje de ganancia deseado sobre el precio de compra (ej. 0.2500 para 25%).",
+    porcentaje_ganancia DECIMAL(5,4) NOT NULL COMMENT "Porcentaje de ganancia deseado sobre el precio de compra (ej. 0.2500 para 25%).",
     precio_compra_proveedor DECIMAL(6,2) NOT NULL COMMENT "Precio al que se compró el producto al proveedor.",
     descripcion VARCHAR(150) COMMENT "Descripción corta del producto.",
     id_usuario_admin INT NOT NULL COMMENT "Clave foránea al usuario administrador que registró o modificó el producto por última vez.",
