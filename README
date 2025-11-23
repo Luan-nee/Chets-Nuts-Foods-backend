@@ -1,3 +1,11 @@
+## DOCUMENTACIÓN DE LA BASE DE DATOS
+
+Para leer la documentación de la base de datos debes ingresar a la siguiente herramienta web e ingresar la contraseña correspondiente.
+
+* Herramienta web: [dbdocs.io](https://dbdocs.io/luandelsol54/Base-de-datos-guia-de-remision?table=usuarios_admin&schema=public&view=table_structure)
+* contraseña: `comiendocomida`
+
+
 ## 💻 CREACIÓN DE LA BASE DE DATOS EN MYSQL
 
 Los siguientes pasos te permitirán crear y levantar localmente la base de datos **MySQL** que necesita el backend, por lo tanto necesitaras el uso de tu **usuario** y **contraseña**.
