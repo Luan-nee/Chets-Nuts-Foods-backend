@@ -1,10 +1,10 @@
-import { ResponseStatus } from "../../consts";
+import { ResponseStatus } from "../../consts.js";
 import {
   ErrorResponseArgs,
   SendResponseArgs,
   SuccesArgs,
   UnautorizedResponseArgs,
-} from "../core";
+} from "../core.js";
 
 export class CustomResponse {
   static send({

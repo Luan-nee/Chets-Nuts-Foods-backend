@@ -1,5 +1,5 @@
-import { ResponseStatus } from "../../consts";
-import { ResponseStatusType } from "../core";
+import { ResponseStatus } from "../../consts.js";
+import { ResponseStatusType } from "../core.js";
 
 interface CustomErrorConstructor {
   statusCode: number;

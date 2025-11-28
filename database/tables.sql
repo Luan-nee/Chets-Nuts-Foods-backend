@@ -390,3 +390,4 @@ COMMENT = "
 * **Clave Única Compuesta:** `UNIQUE KEY uk_relacion_guia_doc` en las columnas (`id_guia_remision`, `id_documento_relacionado`). Esta restricción asegura que una misma guía no pueda ser relacionada dos veces con el mismo documento.
 ";
 
+
