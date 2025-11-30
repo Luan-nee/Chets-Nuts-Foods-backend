@@ -12,8 +12,8 @@ export const envs = {
     .asIntPositive(),
   JWT_SEED: get("JWT_SEED").required().asString(),
   DB_HOST: get("DB_HOST").required().asString(),
-  DB_PORT: get("DB_PORT").required().asString(),
+  DB_PORT: get("DB_PORT").required().asPortNumber(),
   DB_DATABASE: get("DB_DATABASE").required().asString(),
   DB_USER: get("DB_USER").required().asString(),
-  DB_PASS: get("DB_PASS").required().asString(),
+  DB_PASS: get("DB_PASS").default("").asString(),
 };
