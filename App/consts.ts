@@ -3,3 +3,29 @@ export const ResponseStatus = {
   fail: "fail",
   error: "error",
 } as const;
+
+export const orderValues = {
+  asc: "asc",
+  desc: "desc",
+} as const;
+
+export const filterTypeValues = {
+  eq: "eq",
+  gt: "gt",
+  lt: "lt",
+  after: "after",
+  before: "before",
+} as const;
+
+export const maxPageSize = 100;
+
+export const defaultQueries = {
+  search: "",
+  sort_by: "",
+  order: orderValues.desc,
+  page: 1,
+  page_size: 30,
+  filter: "",
+  filter_value: undefined,
+  filter_type: filterTypeValues.eq,
+};

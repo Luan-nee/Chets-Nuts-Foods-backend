@@ -29,4 +29,11 @@ export class CustomError extends Error {
       status: ResponseStatus.fail,
     });
   }
+  static internalServer(message = "Unexpected error") {
+    return new CustomError({
+      statusCode: 500,
+      message,
+      status: ResponseStatus.error,
+    });
+  }
 }
