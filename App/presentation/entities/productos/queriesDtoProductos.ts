@@ -4,22 +4,18 @@ import { queriesProductosValidator } from "../../../domain/validators/productos/
 import { QueriesDtoType } from "../../../types/zod.js";
 
 export class QueriesProductoDto {
-  sortBy: QueriesDtoType["sortBy"];
-  order: QueriesDtoType["order"];
-  filter: QueriesDtoType["filter"];
-  search: QueriesDtoType["search"];
+  order: string | undefined;
+  page: number | undefined;
+  search: string | undefined;
 
-  private constructor({ sortBy, order, filter, search }: QueriesProductoDto) {
-    this.sortBy = sortBy;
-    this.filter = filter;
+  private constructor({
+    order = "",
+    search = "",
+    page = 0,
+  }: QueriesProductoDto) {
     this.order = order;
     this.search = search;
-  }
-
-  private static isValidOrder(
-    order: string
-  ): order is keyof typeof orderValues {
-    return Object.keys(orderValues).includes(order);
+    this.page = page;
   }
 
   static create(input: any): [string?, QueriesProductoDto?] {
@@ -27,16 +23,13 @@ export class QueriesProductoDto {
     if (!resultado.success) {
       return [resultado.error.message, undefined];
     }
-    if (this.isValidOrder(resultado.data.order)) {
-      throw CustomError.internalServer();
-    }
+
     return [
       undefined,
       new QueriesProductoDto({
         order: resultado.data.order,
-        filter: resultado.data.filter,
         search: resultado.data.search,
-        sortBy: resultado.data.sortBy,
+        page: resultado.data.page,
       }),
     ];
   }

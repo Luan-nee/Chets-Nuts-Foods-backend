@@ -6,9 +6,8 @@ import { handleError } from "../../../core/res/hanlde.error.js";
 
 export class ProductosController {
   getAll = (req: Request, res: Response) => {
-    const [error, queriesDto] = QueriesProductoDto.create(req.query);
-    if (error !== undefined || queriesDto == undefined)
-      CustomResponse.badRequest({ res, error });
+    console.log(req.query);
+    const [, queriesDto] = QueriesProductoDto.create(req.query);
 
     const productos = new GetAllProductos();
     productos
@@ -17,6 +16,7 @@ export class ProductosController {
         CustomResponse.success({ res, data });
       })
       .catch((error: unknown) => {
+        console.log(error);
         handleError(error, res);
       });
   };

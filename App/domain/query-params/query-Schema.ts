@@ -7,10 +7,15 @@ export const paramsSchema = {
 };
 
 export const queryBaseSchema = {
-  search: z.coerce.string().trim().default(defaultQueries.search),
-  sortBy: z.coerce.string().trim().default(defaultQueries.sort_by),
-  filter: z.coerce.string().trim().default(defaultQueries.filter),
-  order: z.coerce.string().trim().default(defaultQueries.order),
+  search: z.coerce.string().trim().default(defaultQueries.search).optional(),
+  sortBy: z.coerce.string().trim().default(defaultQueries.sort_by).optional(),
+  filter: z.coerce.string().trim().default(defaultQueries.filter).optional(),
+  order: z.coerce
+    .string()
+    .trim()
+    .max(5)
+    .default(defaultQueries.order)
+    .optional(),
   page: z.coerce
     .number()
     .default(defaultQueries.page)

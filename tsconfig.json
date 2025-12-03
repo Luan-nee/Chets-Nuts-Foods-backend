@@ -4,6 +4,7 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "esModuleInterop": true,
+    "outDir": "./dist",
     "strict": false,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,

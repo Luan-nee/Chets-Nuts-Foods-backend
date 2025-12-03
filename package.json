@@ -18,7 +18,7 @@
         "jsonwebtoken": "^9.0.2",
         "socket.io": "^4.8.1",
         "zod": "^4.1.13",
-        "zormz": "^1.0.1"
+        "zormz": "^1.1.2"
     },
     "devDependencies": {
         "@tsconfig/node20": "^20.1.8",
