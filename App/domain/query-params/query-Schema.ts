@@ -20,7 +20,7 @@ export const queryBaseSchema = {
     .number()
     .default(defaultQueries.page)
     .transform((valor) => {
-      if (valor < 1) return 1;
+      if (valor < 1) return 0;
       if (valor > maxPageSize) return maxPageSize;
       return valor;
     }),

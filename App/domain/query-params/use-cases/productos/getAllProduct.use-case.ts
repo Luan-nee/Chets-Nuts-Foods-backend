@@ -16,7 +16,9 @@ export class GetAllProductos {
   ];
 
   private async getProductos(queriesDto: QueriesProductoDto | undefined) {
-    const order = queriesDto.order === orderValues.asc ? "ASC" : "DESC";
+    const order = queriesDto.order === orderValues.asc ? "DESC" : "ASC";
+    const cantidad = queriesDto.page == 1 ? 0 : queriesDto.page * maxPageSize;
+    console.log(queriesDto);
     const busquedaCondicion =
       queriesDto.search.length > 2
         ? OR(
@@ -25,13 +27,13 @@ export class GetAllProductos {
           )
         : undefined;
     const condition = AND(
-      MAYOR(t_productos.id, `${queriesDto.page * maxPageSize}`),
+      MAYOR(t_productos.id, `${cantidad}`),
       busquedaCondicion
     );
     const productos = await DB.select(this.selectFields)
       .from(t_productos())
       .OrderBy({ id: order })
-      .where(busquedaCondicion)
+      .where(condition)
       .LIMIT(maxPageSize)
       .execute();
     return productos;

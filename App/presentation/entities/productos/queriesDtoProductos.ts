@@ -1,7 +1,4 @@
-import { orderValues } from "../../../consts.js";
-import { CustomError } from "../../../core/res/Custom.error.js";
 import { queriesProductosValidator } from "../../../domain/validators/productos/producto.validator.js";
-import { QueriesDtoType } from "../../../types/zod.js";
 
 export class QueriesProductoDto {
   order: string | undefined;
