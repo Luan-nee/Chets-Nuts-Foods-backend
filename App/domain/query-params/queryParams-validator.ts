@@ -1,5 +1,5 @@
 import z from "zod";
-import { queryBaseSchema } from "./query-Schema.js";
+import { paramsSchema, queryBaseSchema } from "./query-Schema.js";
 
 export const queryEschemas = z.object({
   sortBy: queryBaseSchema.sortBy,
@@ -19,3 +19,10 @@ order=asc: Ordena los resultados en orden ascendente.
 search=engine: Filtra los resultados que contienen la palabra "engine".
 page_size=10: Define el tamaño de la página como 10 elementos.
 */
+
+const ParamsNumericIDSchema = z.object({
+  id: paramsSchema.numericId,
+});
+
+export const ParamNumericIdValidator = (object: unknown) =>
+  ParamsNumericIDSchema.safeParse(object);

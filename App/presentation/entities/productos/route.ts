@@ -8,6 +8,8 @@ export class ProductosRouter {
 
     router.get("/", productos.getAll);
 
+    router.get("/:id", productos.getID);
+
     return router;
   }
 }
