@@ -20,6 +20,6 @@ export const productosSchema = {
   stockActual: z.coerce.number().positive().default(0),
   stockMinimo: z.coerce.number().positive().default(0),
   precioCompraProveedor: z.coerce.number().positive().default(0),
-  porcentajeGananacia: z.coerce.number().positive().default(0),
+  porcentajeGananacia: z.string().max(5).default("0"),
   idUserAdmin: z.number().optional(),
 };

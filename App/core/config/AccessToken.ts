@@ -1,4 +1,4 @@
-import { sign, verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import {
   generateAccessTokenType,
   generateRefreshTokenType,
@@ -7,6 +7,8 @@ import {
 } from "../../types/config.js";
 import { envs } from "./envs.js";
 import { randomBytes } from "crypto";
+
+const { sign, verify } = jwt;
 
 const { ACCESS_TOKEN_DURATION, JWT_SEED, REFRESH_TOKEN_DURATION } = envs;
 
