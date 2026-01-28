@@ -1,31 +1,35 @@
 {
-    "name": "mybackend",
-    "version": "1.0.0",
-    "main": "index.js",
-    "type": "module",
-    "scripts": {
-        "dev": "nodemon",
-        "build": "tsc"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "description": "",
-    "dependencies": {
-        "dotenv": "^17.2.3",
-        "env-var": "^7.5.0",
-        "express": "^5.1.0",
-        "jsonwebtoken": "^9.0.2",
-        "socket.io": "^4.8.1",
-        "zod": "^4.1.13",
-        "zormz": "^1.3.1"
-    },
-    "devDependencies": {
-        "@tsconfig/node20": "^20.1.8",
-        "@types/express": "^5.0.5",
-        "@types/node": "^24.10.1",
-        "nodemon": "^3.1.11",
-        "ts-node": "^10.9.2",
-        "typescript": "^5.9.3"
-    }
+  "name": "mybackend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon",
+    "build": "tsc",
+    "BD:create": "node --loader ts-node/esm App/commands/createTableSql.ts",
+    "BD:delete": "node --loader ts-node/esm App/commands/deleteTables.ts",
+    "BD:defect": "node --loader ts-node/esm App/commands/defectDataSql.ts",
+    "BD:reset": "node --loader ts-node/esm App/commands/resetDataSql.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "env-var": "^7.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.8.1",
+    "zod": "^4.1.13",
+    "zormz": "^1.4.2"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.8",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.1",
+    "nodemon": "^3.1.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
 }

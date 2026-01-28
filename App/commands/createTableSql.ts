@@ -1,38 +1,28 @@
-import { initBD } from "../core/config/conexion.js";
-
 import { generateTable } from "zormz";
-import { generateTables } from "../sql/definitionTables.js";
+import { initBD } from "../../database/conexion.js";
+import { generateTables } from "../BD-Control.js";
 initBD();
 
-
-async function generarTablas(){
+async function generarTablas() {
   const {
-    pedidos,
-    producto,
-    colaborador,
-    detallepedido,
-    permisos,
-    detallespermisos,
+    accesos,
+    establecimientos,
+    guiasremision,
+    paquetes,
+    productos,
+    seguimientopaquetes,
     usuarios,
-    categorias
+    vehiculosempresa,
   } = generateTables();
 
-  await generateTable(pedidos(), pedidos.$columns);
-  
-  await generateTable(producto(), producto.$columns);
-  
-  await generateTable(colaborador(), colaborador.$columns);
-  
-  await generateTable(detallepedido(), detallepedido.$columns);
-  
-  await generateTable(permisos(), permisos.$columns);
-  
-  await generateTable(detallespermisos(), detallespermisos.$columns);
-  
-  await generateTable(usuarios(),usuarios.$columns);
-
-  await generateTable(categorias(),categorias.$columns);
-
+  await generateTable(accesos(), accesos.$columns);
+  await generateTable(establecimientos(), establecimientos.$columns);
+  await generateTable(guiasremision(), guiasremision.$columns);
+  await generateTable(paquetes(), paquetes.$columns);
+  await generateTable(productos(), productos.$columns);
+  await generateTable(seguimientopaquetes(), seguimientopaquetes.$columns);
+  await generateTable(usuarios(), usuarios.$columns);
+  await generateTable(vehiculosempresa(), vehiculosempresa.$columns);
 }
 
 await generarTablas();

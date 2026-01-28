@@ -1,31 +1,29 @@
-import { initBD } from "../core/config/conexion.js";
-
 import { DB } from "zormz";
-import { generateTables } from "../sql/definitionTables.js";
+import { initBD } from "../../database/conexion.js";
+import { generateTables } from "../BD-Control.js";
 initBD();
 
 async function resetTables() {
   const {
-    pedidos,
-    producto,
-    colaborador,
-    detallepedido,
-    permisos,
-    detallespermisos,
+    accesos,
+    establecimientos,
+    guiasremision,
+    paquetes,
+    productos,
+    seguimientopaquetes,
     usuarios,
+    vehiculosempresa,
   } = generateTables();
 
-  
-  await DB.Delete(pedidos()).execute();
-  await DB.Delete(producto()).execute();
-  await DB.Delete(colaborador()).execute();
-  await DB.Delete(detallepedido()).execute();
-  await DB.Delete(permisos()).execute();
-  await DB.Delete(detallespermisos()).execute();
+  await DB.Delete(accesos()).execute();
+  await DB.Delete(establecimientos()).execute();
+  await DB.Delete(guiasremision()).execute();
+  await DB.Delete(paquetes()).execute();
+  await DB.Delete(productos()).execute();
+  await DB.Delete(seguimientopaquetes()).execute();
   await DB.Delete(usuarios()).execute();
-
+  await DB.Delete(vehiculosempresa()).execute();
   console.log("La base de datos se reseteo con exito");
-
 }
 
 await resetTables();
