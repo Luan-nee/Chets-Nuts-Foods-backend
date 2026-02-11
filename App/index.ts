@@ -24,7 +24,7 @@ const httpServer = server.listen(PORT, () => {
   console.log(
     `\n ======== Servidor Z en linea ==========\n \t 
       http://localhost:${PORT}/
-    \n ========================================`
+    \n ========================================`,
   );
 });
 

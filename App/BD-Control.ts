@@ -11,6 +11,7 @@ export function generateTables() {
         .$(),
       correo: varchar(200).Required().$(),
       contra: varchar(50).Required().$(),
+      estado: bool().default(true).$(),
       fechaCreacion: timestamp().now().$(),
     }),
     establecimientos: defineTable("establecimientos", {
@@ -48,6 +49,7 @@ export function generateTables() {
       edad: int().Required().Default(18).$(),
       dniuser: varchar(10).$(),
       rucuser: varchar(15).$(),
+      numero: varchar(50).$(),
       cantenvios: int().Required().$(),
       fechacreado: timestamp().now().$(),
     }),
@@ -73,7 +75,7 @@ export function generateTables() {
       tiempoestimado: varchar(50).$(),
       estado: varchar(50)
         .Check(["ENTREGADO", "CAMINO", "DETENIDO", "CANCELADO", "REVISION"]) //revision esperando aprobacion de la sunat
-        .$(), //entregado, en camino,cancelado,detenido
+        .$(),
       observacion: varchar(300).$(), //en caso la policia lo detenga o ocurra algo con el paquete
       ultimaactualizacion: timestamp().$(),
       fechafinalizado: timestamp().$(),

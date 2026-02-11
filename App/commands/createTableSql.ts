@@ -17,11 +17,11 @@ async function generarTablas() {
 
   await generateTable(accesos(), accesos.$columns);
   await generateTable(establecimientos(), establecimientos.$columns);
+  await generateTable(productos(), productos.$columns);
+  await generateTable(usuarios(), usuarios.$columns);
   await generateTable(guiasremision(), guiasremision.$columns);
   await generateTable(paquetes(), paquetes.$columns);
-  await generateTable(productos(), productos.$columns);
   await generateTable(seguimientopaquetes(), seguimientopaquetes.$columns);
-  await generateTable(usuarios(), usuarios.$columns);
   await generateTable(vehiculosempresa(), vehiculosempresa.$columns);
 }
 

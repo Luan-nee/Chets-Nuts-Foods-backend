@@ -8,11 +8,6 @@ export class ApiRoutes {
     const router = Router();
 
     router.use("/auth", SessionRoutes.routes);
-
-    /*router.use(
-      [AuthMiddleware.request, AuthMiddleware.verifiAcceso],
-      EntitiesRoutes.routes
-    );*/
     router.use(AuthMiddleware.request, EntitiesRoutes.routes);
 
     return router;
