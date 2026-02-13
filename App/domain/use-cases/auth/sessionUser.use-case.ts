@@ -7,6 +7,7 @@ import { generateTables } from "../../../BD-Control.js";
 interface IdReponse {
   idacceso: number;
   tipos: string;
+  idusuario: number;
 }
 
 export default class SessionUserUseCase {
@@ -20,8 +21,12 @@ export default class SessionUserUseCase {
   }
 
   async sessionUser(data: LoginUserDto) {
-    const { accesos } = generateTables();
-    const resutado = (await DB.Select([accesos.tipos, accesos.idacceso])
+    const { accesos, usuarios } = generateTables();
+    const resutado = (await DB.Select([
+      accesos.tipos,
+      accesos.idacceso,
+      accesos.idusuario,
+    ])
       .from(accesos())
       .where(
         AND(
@@ -39,7 +44,12 @@ export default class SessionUserUseCase {
       throw CustomError.badRequest("Usuario o Contra Incorrectas");
     }
 
+    const [user] = (await DB.Select([usuarios.nombres])
+      .from(usuarios())
+      .where(eq(usuarios.iduser, resutado[0].idusuario))
+      .execute()) as { nombres: string }[];
+
     const tokenZ = this.generarToken({ id: resutado[0].idacceso });
-    return { tipos: resutado[0].tipos, tokenZ };
+    return { rol: resutado[0].tipos, tokenZ, nombreUser: user.nombres };
   }
 }
