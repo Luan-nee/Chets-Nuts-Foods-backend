@@ -3,7 +3,7 @@ import { bool, defineTable, int, money, timestamp, varchar } from "zormz";
 export function generateTables() {
   return {
     accesos: defineTable("accesos", {
-      idacceso: int().Pk().$(),
+      idacceso: int().Pk().Required().$(),
       idusuario: int().Required().$(),
       tipos: varchar(50)
         .Check(["ADMIN", "CHOFER", "CLIENTE", "COLABORADOR"])
@@ -15,7 +15,7 @@ export function generateTables() {
       fechaCreacion: timestamp().now().$(),
     }),
     establecimientos: defineTable("establecimientos", {
-      idEst: int().Pk().$(),
+      idEst: int().Pk().Required().$(),
       idResponsable: int().Required().$(),
       nombreEst: varchar(100).Required().$(),
       direccion: varchar(150).Required().$(),
@@ -33,7 +33,7 @@ export function generateTables() {
       fechaCreacion: timestamp().now().$(),
     }),
     productos: defineTable("productos", {
-      id: int().Pk().AutoIncrement().$(),
+      id: int().Pk().Required().$(),
       idenvio: int().Required().$(),
       nombreproducto: varchar(150).Required().$(),
       observacion: varchar(150).$(), //en caso de ser vidrio
@@ -42,7 +42,7 @@ export function generateTables() {
       fechaactualizado: timestamp().onUpdate().$(),
     }),
     usuarios: defineTable("usuarios", {
-      iduser: int().Pk().$(),
+      iduser: int().Pk().Required().$(),
       nombres: varchar(100).Required().$(),
       apellidomaterno: varchar(50).Required().$(),
       apellidopaterno: varchar(50).Required().$(),
@@ -50,11 +50,11 @@ export function generateTables() {
       dniuser: varchar(10).$(),
       rucuser: varchar(15).$(),
       numero: varchar(50).$(),
-      cantenvios: int().Required().$(),
+      cantenvios: int().Default(0).$(),
       fechacreado: timestamp().now().$(),
     }),
     guiasremision: defineTable("guiasremision", {
-      idguia: int().Pk().$(),
+      idguia: int().Pk().Required().$(),
       idpaquete: int().$(),
       numero: varchar().$(),
       qrUrl: varchar(200).$(),
@@ -62,7 +62,7 @@ export function generateTables() {
     }),
     paquetes: defineTable("paquetes", {
       //envios
-      idenvio: int().Pk().$(),
+      idenvio: int().Pk().Required().$(),
       idusuario: int().Required().$(),
       idchofer: int().Required().$(),
       idvehiculo: int().Required().$(),
@@ -83,7 +83,7 @@ export function generateTables() {
     }),
 
     seguimientopaquetes: defineTable("seguimientopaquetes", {
-      idseg: int().Pk().$(),
+      idseg: int().Pk().Required().$(),
       idpaquete: int().Required().$(),
       idcontrolestablecimiento: int()
         .Comment("En caso de haber pasado por algun establecimiento")
@@ -97,7 +97,7 @@ export function generateTables() {
       fecharegistro: timestamp().now().$(),
     }),
     vehiculosempresa: defineTable("vehiculosempresa", {
-      idvehempresa: int().Pk().$(),
+      idvehempresa: int().Pk().Required().$(),
       placa: varchar(10).Required().$(),
       marca: varchar(10).Required().$(),
       modelo: varchar(10).Required().$(),
@@ -107,37 +107,3 @@ export function generateTables() {
     }),
   };
 }
-
-//agregar tabla para vehiculos ya que se va a considerar por que tienen un
-//un flota de vei=hiculos de la empresa
-
-//productos y guias de remision apis cruds
-
-//en la guia de remision considerar la direccion fiscal
-
-/*
-export const t_productos = defineTable("t_productos", {
-  id: "id",
-  sku: "sku",
-  nombre: "nombre",
-  stock_actual: "stock_actual",
-  stock_minimo: "stock_minimo",
-  porcentaje_ganancia: "porcentaje_ganancia",
-  precio_compra_proveedor: "precio_compra_proveedor",
-  descripcion: "descripcion",
-  id_usuario_admin: "id_usuario_admin",
-});
-
-export const usuarios_admin = defineTable("usuarios_admin", {
-  id: "id",
-  nombres: "nombres",
-  apellidos: "apellidos",
-  dni: "dni",
-  ruc: "ruc",
-  tipo_domicilio: "tipo_domicilio",
-  ubigeo: "ubigeo",
-  direccion_detallada: "direccion_detallada",
-  correo: "correo",
-  contrasenia: "contrasenia",
-});
-*/
