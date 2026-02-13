@@ -2,7 +2,7 @@ import z from "zod";
 import { Validator } from "../validators.js";
 
 export const usuarioSchema = {
-  iduser: z.coerce.number().int().positive().optional(),
+  iduser: z.coerce.number().int().positive(),
   nombres: z
     .string()
     .trim()
@@ -27,7 +27,7 @@ export const usuarioSchema = {
     .refine((valor) => Validator.isValidFullName(valor), {
       error: "El apellido materno solo puede contener letras",
     }),
-  edad: z.number().int().min(18).max(120).default(18),
+  edad: z.string().max(120).default("18"),
   dniuser: z
     .string()
     .trim()

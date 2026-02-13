@@ -30,3 +30,4 @@ const httpServer = server.listen(PORT, () => {
 
 const socketsControl = new SocketControl(httpServer);
 socketsControl.principalConection();
+APP.locals.io = socketsControl.getIo();

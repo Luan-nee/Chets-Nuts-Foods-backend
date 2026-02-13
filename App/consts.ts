@@ -1,3 +1,5 @@
+import { UP } from "zormz";
+
 export const ResponseStatus = {
   success: "success",
   fail: "fail",
@@ -29,3 +31,21 @@ export const defaultQueries = {
   filter_value: undefined,
   filter_type: filterTypeValues.eq,
 };
+
+export type UpdateParam = ReturnType<typeof UP>;
+
+export const permisosPrincipal = {
+  createUser: "Creacion de un usuario",
+  createColaborador: "Creacion de colaborador",
+  createVehiculo: "Creacion de un vehiculo",
+  updatePaquetes: "Actualizar estado de los paquetes o middificarlos",
+} as const;
+
+export type PermisoValor = keyof typeof permisosPrincipal;
+
+export const permisosAdministrador: PermisoValor[] = [
+  "createColaborador",
+  "createUser",
+  "createVehiculo",
+  "updatePaquetes",
+];

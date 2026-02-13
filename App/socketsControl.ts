@@ -12,6 +12,11 @@ export default class SocketControl {
     });
   }
 
+  getIo() {
+    if (!this.io) throw new Error("socket io iniciado");
+    return this.io;
+  }
+
   principalConection() {
     if (this.io === null) throw new Error("La conexion es obligatorio");
     this.io.on("connection", (usuario) => {

@@ -12,14 +12,13 @@ const createUsuarioSchema = z.object({
 });
 
 const updateUsuarioSchema = z.object({
-  nombres: usuarioSchema.nombres.optional(),
+  iduser: usuarioSchema.iduser,
+  nombre: usuarioSchema.nombres.optional(),
   apellidopaterno: usuarioSchema.apellidopaterno.optional(),
   apellidomaterno: usuarioSchema.apellidomaterno.optional(),
   edad: usuarioSchema.edad.optional(),
-  dniuser: usuarioSchema.dniuser.optional(),
   rucuser: usuarioSchema.rucuser.optional(),
   numero: usuarioSchema.numero.optional(),
-  cantenvios: usuarioSchema.cantenvios.optional(),
 });
 
 export const createUsuarioValidator = (object: unknown) =>

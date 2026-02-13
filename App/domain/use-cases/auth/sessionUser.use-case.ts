@@ -31,8 +31,6 @@ export default class SessionUserUseCase {
       )
       .execute(true)) as IdReponse[];
 
-    console.log(resutado);
-
     if (!resutado) {
       throw CustomError.badRequest("Usuario o contra Incorrectas");
     }
