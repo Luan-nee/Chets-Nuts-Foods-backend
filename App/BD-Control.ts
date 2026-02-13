@@ -49,6 +49,8 @@ export function generateTables() {
       edad: int().Required().Default(18).$(),
       dniuser: varchar(10).$(),
       rucuser: varchar(15).$(),
+      tipo: varchar(50).Check(["NATURAL", "JURIDICO"]).Default("NATURAL").$(),
+      estado: bool().default(true).$(),
       numero: varchar(50).$(),
       cantenvios: int().Default(0).$(),
       fechacreado: timestamp().now().$(),

@@ -3,6 +3,7 @@ import { CustomResponse } from "../../../core/res/custom.response.js";
 import { UsuarioDto } from "../../../domain/dto/usuarios/usuario.dto.js";
 import { UsuariosUseCase } from "../../../domain/use-cases/usuarios/Usuarios.use-case.js";
 import { emitSocket } from "../../../controllerSockets/globalSocket.js";
+import { UpdateUsuarioDto } from "../../../domain/dto/usuarios/UpdateUsuario.dto.js";
 
 export class UsuariosController {
   create = (req: Request, res: Response) => {
@@ -38,6 +39,36 @@ export class UsuariosController {
       });
       return;
     }
-    //const [error,userDto] =
+
+    const [error, userUpdateDto] = UpdateUsuarioDto.createUpdateUser(req.body);
+
+    if (error !== undefined || userUpdateDto === undefined) {
+      CustomResponse.badRequest({ res, error });
+      return;
+    }
+
+    const userUse = new UsuariosUseCase();
+
+    userUse
+      .update(userUpdateDto, req.authpayload.id)
+      .then((data) => {
+        emitSocket(req, "updateUser", data);
+        CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
+      });
+  };
+
+  getAll = (req: Request, res: Response) => {
+    if (req.authpayload == undefined) {
+      CustomResponse.badRequest({
+        res,
+        error: "No tienes acceso o la secion caduco",
+      });
+      return;
+    }
+
+    const userCase = new UsuariosUseCase();
   };
 }
