@@ -70,5 +70,60 @@ export class UsuariosController {
     }
 
     const userCase = new UsuariosUseCase();
+
+    userCase
+      .getAll(req.authpayload.id)
+      .then((data) => {
+        CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
+      });
+  };
+  getByDni = (req: Request, res: Response) => {
+    if (req.authpayload === undefined) {
+      CustomResponse.badRequest({ res, error: "NO TIENES PERMISOS" });
+      return;
+    }
+
+    const [error, dni] = UsuarioDto.validDniUserDto(req.body);
+
+    if (error !== undefined || dni === undefined) {
+      CustomResponse.badRequest({ res, error });
+      return;
+    }
+
+    const userCase = new UsuariosUseCase();
+    userCase
+      .GetByDni(dni, req.authpayload.id)
+      .then((data) => {
+        CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
+      });
+  };
+  getByRuc = (req: Request, res: Response) => {
+    if (req.authpayload === undefined) {
+      CustomResponse.badRequest({ res, error: "NO TIENES PERMISOS" });
+      return;
+    }
+
+    const [error, ruc] = UsuarioDto.validRucUserDto(req.body);
+    if (error !== undefined || ruc === undefined) {
+      CustomResponse.badRequest({ res, error });
+      return;
+    }
+
+    const userCase = new UsuariosUseCase();
+
+    userCase
+      .GetByRuc(ruc, req.authpayload.id)
+      .then((data) => {
+        CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
+      });
   };
 }

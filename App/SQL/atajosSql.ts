@@ -8,26 +8,31 @@ export async function InsertUser({
   nombre,
   apellidomaterno,
   apellidopaterno,
+  edad,
   dni,
-  numero,
   ruc,
+  numero,
+  tipo,
 }: UsuarioDto) {
   const { usuarios } = generateTables();
 
-  const fields = [
+  const fields: (string | number)[] = [
     nombre.toUpperCase(),
     apellidomaterno.toUpperCase(),
     apellidopaterno.toUpperCase(),
     dni,
     numero,
     ruc,
+    tipo,
   ];
   const valores = [
     usuarios.nombres,
     usuarios.apellidomaterno,
     usuarios.apellidopaterno,
-    usuarios.dniuser,
   ];
+  if (dni === undefined && ruc === undefined) {
+    throw CustomError.badRequest("RUC O DNI PARA REGISTRAR AL USUARIO");
+  }
 
   if (numero !== undefined) {
     fields.push(numero);
@@ -37,6 +42,21 @@ export async function InsertUser({
   if (ruc !== undefined) {
     fields.push(ruc);
     valores.push(usuarios.rucuser);
+  }
+
+  if (dni !== undefined) {
+    fields.push(dni);
+    valores.push(usuarios.dniuser);
+  }
+
+  if (tipo !== undefined) {
+    fields.push(tipo);
+    valores.push(usuarios.tipo);
+  }
+
+  if (edad !== undefined) {
+    fields.push(edad);
+    valores.push(usuarios.edad);
   }
 
   const [id] = (await DB.Insert(usuarios(), valores)

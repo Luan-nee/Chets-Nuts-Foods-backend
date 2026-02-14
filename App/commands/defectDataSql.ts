@@ -10,6 +10,7 @@ async function generarTablas() {
     apellidopaterno: "vilca",
     dni: "75276127",
     numero: "925543023",
+    edad: 20,
   });
 
   const id2 = await InsertUser({

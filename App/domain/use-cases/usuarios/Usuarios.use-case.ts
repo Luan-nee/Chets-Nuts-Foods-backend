@@ -7,6 +7,24 @@ import { UpdateUsuarioDto } from "../../dto/usuarios/UpdateUsuario.dto.js";
 import { UpdateParam } from "../../../consts.js";
 
 export class UsuariosUseCase {
+  private async getUserByID(id: number) {
+    const { usuarios } = generateTables();
+    const [user] = (await DB.Select([
+      usuarios.iduser,
+      usuarios.apellidomaterno,
+      usuarios.apellidopaterno,
+      usuarios.dniuser,
+      usuarios.nombres,
+      usuarios.numero,
+      usuarios.rucuser,
+      usuarios.tipo,
+    ])
+      .from(usuarios())
+      .where(eq(usuarios.dniuser, id))
+      .execute()) as Object[];
+    return user;
+  }
+
   async create(userDto: UsuarioDto, idUser) {
     const { usuarios } = generateTables();
 
@@ -32,18 +50,7 @@ export class UsuariosUseCase {
 
     const valorInsert = await InsertUser(userDto);
 
-    const [user] = (await DB.Select([
-      usuarios.iduser,
-      usuarios.apellidomaterno,
-      usuarios.apellidopaterno,
-      usuarios.dniuser,
-      usuarios.nombres,
-      usuarios.numero,
-      usuarios.rucuser,
-    ])
-      .from(usuarios())
-      .where(eq(usuarios.iduser, valorInsert))
-      .execute()) as object[];
+    const user = this.getUserByID(valorInsert);
 
     return user;
   }
@@ -71,7 +78,7 @@ export class UsuariosUseCase {
       fields.push(UP(usuarios.apellidopaterno, userUpt.apellidopaterno));
 
     if (userUpt.edad !== undefined)
-      fields.push(UP(usuarios.edad, userUpt.edad));
+      fields.push(UP(usuarios.edad, `${userUpt.edad}`));
 
     if (userUpt.nombre !== undefined)
       fields.push(UP(usuarios.nombres, userUpt.nombre));
@@ -81,6 +88,14 @@ export class UsuariosUseCase {
 
     if (userUpt.numero !== undefined)
       fields.push(UP(usuarios.numero, userUpt.numero));
+
+    if (userUpt.dni !== undefined) {
+      fields.push(UP(usuarios.dniuser, userUpt.dni));
+    }
+
+    if (userUpt.tipo !== undefined) {
+      fields.push(UP(usuarios.tipo, userUpt.tipo));
+    }
 
     if (fields.length <= 0)
       throw CustomError.badRequest("No hay datos a actualizar");
@@ -94,18 +109,7 @@ export class UsuariosUseCase {
       throw CustomError.badRequest("No se pudo realizar la Actualizacion");
     }
 
-    const [newUser] = (await DB.Select([
-      usuarios.iduser,
-      usuarios.apellidomaterno,
-      usuarios.apellidopaterno,
-      usuarios.dniuser,
-      usuarios.nombres,
-      usuarios.numero,
-      usuarios.rucuser,
-    ])
-      .from(usuarios())
-      .where(eq(usuarios.iduser, userUpt.iduser))
-      .execute()) as Object[];
+    const newUser = this.getUserByID(userUpt.iduser);
 
     return newUser;
   }
@@ -140,7 +144,7 @@ export class UsuariosUseCase {
 
   async GetByDni(dniUser: string, idUser: number) {
     const { usuarios } = generateTables();
-    const user = await DB.Select([
+    const [user] = (await DB.Select([
       usuarios.iduser,
       usuarios.apellidomaterno,
       usuarios.apellidopaterno,
@@ -148,15 +152,41 @@ export class UsuariosUseCase {
       usuarios.nombres,
       usuarios.numero,
       usuarios.rucuser,
+      usuarios.tipo,
     ])
       .from(usuarios())
       .where(eq(usuarios.dniuser, dniUser))
-      .execute();
+      .execute()) as object[];
 
     if (!user) {
       throw CustomError.badRequest(
         "Este usuario no esta registrado en el sistema",
       );
     }
+    return user;
+  }
+
+  async GetByRuc(rucUser: string, idUser: number) {
+    const { usuarios } = generateTables();
+    const [user] = (await DB.Select([
+      usuarios.iduser,
+      usuarios.apellidomaterno,
+      usuarios.apellidopaterno,
+      usuarios.dniuser,
+      usuarios.nombres,
+      usuarios.numero,
+      usuarios.rucuser,
+      usuarios.tipo,
+    ])
+      .from(usuarios())
+      .where(eq(usuarios.rucuser, rucUser))
+      .execute()) as object[];
+
+    if (!user) {
+      throw CustomError.badRequest(
+        "Este usuario no esta registrado en el sistema",
+      );
+    }
+    return user;
   }
 }

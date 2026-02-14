@@ -7,7 +7,9 @@ export class UpdateUsuarioDto {
   public apellidomaterno?: string;
   public ruc?: string;
   public numero?: string;
-  public edad?: string;
+  public edad?: number;
+  public dni?: string;
+  public tipo?: "NATURAL" | "JURIDICO";
 
   private constructor({
     iduser,
@@ -17,6 +19,8 @@ export class UpdateUsuarioDto {
     ruc,
     numero,
     edad,
+    dni,
+    tipo,
   }: UpdateUsuarioDto) {
     this.iduser = iduser;
     this.nombre = nombre;
@@ -25,6 +29,8 @@ export class UpdateUsuarioDto {
     this.ruc = ruc;
     this.numero = numero;
     this.edad = edad;
+    this.dni = dni;
+    this.tipo = tipo;
   }
 
   static createUpdateUser(input: any): [string?, UpdateUsuarioDto?] {

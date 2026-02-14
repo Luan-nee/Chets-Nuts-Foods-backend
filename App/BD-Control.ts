@@ -46,7 +46,7 @@ export function generateTables() {
       nombres: varchar(100).Required().$(),
       apellidomaterno: varchar(50).Required().$(),
       apellidopaterno: varchar(50).Required().$(),
-      edad: int().Required().Default(18).$(),
+      edad: int().Default(18).$(),
       dniuser: varchar(10).$(),
       rucuser: varchar(15).$(),
       tipo: varchar(50).Check(["NATURAL", "JURIDICO"]).Default("NATURAL").$(),

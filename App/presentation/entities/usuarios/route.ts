@@ -6,8 +6,11 @@ export class UsuariosRouter {
     const router = Router();
     const usuarios = new UsuariosController();
 
+    router.get("/", usuarios.getAll);
     router.post("/", usuarios.create);
-
+    router.patch("/", usuarios.update);
+    router.post("/dni", usuarios.getByDni);
+    router.post("/ruc", usuarios.getByRuc);
     return router;
   }
 }
