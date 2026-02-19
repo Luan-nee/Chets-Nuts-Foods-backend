@@ -68,7 +68,7 @@ async function generarTablas() {
     capacidadCarga: 980,
     marca: "KOSS",
     modelo: "EX1",
-    placa: "BBC-1TO2",
+    placa: "BBC-1TU",
     tipoVehiculo: "ban",
   });
 

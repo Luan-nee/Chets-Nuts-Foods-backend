@@ -56,7 +56,7 @@ export async function InsertUser({
     valores.push(usuarios.tipo);
   }
 
-  if (edad !== undefined) {
+  if (edad !== null && edad !== undefined) {
     fields.push(edad);
     valores.push(usuarios.edad);
   }
@@ -113,7 +113,7 @@ export async function createVehiculoEmpresa({
     .where(eq(vehiculosempresa.placa, placa))
     .execute()) as object[];
 
-  if (verifiVehiculo || verifiVehiculo.length > 0) {
+  if (verifiVehiculo.length > 0) {
     throw CustomError.badRequest(
       `Este vehiculo con la placa ${placa} ya esta registrado.`,
     );
@@ -164,7 +164,7 @@ export async function CreateEstablecimiento({
     direccion: string;
   }[];
 
-  if (verifi || verifi.length > 0) {
+  if (verifi.length > 0) {
     throw CustomError.badRequest(
       `El establecimiento ${nombreEstablecimiento} Ya esta registrado y se encuentra en la direccion : ${verifi[0].direccion} y fue creado el ${verifi[0].fechaCreacion}`,
     );
