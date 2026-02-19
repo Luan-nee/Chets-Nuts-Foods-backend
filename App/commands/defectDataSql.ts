@@ -1,5 +1,10 @@
 import { initBD } from "../../database/conexion.js";
-import { CreateAccesos, InsertUser } from "../SQL/atajosSql.js";
+import {
+  CreateAccesos,
+  CreateEstablecimiento,
+  createVehiculoEmpresa,
+  InsertUser,
+} from "../SQL/atajosSql.js";
 
 initBD();
 
@@ -40,6 +45,57 @@ async function generarTablas() {
     password: "luan123",
     tipos: "COLABORADOR",
     idUser: id3,
+  });
+
+  const idAcceso3 = await CreateAccesos({
+    usuario: "luandelsol@gmail.com",
+    password: "chofer123",
+    tipos: "CHOFER",
+    idUser: id3,
+  });
+
+  const carro1 = await createVehiculoEmpresa({
+    anio: "2012",
+    capacidadCarga: 20,
+    marca: "TOYOTA",
+    modelo: "EX1",
+    placa: "BBC-1TO",
+    tipoVehiculo: "4*4",
+  });
+
+  const carro2 = await createVehiculoEmpresa({
+    anio: "2017",
+    capacidadCarga: 980,
+    marca: "KOSS",
+    modelo: "EX1",
+    placa: "BBC-1TO2",
+    tipoVehiculo: "ban",
+  });
+
+  const establecimiento1 = await CreateEstablecimiento({
+    departamento: "MADRE DE DIOS",
+    descripcion: "Establecimiento de prueba",
+    direccion: "av. madre de dios con fiscarrald",
+    distrito: "TAMBOPATA",
+    provincia: "TAMBOPATA",
+    idResponsable: idR,
+    latitud: "111500",
+    longitud: "1200",
+    nombreEstablecimiento: "Prueba 1",
+    tipoEstado: "oficina",
+  });
+
+  const establecimiento2 = await CreateEstablecimiento({
+    departamento: "MADRE DE DIOS",
+    descripcion: "Establecimiento de prueba",
+    direccion: "av. madre de dios con fiscarrald",
+    distrito: "TAMBOPATA",
+    provincia: "TAMBOPATA",
+    idResponsable: id3,
+    latitud: "111500",
+    longitud: "1200",
+    nombreEstablecimiento: "Prueba 2",
+    tipoEstado: "almacen",
   });
 }
 

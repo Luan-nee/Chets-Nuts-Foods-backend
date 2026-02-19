@@ -27,6 +27,7 @@ export function generateTables() {
       departamento: varchar(70).Required().$(),
       tipoEst: varchar()
         .Check(["fiscal", "anexo", "almacen", "oficina", "no_registrado"])
+        .Default("oficina")
         .Required()
         .$(),
       activo: bool().default(true).$(),

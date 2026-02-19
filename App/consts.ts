@@ -49,3 +49,10 @@ export const permisosAdministrador: PermisoValor[] = [
   "createVehiculo",
   "updatePaquetes",
 ];
+
+export type EstadosTipoEstablecimiento =
+  | "fiscal"
+  | "anexo"
+  | "almacen"
+  | "oficina"
+  | "no_registrado";

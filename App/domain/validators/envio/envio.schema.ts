@@ -25,14 +25,11 @@ export const envioSchema = {
       error: "El destino contiene caracteres no permitidos",
     })
     .optional(),
-  tiempoestimado: z
-    .string()
-    .trim()
-    .max(50)
-    .optional(),
+  tiempoestimado: z.string().trim().max(50).optional(),
   estado: z.enum(["ENTREGADO", "CAMINO", "DETENIDO", "CANCELADO", "REVISION"], {
-    errorMap: () => ({
-      message: "El estado debe ser ENTREGADO, CAMINO, DETENIDO, CANCELADO o REVISION",
+    error: () => ({
+      message:
+        "El estado debe ser ENTREGADO, CAMINO, DETENIDO, CANCELADO o REVISION",
     }),
   }),
   observacion: z
@@ -44,4 +41,3 @@ export const envioSchema = {
     })
     .optional(),
 };
-
