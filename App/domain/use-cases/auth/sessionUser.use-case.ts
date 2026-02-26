@@ -21,7 +21,7 @@ export default class SessionUserUseCase {
   }
 
   async sessionUser(data: LoginUserDto) {
-    const { accesos, usuarios } = generateTables();
+    const { accesos, usuarios, datosempresa } = generateTables();
     const resutado = (await DB.Select([
       accesos.tipos,
       accesos.idacceso,
@@ -34,7 +34,7 @@ export default class SessionUserUseCase {
           eq(accesos.contra, data.password),
         ),
       )
-      .execute(true)) as IdReponse[];
+      .execute()) as IdReponse[];
 
     if (!resutado) {
       throw CustomError.badRequest("Usuario o contra Incorrectas");
@@ -49,7 +49,26 @@ export default class SessionUserUseCase {
       .where(eq(usuarios.iduser, resutado[0].idusuario))
       .execute()) as { nombres: string }[];
 
-    const tokenZ = this.generarToken({ id: resutado[0].idacceso });
-    return { rol: resutado[0].tipos, tokenZ, nombreUser: user.nombres };
+    const dataEmpresa = await DB.Select([datosempresa.idDatosEmpresa])
+      .from(datosempresa())
+      .execute();
+
+    console.log(dataEmpresa);
+    let mensajeAlert = "";
+    if (dataEmpresa?.length == 0) {
+      mensajeAlert =
+        "INICIASTE SESION PERO AUN EL SISTEMA NO FUNCIONARA, PRIMERO REGISTRAR LOS DATOS DE LA EMPRESA";
+    }
+
+    const tokenZ = this.generarToken({
+      id: resutado[0].idacceso,
+      rol: resutado[0].tipos,
+    });
+    return {
+      rol: resutado[0].tipos,
+      tokenZ,
+      nombreUser: user.nombres,
+      mensajeAlert,
+    };
   }
 }

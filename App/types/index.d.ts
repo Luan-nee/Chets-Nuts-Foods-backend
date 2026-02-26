@@ -3,6 +3,7 @@ import "socket.io";
 
 interface Authpayload {
   id: number;
+  rol: "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
   exp?: number;
   [key: string]: any;
 }

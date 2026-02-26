@@ -1,7 +1,7 @@
 import { connecionLocal, getConexion } from "zormz";
 import { envs } from "../App/core/config/envs.js";
 
-const { DB_DATABASE, DB_HOST, DB_PASS, DB_PORT, DB_USER } = envs;
+const { DB_DATABASE, DB_HOST, DB_PASS, DB_PORT, DB_USER, DB_TIPO } = envs;
 
 export async function initBD() {
   const conexion: connecionLocal = {
@@ -12,5 +12,5 @@ export async function initBD() {
     user: DB_USER,
   };
 
-  await getConexion("mysql", conexion);
+  await getConexion(DB_TIPO, conexion);
 }

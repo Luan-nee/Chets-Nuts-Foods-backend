@@ -5,9 +5,11 @@ import SessionUserUseCase from "../../domain/use-cases/auth/sessionUser.use-case
 
 export class AuthController {
   sessionMain = (req: Request, res: Response) => {
+    console.log(req.body);
     const [error, sessionDtoUser] = LoginUserDto.createSessionUserMain(
       req.body,
     );
+    console.log(sessionDtoUser);
     if (error != undefined || sessionDtoUser === undefined) {
       CustomResponse.badRequest({ res, error });
       return;

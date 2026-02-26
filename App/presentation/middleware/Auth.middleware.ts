@@ -1,7 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { CustomResponse } from "../../core/res/custom.response.js";
 import { JWTadapter } from "../../core/config/AccessToken.js";
-import pkg from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import { Authpayload } from "../../types/index.js";
+
+const { JsonWebTokenError } = jwt;
 
 export class AuthMiddleware {
   private static handleAuthError(res: Response) {
@@ -55,7 +58,7 @@ export class AuthMiddleware {
 
       next();
     } catch (error) {
-      if (error instanceof pkg.JsonWebTokenError) {
+      if (error instanceof JsonWebTokenError) {
         AuthMiddleware.handleAuthError(res);
         return;
       }

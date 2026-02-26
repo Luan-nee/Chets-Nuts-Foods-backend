@@ -20,17 +20,20 @@
         "env-var": "^7.5.0",
         "express": "^5.1.0",
         "jsonwebtoken": "^9.0.2",
+        "pg": "^8.19.0",
         "socket.io": "^4.8.1",
-        "tsx": "^4.21.0",
         "zod": "^4.1.13",
-        "zormz": "^1.4.2"
+        "zormz": "^1.4.7"
     },
     "devDependencies": {
         "@tsconfig/node20": "^20.1.8",
         "@types/express": "^5.0.5",
+        "@types/jsonwebtoken": "^9.0.10",
         "@types/node": "^24.10.1",
         "nodemon": "^3.1.11",
         "ts-node": "^10.9.2",
+        "tsconfig-paths": "^4.2.0",
+        "tsx": "^4.21.0",
         "typescript": "^5.9.3"
     }
 }

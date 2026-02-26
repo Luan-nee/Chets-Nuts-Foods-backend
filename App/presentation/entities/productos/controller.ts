@@ -12,6 +12,11 @@ export class ProductosController {
   getAll = (req: Request, res: Response) => {
     const [, queriesDto] = QueriesProductoDto.create(req.query);
 
+    if (queriesDto !== undefined) {
+      CustomResponse.badRequest({ res, error: "No Se envio la data correcta" });
+      return;
+    }
+
     const productos = new GetAllProductos();
     productos
       .execute(queriesDto)

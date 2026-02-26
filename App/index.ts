@@ -2,21 +2,9 @@ import http from "http";
 import APP from "./app.js";
 import { env } from "process";
 import SocketControl from "./socketsControl.js";
-import { envs } from "./core/config/envs.js";
-import { connecionLocal, getConexion } from "zormz";
+import { initBD } from "../database/conexion.js";
 
-const { DB_DATABASE, DB_HOST, DB_PASS, DB_PORT, DB_USER } = envs;
-
-const conexion: connecionLocal = {
-  database: DB_DATABASE,
-  host: DB_HOST,
-  password: DB_PASS,
-  port: DB_PORT,
-  user: DB_USER,
-};
-
-getConexion("mysql", conexion);
-
+initBD();
 const server = http.createServer(APP);
 const PORT = env.port || 4000;
 

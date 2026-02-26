@@ -56,3 +56,5 @@ export type EstadosTipoEstablecimiento =
   | "almacen"
   | "oficina"
   | "no_registrado";
+
+export const MTCdata = "123456-2024-MTC/17";

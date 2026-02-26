@@ -15,20 +15,19 @@ export class GetAllProductos {
     t_productos.descripcion,
   ];
 
-  private async getProductos(queriesDto: QueriesProductoDto | undefined) {
+  private async getProductos(queriesDto: QueriesProductoDto) {
     const order = queriesDto.order === orderValues.asc ? "DESC" : "ASC";
     const cantidad = queriesDto.page == 1 ? 0 : queriesDto.page * maxPageSize;
-    console.log(queriesDto);
     const busquedaCondicion =
       queriesDto.search.length > 2
         ? OR(
             ILIKE(t_productos.nombre, `%${queriesDto.search}%`),
-            ILIKE(t_productos.descripcion, `%${queriesDto.search}%`)
+            ILIKE(t_productos.descripcion, `%${queriesDto.search}%`),
           )
         : undefined;
     const condition = AND(
       MAYOR(t_productos.id, `${cantidad}`),
-      busquedaCondicion
+      busquedaCondicion,
     );
     const productos = await DB.select(this.selectFields)
       .from(t_productos())

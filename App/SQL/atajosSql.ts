@@ -22,10 +22,6 @@ export async function InsertUser({
     nombre.toUpperCase(),
     apellidomaterno.toUpperCase(),
     apellidopaterno.toUpperCase(),
-    dni,
-    numero,
-    ruc,
-    tipo,
   ];
   const valores = [
     usuarios.nombres,
@@ -196,7 +192,7 @@ export async function CreateEstablecimiento({
 
   if (tipoEstado !== undefined) {
     campos.push(tipoEstado);
-    querys.push(establecimientos.tipoEst);
+    querys.push(establecimientos.tipoestablecimiento);
   }
 
   const [id] = (await DB.Insert(establecimientos(), querys)

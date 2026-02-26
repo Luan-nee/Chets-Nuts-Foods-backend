@@ -14,6 +14,15 @@ export function generateTables() {
       estado: bool().default(true).$(),
       fechaCreacion: timestamp().now().$(),
     }),
+    datosempresa: defineTable("datosempresa", {
+      idDatosEmpresa: int().Pk().Required().$(),
+      ruc: varchar(15).Required().$(),
+      denominacion: varchar(150).Required().$(),
+      numeroRegistroMtc: varchar(30).Required().$(),
+      codigoMtc: varchar(30).Required().$(),
+      urlApi: varchar(150).Default("none").$(),
+      claveAcceso: varchar(80).Default("none").$(),
+    }),
     establecimientos: defineTable("establecimientos", {
       idEst: int().Pk().Required().$(),
       idResponsable: int().Required().$(),
@@ -25,10 +34,9 @@ export function generateTables() {
       distrito: varchar(70).Required().$(),
       provincia: varchar(70).Required().$(),
       departamento: varchar(70).Required().$(),
-      tipoEst: varchar()
-        .Check(["fiscal", "anexo", "almacen", "oficina", "no_registrado"])
+      tipoestablecimiento: varchar()
+        .Check(["fiscal", "anexo", "almacen", "oficina", "noRegistrado"])
         .Default("oficina")
-        .Required()
         .$(),
       activo: bool().default(true).$(),
       fechaCreacion: timestamp().now().$(),
@@ -53,6 +61,7 @@ export function generateTables() {
       tipo: varchar(50).Check(["NATURAL", "JURIDICO"]).Default("NATURAL").$(),
       estado: bool().default(true).$(),
       numero: varchar(50).$(),
+      numeroLicenciaConducir: varchar(20).$(),
       cantenvios: int().Default(0).$(),
       fechacreado: timestamp().now().$(),
     }),
@@ -106,6 +115,8 @@ export function generateTables() {
       modelo: varchar(10).Required().$(),
       anio: varchar(5).Required().$(),
       tipoVehiculo: varchar(20).$(),
+      vin: varchar(100).$(),
+      numeroHabilitacion: varchar(150).$(),
       capacidadCarga: money().required().$(),
     }),
   };
