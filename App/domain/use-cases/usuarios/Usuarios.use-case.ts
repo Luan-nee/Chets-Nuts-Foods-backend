@@ -6,6 +6,13 @@ import { InsertUser } from "../../../SQL/atajosSql.js";
 import { UpdateUsuarioDto } from "../../dto/usuarios/UpdateUsuario.dto.js";
 import { UpdateParam } from "../../../consts.js";
 
+interface validateUserDuplicate {
+  iduser: number;
+  rucuser: string | null;
+  dniuser: string | null;
+  numeroLicenciaConducir: string | null;
+}
+
 export class UsuariosUseCase {
   private async getUserByID(id: number) {
     const { usuarios } = generateTables();
@@ -20,42 +27,76 @@ export class UsuariosUseCase {
       usuarios.tipo,
     ])
       .from(usuarios())
-      .where(eq(usuarios.dniuser, id))
+      .where(eq(usuarios.iduser, id))
       .execute()) as Object[];
     return user;
   }
 
-  async create(userDto: UsuarioDto, idUser) {
+  async create(userDto: UsuarioDto, idUser: number) {
     const { usuarios } = generateTables();
 
-    const repeat = (await DB.Select([usuarios.nombres])
-      .from(usuarios())
-      .where(eq(usuarios.dniuser, userDto.dni))
-      .execute()) as object[];
-
-    if (repeat.length > 0) {
+    if (userDto.dni === undefined && userDto.ruc === undefined) {
       throw CustomError.badRequest(
-        "Este usuario ya esta registrado, no se puede volver a registrar",
+        "Para agregar al usuario se tiene que ingresar el ruc o dni",
       );
     }
 
-    const fields = [
-      userDto.apellidomaterno,
-      userDto.apellidopaterno,
-      userDto.dni,
-      userDto.nombre,
-      userDto.numero,
-      userDto.ruc,
-    ];
+    const comparacion = eq(
+      usuarios.dniuser,
+      userDto.dni !== undefined
+        ? userDto.dni
+        : userDto.ruc !== undefined
+          ? userDto.ruc
+          : "",
+    );
 
+    const repeat = (await DB.Select([
+      usuarios.iduser,
+      usuarios.rucuser,
+      usuarios.dniuser,
+      usuarios.numeroLicenciaConducir,
+    ])
+      .from(usuarios())
+      .where(comparacion)
+      .execute()) as validateUserDuplicate[];
+
+    console.log(repeat);
+    if (repeat.length > 0) {
+      const queryExec: UpdateParam[] = [];
+      if (repeat[0].dniuser == null && userDto.dni !== undefined) {
+        queryExec.push(UP(usuarios.dniuser, userDto.dni));
+      }
+
+      if (repeat[0].rucuser == null && userDto.ruc !== undefined) {
+        queryExec.push(UP(usuarios.rucuser, userDto.ruc));
+      }
+
+      if (
+        repeat[0].numeroLicenciaConducir == null &&
+        userDto.numeroLicenciaConducir !== undefined
+      ) {
+        queryExec.push(
+          UP(usuarios.numeroLicenciaConducir, userDto.numeroLicenciaConducir),
+        );
+      }
+      if (queryExec.length == 0) {
+        throw CustomError.badRequest(
+          "Este usuario ya esta registrado, no se puede volver a registrar",
+        );
+      }
+      const updateUser = await DB.Update(usuarios())
+        .set(queryExec)
+        .where(eq(usuarios.iduser, repeat[0].iduser))
+        .execute();
+      const user = this.getUserByID(repeat[0].iduser);
+      return user;
+    }
     const valorInsert = await InsertUser(userDto);
-
     const user = this.getUserByID(valorInsert);
-
     return user;
   }
 
-  async update(userUpt: UpdateUsuarioDto, idUser) {
+  async update(userUpt: UpdateUsuarioDto, idUser: number) {
     const { usuarios } = generateTables();
     const existUser = await DB.Select([usuarios.iduser, usuarios.dniuser])
       .from(usuarios())
@@ -153,6 +194,9 @@ export class UsuariosUseCase {
       usuarios.numero,
       usuarios.rucuser,
       usuarios.tipo,
+      usuarios.edad,
+      usuarios.numeroLicenciaConducir,
+      usuarios.cantenvios,
     ])
       .from(usuarios())
       .where(eq(usuarios.dniuser, dniUser))
@@ -177,6 +221,9 @@ export class UsuariosUseCase {
       usuarios.numero,
       usuarios.rucuser,
       usuarios.tipo,
+      usuarios.edad,
+      usuarios.numeroLicenciaConducir,
+      usuarios.cantenvios,
     ])
       .from(usuarios())
       .where(eq(usuarios.rucuser, rucUser))

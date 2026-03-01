@@ -45,11 +45,18 @@ export const usuarioSchema = {
   numero: z
     .string()
     .trim()
+    .min(0, {
+      error:
+        "El numero es un campo obligatorio para comunicarse con el cliente",
+    })
     .max(50)
     .refine((valor) => Validator.isValidPhoneNumber(valor), {
       error: "El número de teléfono no es válido",
+    }),
+  numeroLicenciaConducir: z.string().trim().optional(),
+  tipo: z
+    .enum(["NATURAL", "JURIDICO"], {
+      error: "tipo solo puede contener NATURAL y JURIDICO",
     })
     .optional(),
-  cantenvios: z.coerce.number().int().min(0).default(0),
-  tipo: z.enum(["NATURAL", "JURIDICO"]),
 };

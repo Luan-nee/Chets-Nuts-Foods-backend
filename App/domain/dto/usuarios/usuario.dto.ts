@@ -10,9 +10,10 @@ export class UsuarioDto {
   public apellidomaterno: string;
   public dni?: string;
   public ruc?: string;
-  public numero?: string;
-  public tipo?: "NATURAL" | "JURIDICO";
+  public numero: string;
+  public tipo?: "NATURAL" | "JURIDICO" | undefined;
   public edad?: number;
+  public numeroLicenciaConducir?: string;
 
   private constructor({
     nombre,
@@ -22,6 +23,7 @@ export class UsuarioDto {
     numero,
     ruc,
     edad,
+    numeroLicenciaConducir,
   }: UsuarioDto) {
     this.nombre = nombre;
     this.apellidomaterno = apellidomaterno;
@@ -30,11 +32,11 @@ export class UsuarioDto {
     this.numero = numero;
     this.ruc = ruc;
     this.edad = edad;
+    this.numeroLicenciaConducir = numeroLicenciaConducir;
   }
 
   static createUserDto(input: any): [string?, UsuarioDto?] {
     const validator = createUsuarioValidator(input);
-
     if (!validator.success) {
       return [validator.error.message, undefined];
     }

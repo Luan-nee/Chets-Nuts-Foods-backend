@@ -15,6 +15,7 @@ export async function InsertUser({
   ruc,
   numero,
   tipo,
+  numeroLicenciaConducir,
 }: UsuarioDto) {
   const { usuarios } = generateTables();
 
@@ -55,6 +56,11 @@ export async function InsertUser({
   if (edad !== null && edad !== undefined) {
     fields.push(edad);
     valores.push(usuarios.edad);
+  }
+
+  if (numeroLicenciaConducir !== undefined) {
+    fields.push(numeroLicenciaConducir);
+    valores.push(usuarios.numeroLicenciaConducir);
   }
 
   const [id] = (await DB.Insert(usuarios(), valores)

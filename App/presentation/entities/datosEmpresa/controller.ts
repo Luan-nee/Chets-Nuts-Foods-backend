@@ -20,6 +20,13 @@ export class DatosEmpresaController {
 
     const dataUseCase = new DatosEmpresaUseCase();
 
-    dataUseCase.create(datosEmpresaDto, req.authpayload);
+    dataUseCase
+      .create(datosEmpresaDto, req.authpayload)
+      .then((data) => {
+        CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
+      });
   };
 }

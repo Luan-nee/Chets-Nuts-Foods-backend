@@ -30,7 +30,6 @@ export class AuthMiddleware {
       return;
     }
     const partes = authHeader.split(" ");
-    console.log(partes);
     if (partes.length !== 2 || partes[0] !== "bearer") {
       AuthMiddleware.handleAuthError(res);
       return;
@@ -49,8 +48,6 @@ export class AuthMiddleware {
       const tiempoRestante = decodeAuthpayload.exp - tiempoActual;
       req.authpayload = decodeAuthpayload;
       req.tiempo = tiempoRestante;
-
-      console.log("tiempo : " + req.tiempo + " cod : " + req.authpayload);
 
       if (req.authpayload === undefined || req.tiempo < 0) {
         return AuthMiddleware.handleAuthError(res);

@@ -8,8 +8,9 @@ const createUsuarioSchema = z.object({
   edad: usuarioSchema.edad,
   dni: usuarioSchema.dniuser.optional(),
   ruc: usuarioSchema.rucuser.optional(),
-  numero: usuarioSchema.numero.optional(),
-  tipo: usuarioSchema.tipo.optional(),
+  numero: usuarioSchema.numero,
+  tipo: usuarioSchema.tipo,
+  numeroLicenciaConducir: usuarioSchema.numeroLicenciaConducir,
 });
 
 const updateUsuarioSchema = z.object({
@@ -19,7 +20,7 @@ const updateUsuarioSchema = z.object({
   apellidomaterno: usuarioSchema.apellidomaterno.optional(),
   edad: usuarioSchema.edad.optional(),
   rucuser: usuarioSchema.rucuser.optional(),
-  numero: usuarioSchema.numero.optional(),
+  numero: usuarioSchema.numero,
   dni: usuarioSchema.dniuser.optional(),
   tipo: usuarioSchema.tipo.optional(),
 });

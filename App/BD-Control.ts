@@ -34,6 +34,7 @@ export function generateTables() {
       distrito: varchar(70).Required().$(),
       provincia: varchar(70).Required().$(),
       departamento: varchar(70).Required().$(),
+      ubigeo: varchar(15).Required().$(),
       tipoestablecimiento: varchar()
         .Check(["fiscal", "anexo", "almacen", "oficina", "noRegistrado"])
         .Default("oficina")
