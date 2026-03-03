@@ -54,7 +54,7 @@ export default class SessionUserUseCase {
       .execute();
 
     console.log(dataEmpresa);
-    let mensajeAlert = "";
+    let mensajeAlert = "LOGEADO CON EXITO !!";
     if (dataEmpresa?.length == 0) {
       mensajeAlert =
         "INICIASTE SESION PERO AUN EL SISTEMA NO FUNCIONARA, PRIMERO REGISTRAR LOS DATOS DE LA EMPRESA";

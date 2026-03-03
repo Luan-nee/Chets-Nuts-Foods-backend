@@ -11,7 +11,9 @@ export class CreateEstablecimientoDto {
   public distrito: string;
   public provincia: string;
   public departamento: string;
+  public ubigeo: string;
   public tipoEstado?: EstadosTipoEstablecimiento | undefined;
+  public codigoSunat?: string;
 
   private constructor({
     departamento,
@@ -24,6 +26,8 @@ export class CreateEstablecimientoDto {
     nombreEstablecimiento,
     provincia,
     tipoEstado,
+    codigoSunat,
+    ubigeo,
   }: CreateEstablecimientoDto) {
     this.departamento = departamento;
     this.descripcion = descripcion;
@@ -35,9 +39,13 @@ export class CreateEstablecimientoDto {
     this.nombreEstablecimiento = nombreEstablecimiento;
     this.provincia = provincia;
     this.tipoEstado = tipoEstado;
+    this.codigoSunat = codigoSunat;
+    this.ubigeo = ubigeo;
   }
 
-  static CreateEstablecimientoAccess(input: any) {
+  static CreateEstablecimientoAccess(
+    input: any,
+  ): [string?, CreateEstablecimientoDto?] {
     const resultado = createEstablecimientoValidatos(input);
     if (!resultado.success) {
       return [resultado.error.message, undefined];

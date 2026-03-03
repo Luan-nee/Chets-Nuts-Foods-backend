@@ -83,6 +83,7 @@ async function generarTablas() {
     longitud: "1200",
     nombreEstablecimiento: "Prueba 1",
     tipoEstado: "oficina",
+    ubigeo: "12345667",
   });
 
   const establecimiento2 = await CreateEstablecimiento({
@@ -96,6 +97,7 @@ async function generarTablas() {
     longitud: "1200",
     nombreEstablecimiento: "Prueba 2",
     tipoEstado: "almacen",
+    ubigeo: "1234561234",
   });
 }
 

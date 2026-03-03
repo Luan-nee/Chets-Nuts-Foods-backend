@@ -12,6 +12,8 @@ const createEstablecimiento = z.object({
   nombreEstablecimiento: establecimientoSchema.nombreEstablecimiento,
   provincia: establecimientoSchema.provincia,
   tipoEstado: establecimientoSchema.tipoEstado.optional(),
+  codigoSunat: establecimientoSchema.codigoSunat,
+  ubigeo: establecimientoSchema.ubigeo,
 });
 
 export const createEstablecimientoValidatos = (object: unknown) =>

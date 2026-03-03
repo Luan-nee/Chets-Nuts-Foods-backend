@@ -25,7 +25,8 @@ export function generateTables() {
     }),
     establecimientos: defineTable("establecimientos", {
       idEst: int().Pk().Required().$(),
-      idResponsable: int().Required().$(),
+      idUsuarioResponsable: int().Required().$(),
+      codigoSunat: varchar(5).$(),
       nombreEst: varchar(100).Required().$(),
       direccion: varchar(150).Required().$(),
       descripcion: varchar(200).$(),

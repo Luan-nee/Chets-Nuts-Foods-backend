@@ -19,7 +19,7 @@ export class AuthController {
     initSession
       .sessionUser(sessionDtoUser)
       .then((data) => {
-        CustomResponse.success({ res, data, message: "Logeado con Exito !! " });
+        CustomResponse.success({ res, data, message: data.mensajeAlert });
       })
       .catch((error: Error) => {
         CustomResponse.badRequest({ res, error });

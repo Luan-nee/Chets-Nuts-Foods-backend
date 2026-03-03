@@ -26,7 +26,7 @@ export const establecimientoSchema = {
   longitud: z.string(),
   nombreEstablecimiento: z
     .string()
-    .refine((nombre) => Validator.isValidFullName(nombre)),
+    .refine((nombre) => Validator.isValidUsername(nombre)),
   provincia: z
     .string()
     .trim()
@@ -40,4 +40,11 @@ export const establecimientoSchema = {
         " Estado de establecimiento solo puede contener fiscal | anexo | almacen | oficina | no_registrado",
     },
   ),
+  codigoSunat: z
+    .string()
+    .max(5, {
+      error: "El codigo de la sunat no puede contener mas de 4 caracteres",
+    })
+    .optional(),
+  ubigeo: z.string().trim().max(15),
 };

@@ -10,7 +10,7 @@ export class UsuarioDto {
   public apellidomaterno: string;
   public dni?: string;
   public ruc?: string;
-  public numero: string;
+  public numero?: string;
   public tipo?: "NATURAL" | "JURIDICO" | undefined;
   public edad?: number;
   public numeroLicenciaConducir?: string;

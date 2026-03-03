@@ -151,6 +151,8 @@ export async function CreateEstablecimiento({
   nombreEstablecimiento,
   provincia,
   tipoEstado,
+  codigoSunat,
+  ubigeo,
 }: CreateEstablecimientoDto) {
   const { establecimientos } = generateTables();
   const verifi = (await DB.Select([
@@ -182,10 +184,11 @@ export async function CreateEstablecimiento({
     provincia,
     departamento,
     distrito,
+    ubigeo,
   ];
 
   const querys = [
-    establecimientos.idResponsable,
+    establecimientos.idUsuarioResponsable,
     establecimientos.nombreEst,
     establecimientos.descripcion,
     establecimientos.direccion,
@@ -194,11 +197,17 @@ export async function CreateEstablecimiento({
     establecimientos.provincia,
     establecimientos.departamento,
     establecimientos.distrito,
+    establecimientos.ubigeo,
   ];
 
   if (tipoEstado !== undefined) {
     campos.push(tipoEstado);
     querys.push(establecimientos.tipoestablecimiento);
+  }
+
+  if (codigoSunat !== undefined) {
+    campos.push(codigoSunat);
+    querys.push(establecimientos.codigoSunat);
   }
 
   const [id] = (await DB.Insert(establecimientos(), querys)
