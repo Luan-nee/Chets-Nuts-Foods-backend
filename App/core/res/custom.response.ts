@@ -55,7 +55,6 @@ export class CustomResponse {
   static badRequest({ res, error }: ErrorResponseArgs) {
     this.send({
       res,
-      error,
       status: ResponseStatus.error,
       message: error.message,
       statusCode: 400,
