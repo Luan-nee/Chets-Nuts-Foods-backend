@@ -19,7 +19,17 @@ export class AuthController {
     initSession
       .sessionUser(sessionDtoUser)
       .then((data) => {
-        CustomResponse.success({ res, data, message: data.mensajeAlert });
+        const data2 = {
+          nombreUser: data.nombreUser,
+          rol: data.rol,
+          tokenZ: data.tokenZ,
+        };
+
+        CustomResponse.success({
+          res,
+          data: data2,
+          message: data.mensajeAlert,
+        });
       })
       .catch((error: Error) => {
         CustomResponse.badRequest({ res, error });
