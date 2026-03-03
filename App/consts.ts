@@ -4,6 +4,7 @@ export const ResponseStatus = {
   success: "success",
   fail: "fail",
   error: "error",
+  z: "z",
 } as const;
 
 export const orderValues = {

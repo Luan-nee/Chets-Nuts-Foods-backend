@@ -56,7 +56,7 @@ export class CustomResponse {
     this.send({
       res,
       error,
-      status: ResponseStatus.fail,
+      status: ResponseStatus.error,
       message: error.message,
       statusCode: 400,
     });
