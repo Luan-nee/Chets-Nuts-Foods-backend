@@ -1,4 +1,4 @@
-import { DB } from "zormz";
+import { DB, eq, OR } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import { CreateDatosEmpresaDto } from "../../dto/datosEmpresa/createDatosEmpresaDto.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
@@ -11,8 +11,26 @@ export class DatosEmpresaUseCase {
         "Para confirmar los datos Empresariales tienes que ser ADMINISTRADOR",
       );
     }
-
     const { datosempresa } = generateTables();
+
+    const noRepeat = await DB.Select([dataEmpresa.denominacion])
+      .from(datosempresa())
+      .where(
+        OR(
+          eq(datosempresa.codigoMtc, dataEmpresa.codigoMtc),
+          eq(datosempresa.ruc, dataEmpresa.ruc),
+        ),
+      )
+      .execute();
+
+    if (noRepeat !== undefined) {
+      if (noRepeat.length !== 0) {
+        throw CustomError.badRequest(
+          `Esta RUC o MTC ya esta en uso, no puedes usarlo 2 veces`,
+        );
+      }
+    }
+
     const campos = [
       datosempresa.codigoMtc,
       datosempresa.ruc,
