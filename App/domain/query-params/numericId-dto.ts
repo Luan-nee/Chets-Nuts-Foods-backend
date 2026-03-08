@@ -9,6 +9,7 @@ export class NumericId {
   static create(input: any): [string?, NumericId?] {
     const resultado = ParamNumericIdValidator(input);
     if (!resultado.success) {
+      console.log(resultado.error);
       return ["Id invalido", undefined];
     }
     return [undefined, new NumericId(resultado.data)];

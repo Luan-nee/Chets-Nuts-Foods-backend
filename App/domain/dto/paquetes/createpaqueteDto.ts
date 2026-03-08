@@ -31,6 +31,7 @@ export class CreatePaqueteDto {
     this.clave = clave;
     this.destino = destino;
     this.montocobrado = montocobrado;
+    console.log("agregando datos");
   }
 
   static createPaquete(input: any) {
