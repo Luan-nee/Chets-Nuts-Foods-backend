@@ -66,6 +66,7 @@ export function generateTables() {
       estado: bool().default(true).$(),
       numero: varchar(50).$(),
       numeroLicenciaConducir: varchar(20).$(),
+      correo: varchar(100).$(),
       cantenvios: int().Default(0).$(),
       fechacreado: timestamp().now().$(),
     }),

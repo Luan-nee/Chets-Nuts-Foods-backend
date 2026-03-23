@@ -11,6 +11,8 @@ const createUsuarioSchema = z.object({
   numero: usuarioSchema.numero,
   tipo: usuarioSchema.tipo,
   numeroLicenciaConducir: usuarioSchema.numeroLicenciaConducir,
+  sexo: usuarioSchema.sexo,
+  correo: usuarioSchema.correo,
 });
 
 const updateUsuarioSchema = z.object({
@@ -23,6 +25,7 @@ const updateUsuarioSchema = z.object({
   numero: usuarioSchema.numero,
   dni: usuarioSchema.dniuser.optional(),
   tipo: usuarioSchema.tipo.optional(),
+  correo: usuarioSchema.correo,
 });
 
 const dniValidSchema = z.object({

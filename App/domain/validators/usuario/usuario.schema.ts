@@ -59,4 +59,8 @@ export const usuarioSchema = {
       error: "tipo solo puede contener NATURAL y JURIDICO",
     })
     .optional(),
+  sexo: z.enum(["MASCULINO", "FEMENINO"], {
+    error: "Solo esta permitido masculino o femenino",
+  }),
+  correo: z.string().trim().min(6),
 };

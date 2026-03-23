@@ -14,6 +14,8 @@ export class UsuarioDto {
   public numero?: string;
   public tipo?: "NATURAL" | "JURIDICO" | undefined;
   public numeroLicenciaConducir?: string;
+  public correo?: string;
+  public sexo: "MASCULINO" | "FEMENINO";
 
   private constructor({
     nombre,
@@ -24,6 +26,9 @@ export class UsuarioDto {
     ruc,
     edad,
     numeroLicenciaConducir,
+    sexo,
+    correo,
+    tipo,
   }: UsuarioDto) {
     this.nombre = nombre;
     this.apellidomaterno = apellidomaterno;
@@ -33,6 +38,9 @@ export class UsuarioDto {
     this.ruc = ruc;
     this.edad = edad;
     this.numeroLicenciaConducir = numeroLicenciaConducir;
+    this.sexo = sexo;
+    this.correo = correo;
+    this.tipo = tipo;
   }
 
   static createUserDto(input: any): [string?, UsuarioDto?] {

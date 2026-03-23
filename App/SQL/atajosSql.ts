@@ -5,6 +5,7 @@ import { CreateAccesDto } from "../domain/dto/auth/createAcces.dto.js";
 import { CustomError } from "../core/res/Custom.error.js";
 import { CreateCarroDto } from "../domain/dto/autosEmpresa/createCarro.dto.js";
 import { CreateEstablecimientoDto } from "../domain/dto/establecimientos/createEstablecimiento.dto.js";
+import { ZynovaConnect } from "../connection/zynovaConnect.js";
 
 export async function InsertUser({
   nombre,
@@ -16,10 +17,10 @@ export async function InsertUser({
   numero,
   tipo,
   numeroLicenciaConducir,
+  sexo,
+  correo,
 }: UsuarioDto) {
   const { usuarios } = generateTables();
-
-  //https://server.zynova.online/userMaster/api/register
 
   const fields: (string | number)[] = [
     nombre.toUpperCase(),
@@ -63,6 +64,27 @@ export async function InsertUser({
   if (numeroLicenciaConducir !== undefined) {
     fields.push(numeroLicenciaConducir);
     valores.push(usuarios.numeroLicenciaConducir);
+  }
+
+  if (correo !== undefined) {
+    fields.push(correo);
+    valores.push(usuarios.correo);
+  }
+
+  if (
+    edad !== undefined &&
+    dni !== undefined &&
+    correo !== undefined &&
+    numero !== undefined
+  ) {
+    ZynovaConnect.registrarUser({
+      nombre: nombre,
+      apellido: apellidopaterno + apellidomaterno,
+      correos: [{ correo: correo }],
+      dni: dni,
+      sexo: sexo,
+      telefono: [{ numeroCelular: numero }],
+    });
   }
 
   const [id] = (await DB.Insert(usuarios(), valores)
