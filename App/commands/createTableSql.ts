@@ -14,6 +14,7 @@ async function generarTablas() {
     usuarios,
     vehiculosempresa,
     datosempresa,
+    salidatransporte,
   } = generateTables();
 
   await generateTable(accesos(), accesos.$columns);
@@ -25,6 +26,14 @@ async function generarTablas() {
   await generateTable(seguimientopaquetes(), seguimientopaquetes.$columns);
   await generateTable(vehiculosempresa(), vehiculosempresa.$columns);
   await generateTable(datosempresa(), datosempresa.$columns);
+  await generateTable(salidatransporte(), salidatransporte.$columns);
 }
 
-await generarTablas();
+await generarTablas()
+  .then(() => {
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.log(error);
+    process.exit(1);
+  });

@@ -1,9 +1,10 @@
 import { Server as SocketIOServer } from "socket.io";
 import "socket.io";
+import { tipeUser } from "./global.js";
 
 interface Authpayload {
   id: number;
-  rol: "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
+  rol: tipeUser;
   exp?: number;
   [key: string]: any;
 }

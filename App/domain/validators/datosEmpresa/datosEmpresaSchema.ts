@@ -26,4 +26,6 @@ export const datosEmpresaSchema = {
   codigoMtc: z.string().trim(),
   urlApi: z.string().trim(),
   claveAcceso: z.string().trim(),
+  correo: z.string().trim(),
+  fechavigenciaregistro: z.coerce.date(),
 };

@@ -23,7 +23,7 @@
         "pg": "^8.19.0",
         "socket.io": "^4.8.1",
         "zod": "^4.1.13",
-        "zormz": "^1.4.7"
+        "zormz": "^1.5.0"
     },
     "devDependencies": {
         "@tsconfig/node20": "^20.1.8",

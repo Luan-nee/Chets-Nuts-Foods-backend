@@ -3,15 +3,17 @@ import { JWTadapter } from "../../../core/config/AccessToken.js";
 import { LoginUserDto } from "../../dto/auth/loginUser.dto.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
 import { generateTables } from "../../../BD-Control.js";
+import { Authpayload } from "../../../types/index.js";
+import { tipeUser } from "../../../types/global.js";
 
 interface IdReponse {
   idacceso: number;
-  tipos: string;
+  tipos: tipeUser;
   idusuario: number;
 }
 
 export default class SessionUserUseCase {
-  private generarToken(input: Record<string, any>, duration?: number) {
+  private generarToken(input: Authpayload, duration?: number) {
     const token = JWTadapter.createAccessToken({
       payload: input,
       duration,

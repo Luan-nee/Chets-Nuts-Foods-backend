@@ -26,7 +26,10 @@ export class DatosEmpresaController {
         CustomResponse.success({ res, data });
       })
       .catch((error) => {
-        CustomResponse.badRequest({ res, error });
+        CustomResponse.badRequest({
+          res,
+          error,
+        });
       });
   };
 }

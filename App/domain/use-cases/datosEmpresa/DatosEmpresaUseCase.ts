@@ -6,6 +6,7 @@ import { Authpayload } from "../../../types/index.js";
 
 export class DatosEmpresaUseCase {
   async create(dataEmpresa: CreateDatosEmpresaDto, userData: Authpayload) {
+    console.log(dataEmpresa);
     if (userData.rol !== "ADMIN") {
       throw CustomError.badRequest(
         "Para confirmar los datos Empresariales tienes que ser ADMINISTRADOR",
@@ -13,7 +14,7 @@ export class DatosEmpresaUseCase {
     }
     const { datosempresa } = generateTables();
 
-    const noRepeat = await DB.Select([dataEmpresa.denominacion])
+    const noRepeat = await DB.Select([datosempresa.denominacion])
       .from(datosempresa())
       .where(
         OR(
@@ -36,12 +37,16 @@ export class DatosEmpresaUseCase {
       datosempresa.ruc,
       datosempresa.numeroRegistroMtc,
       datosempresa.denominacion,
+      datosempresa.correo,
+      datosempresa.fechavigenciaregistro,
     ];
-    const querys: string[] = [
+    const querys: any[] = [
       dataEmpresa.codigoMtc,
       dataEmpresa.ruc,
       dataEmpresa.numeroRegistroMtc,
       dataEmpresa.denominacion,
+      dataEmpresa.correo,
+      dataEmpresa.fechaVigenciaRegistroMtc,
     ];
 
     if (dataEmpresa.urlApi !== undefined) {
@@ -57,7 +62,7 @@ export class DatosEmpresaUseCase {
     const response = await DB.Insert(datosempresa(), campos)
       .Values(querys)
       .Returning(datosempresa.idDatosEmpresa)
-      .execute();
+      .execute(true);
 
     if (response === undefined) {
       throw CustomError.badRequest(

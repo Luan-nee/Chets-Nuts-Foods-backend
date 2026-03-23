@@ -20,8 +20,10 @@ export function generateTables() {
       denominacion: varchar(150).Required().$(),
       numeroRegistroMtc: varchar(30).Required().$(),
       codigoMtc: varchar(30).Required().$(),
+      correo: varchar(150).Required().$(),
       urlApi: varchar(150).Default("none").$(),
       claveAcceso: varchar(80).Default("none").$(),
+      fechavigenciaregistro: timestamp().required().$(),
     }),
     establecimientos: defineTable("establecimientos", {
       idEst: int().Pk().Required().$(),
@@ -78,22 +80,27 @@ export function generateTables() {
       //envios
       idenvio: int().Pk().Required().$(),
       idusuario: int().Required().$(),
-      idchofer: int().Required().$(),
-      idvehiculo: int().Required().$(),
       idusuarioDestino: int().Required().$(),
-      idorigenestablecimiento: int().Required().$(),
+      idsalidatransporte: int().Required().$(),
       idDestinoEstablecimiento: int().Required().$(),
+      destino: varchar(50).$(),
       clave: varchar(10).Required().$(),
       montocobrado: money().required().$(),
-      destino: varchar(50).$(),
-      tiempoestimado: varchar(50).$(),
+      observacion: varchar(300).$(), //en caso la policia lo detenga o ocurra algo con el paquete
+      ultimaactualizacion: timestamp().onUpdate().$(),
+    }),
+
+    salidatransporte: defineTable("salidatransporte", {
+      idsalidatransporte: int().Pk().Required().$(),
+      idvehiculo: int().Required().$(),
+      idchofer: int().Required().$(),
+      idorigenestablecimiento: int().Required().$(),
       estado: varchar(50)
         .Check(["ENTREGADO", "CAMINO", "DETENIDO", "CANCELADO", "REVISION"]) //revision esperando aprobacion de la sunat
         .$(),
-      observacion: varchar(300).$(), //en caso la policia lo detenga o ocurra algo con el paquete
-      ultimaactualizacion: timestamp().$(),
+      fechasalida: timestamp().required().$(),
       fechafinalizado: timestamp().$(),
-      fechaenviado: timestamp().now().$(),
+      fechacreado: timestamp().now().$(),
     }),
 
     seguimientopaquetes: defineTable("seguimientopaquetes", {

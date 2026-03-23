@@ -16,5 +16,5 @@ export const envs = {
   DB_DATABASE: get("DB_DATABASE").required().asString(),
   DB_USER: get("DB_USER").required().asString(),
   DB_PASS: get("DB_PASS").default("").asString(),
-  DB_TIPO: get("DB_TIPO").required().default("mysql").asEnum(["mysql", "pg"]),
+  DB_TIPO: get("DB_TIPO").default("mysql").asEnum(["mysql", "pg"]),
 };

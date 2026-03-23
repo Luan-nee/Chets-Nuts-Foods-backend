@@ -85,20 +85,13 @@ async function generarTablas() {
     tipoEstado: "oficina",
     ubigeo: "12345667",
   });
-
-  const establecimiento2 = await CreateEstablecimiento({
-    departamento: "MADRE DE DIOS",
-    descripcion: "Establecimiento de prueba",
-    direccion: "av. madre de dios con fiscarrald",
-    distrito: "TAMBOPATA",
-    provincia: "TAMBOPATA",
-    idResponsable: id3,
-    latitud: "111500",
-    longitud: "1200",
-    nombreEstablecimiento: "Prueba 2",
-    tipoEstado: "almacen",
-    ubigeo: "1234561234",
-  });
 }
 
-await generarTablas();
+await generarTablas()
+  .then(() => {
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.log(error);
+    process.exit(1);
+  });

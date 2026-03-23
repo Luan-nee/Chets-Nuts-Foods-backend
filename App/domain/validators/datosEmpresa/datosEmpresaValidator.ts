@@ -8,6 +8,8 @@ const createDatosEmpresa = z.object({
   codigoMtc: datosEmpresaSchema.codigoMtc,
   urlApi: datosEmpresaSchema.urlApi.optional(),
   claveAcceso: datosEmpresaSchema.claveAcceso.optional(),
+  correo: datosEmpresaSchema.correo,
+  fechaVigenciaRegistroMtc: datosEmpresaSchema.fechavigenciaregistro,
 });
 
 export const createDatosEmpresaValidator = (object: unknown) =>

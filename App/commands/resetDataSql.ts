@@ -26,4 +26,11 @@ async function resetTables() {
   console.log("La base de datos se reseteo con exito");
 }
 
-await resetTables();
+await resetTables()
+  .then(() => {
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.log(error);
+    process.exit(1);
+  });

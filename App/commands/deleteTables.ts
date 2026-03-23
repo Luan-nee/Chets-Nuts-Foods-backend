@@ -27,4 +27,11 @@ async function deleteTables() {
   await dropTable(datosempresa());
 }
 
-await deleteTables();
+await deleteTables()
+  .then(() => {
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.log(error);
+    process.exit(1);
+  });
