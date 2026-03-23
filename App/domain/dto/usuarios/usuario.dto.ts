@@ -8,11 +8,11 @@ export class UsuarioDto {
   public nombre: string;
   public apellidopaterno: string;
   public apellidomaterno: string;
-  public dni?: string;
+  public dni: string;
+  public edad: number;
   public ruc?: string;
   public numero?: string;
   public tipo?: "NATURAL" | "JURIDICO" | undefined;
-  public edad?: number;
   public numeroLicenciaConducir?: string;
 
   private constructor({
@@ -43,6 +43,7 @@ export class UsuarioDto {
 
     return [undefined, new UsuarioDto(validator.data)];
   }
+
   static validDniUserDto(input: any): [string?, string?] {
     const validator = dniUsuarioValidator(input);
     if (!validator.success) {

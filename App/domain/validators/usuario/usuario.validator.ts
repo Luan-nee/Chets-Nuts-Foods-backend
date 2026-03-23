@@ -6,7 +6,7 @@ const createUsuarioSchema = z.object({
   apellidopaterno: usuarioSchema.apellidopaterno,
   apellidomaterno: usuarioSchema.apellidomaterno,
   edad: usuarioSchema.edad,
-  dni: usuarioSchema.dniuser.optional(),
+  dni: usuarioSchema.dniuser,
   ruc: usuarioSchema.rucuser.optional(),
   numero: usuarioSchema.numero,
   tipo: usuarioSchema.tipo,

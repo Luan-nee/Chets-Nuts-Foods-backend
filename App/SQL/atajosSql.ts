@@ -19,6 +19,8 @@ export async function InsertUser({
 }: UsuarioDto) {
   const { usuarios } = generateTables();
 
+  //https://server.zynova.online/userMaster/api/register
+
   const fields: (string | number)[] = [
     nombre.toUpperCase(),
     apellidomaterno.toUpperCase(),

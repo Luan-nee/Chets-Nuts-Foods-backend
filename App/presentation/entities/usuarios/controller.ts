@@ -21,7 +21,7 @@ export class UsuariosController {
     }
     const createUser = new UsuariosUseCase();
     createUser
-      .create(userDto, req.authpayload.id)
+      .create(userDto)
       .then((data) => {
         emitSocket(req, "newUser", data);
         CustomResponse.success({ res, data });

@@ -32,7 +32,7 @@ export class UsuariosUseCase {
     return user;
   }
 
-  async create(userDto: UsuarioDto, idUser: number) {
+  async create(userDto: UsuarioDto) {
     const { usuarios } = generateTables();
 
     if (userDto.dni === undefined && userDto.ruc === undefined) {
@@ -60,7 +60,6 @@ export class UsuariosUseCase {
       .where(comparacion)
       .execute()) as validateUserDuplicate[];
 
-    console.log(repeat);
     if (repeat.length > 0) {
       const queryExec: UpdateParam[] = [];
       if (repeat[0].dniuser == null && userDto.dni !== undefined) {

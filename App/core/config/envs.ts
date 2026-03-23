@@ -17,4 +17,5 @@ export const envs = {
   DB_USER: get("DB_USER").required().asString(),
   DB_PASS: get("DB_PASS").default("").asString(),
   DB_TIPO: get("DB_TIPO").default("mysql").asEnum(["mysql", "pg"]),
+  CONNECT_ZYNOVA: get("CONNECT_ZYNOVA").required().asString(),
 };
