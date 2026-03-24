@@ -9,7 +9,7 @@ export class UsuariosRouter {
 
     router.get("/", usuarios.getAll);
     router.post("/", adminAccess, usuarios.create);
-    router.patch("/", usuarios.update);
+    router.patch("/", adminAccess, usuarios.update);
     router.post("/dni", usuarios.getByDni);
     router.post("/ruc", usuarios.getByRuc);
     return router;
