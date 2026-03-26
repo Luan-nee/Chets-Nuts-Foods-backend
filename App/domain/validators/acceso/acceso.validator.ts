@@ -1,21 +1,19 @@
 import z from "zod";
 import { accesoSchema } from "./acceso.schema.js";
 
-// Schema para crear un nuevo acceso
 const createAccesoSchema = z.object({
-  idusuario: accesoSchema.idusuario,
+  idusuario: accesoSchema.idusuario.optional(),
   tipos: accesoSchema.tipos,
   correo: accesoSchema.correo,
-  contra: accesoSchema.contra,
+  password: accesoSchema.contra,
   estado: accesoSchema.estado,
 });
 
-// Schema para actualizar un acceso
 const updateAccesoSchema = z.object({
-  idusuario: accesoSchema.idusuario.optional(),
+  idacceso: accesoSchema.idacceso,
   tipos: accesoSchema.tipos.optional(),
   correo: accesoSchema.correo.optional(),
-  contra: accesoSchema.contra.optional(),
+  password: accesoSchema.contra.optional(),
   estado: accesoSchema.estado.optional(),
 });
 
@@ -24,4 +22,3 @@ export const createAccesoValidator = (object: unknown) =>
 
 export const updateAccesoValidator = (object: unknown) =>
   updateAccesoSchema.safeParse(object);
-

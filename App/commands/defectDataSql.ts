@@ -15,7 +15,8 @@ async function generarTablas() {
     apellidopaterno: "vilca",
     dni: "75276127",
     numero: "925543023",
-    edad: 20,
+    edad: 22,
+    sexo: "MASCULINO",
   });
 
   const id2 = await InsertUser({
@@ -24,6 +25,8 @@ async function generarTablas() {
     apellidopaterno: "ROJAS",
     dni: "75276126",
     numero: "925543023",
+    edad: 22,
+    sexo: "MASCULINO",
   });
 
   const id3 = await InsertUser({
@@ -31,27 +34,29 @@ async function generarTablas() {
     apellidomaterno: "HUILLCA",
     apellidopaterno: "SANCHEZ",
     dni: "75276128",
+    edad: 23,
+    sexo: "MASCULINO",
   });
 
   const idAcceso1 = await CreateAccesos({
-    usuario: "zviamontevilca@gmail.com",
+    correo: "zviamontevilca@gmail.com",
     password: "zainmaster123",
     tipos: "ADMIN",
-    idUser: idR,
+    idusuario: idR,
   });
 
   const idAcceso2 = await CreateAccesos({
-    usuario: "luandelsol@gmail.com",
+    correo: "luandelsol@gmail.com",
     password: "luan123",
     tipos: "COLABORADOR",
-    idUser: id3,
+    idusuario: id3,
   });
 
   const idAcceso3 = await CreateAccesos({
-    usuario: "luandelsol@gmail.com",
+    correo: "luandelsol@gmail.com",
     password: "chofer123",
     tipos: "CHOFER",
-    idUser: id3,
+    idusuario: id3,
   });
 
   const carro1 = await createVehiculoEmpresa({

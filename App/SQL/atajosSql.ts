@@ -1,4 +1,4 @@
-import { DB, eq } from "zormz";
+import { DB, eq, UP } from "zormz";
 import { generateTables } from "../BD-Control.js";
 import { UsuarioDto } from "../domain/dto/usuarios/usuario.dto.js";
 import { CreateAccesDto } from "../domain/dto/auth/createAcces.dto.js";
@@ -6,6 +6,13 @@ import { CustomError } from "../core/res/Custom.error.js";
 import { CreateCarroDto } from "../domain/dto/autosEmpresa/createCarro.dto.js";
 import { CreateEstablecimientoDto } from "../domain/dto/establecimientos/createEstablecimiento.dto.js";
 import { ZynovaConnect } from "../connection/zynovaConnect.js";
+import { UpdateParam } from "../consts.js";
+
+interface insertarUser {
+  iduser: number;
+  nombres: string;
+  apellidopaterno: string;
+}
 
 export async function InsertUser({
   nombre,
@@ -26,12 +33,17 @@ export async function InsertUser({
     nombre.toUpperCase(),
     apellidomaterno.toUpperCase(),
     apellidopaterno.toUpperCase(),
+    dni,
   ];
   const valores = [
     usuarios.nombres,
     usuarios.apellidomaterno,
     usuarios.apellidopaterno,
+    usuarios.dniuser,
   ];
+
+  const query: UpdateParam[] = [];
+
   if (dni === undefined && ruc === undefined) {
     throw CustomError.badRequest("RUC O DNI PARA REGISTRAR AL USUARIO");
   }
@@ -39,36 +51,37 @@ export async function InsertUser({
   if (numero !== undefined) {
     fields.push(numero);
     valores.push(usuarios.numero);
+    query.push(UP(usuarios.numero, numero));
   }
 
   if (ruc !== undefined) {
     fields.push(ruc);
     valores.push(usuarios.rucuser);
-  }
-
-  if (dni !== undefined) {
-    fields.push(dni);
-    valores.push(usuarios.dniuser);
+    query.push(UP(usuarios.rucuser, ruc));
   }
 
   if (tipo !== undefined) {
     fields.push(tipo);
     valores.push(usuarios.tipo);
+    query.push(UP(usuarios.tipo, tipo));
   }
 
   if (edad !== null && edad !== undefined) {
     fields.push(edad);
     valores.push(usuarios.edad);
+    query.push(UP(usuarios.edad, `${edad}`));
   }
 
   if (numeroLicenciaConducir !== undefined) {
     fields.push(numeroLicenciaConducir);
     valores.push(usuarios.numeroLicenciaConducir);
+    query.push(UP(usuarios.numeroLicenciaConducir, numeroLicenciaConducir));
   }
 
   if (correo !== undefined) {
     fields.push(correo);
     valores.push(usuarios.correo);
+    query.push(UP(usuarios.correo, correo));
   }
 
   if (
@@ -79,7 +92,7 @@ export async function InsertUser({
   ) {
     ZynovaConnect.registrarUser({
       nombre: nombre,
-      apellido: apellidopaterno + apellidomaterno,
+      apellido: apellidopaterno + " " + apellidomaterno,
       correos: [{ correo: correo }],
       dni: dni,
       sexo: sexo,
@@ -87,22 +100,44 @@ export async function InsertUser({
     });
   }
 
-  const [id] = (await DB.Insert(usuarios(), valores)
-    .Values(fields)
-    .Returning(usuarios.iduser)
-    .execute()) as number[];
+  const existUser = (await DB.Select([
+    usuarios.iduser,
+    usuarios.nombres,
+    usuarios.apellidopaterno,
+  ])
+    .from(usuarios())
+    .where(eq(usuarios.dniuser, dni))
+    .execute()) as insertarUser[] | undefined;
 
-  console.log(`Usuario ${nombre} Creado con exito `);
-  return id;
+  if (existUser === undefined || existUser.length === 0) {
+    const [id] = (await DB.Insert(usuarios(), valores)
+      .Values(fields)
+      .Returning(usuarios.iduser)
+      .execute()) as number[];
+
+    console.log(`Usuario ${nombre} Creado con exito `);
+    return id;
+  } else {
+    const upt = await DB.Update(usuarios())
+      .set(query)
+      .where(eq(usuarios.iduser, existUser[0].iduser))
+      .execute();
+
+    return existUser[0].iduser;
+  }
 }
 
 export async function CreateAccesos({
-  usuario,
+  correo,
   password,
   tipos,
-  idUser,
+  idusuario,
 }: CreateAccesDto) {
   const { accesos } = generateTables();
+
+  if (idusuario === undefined) {
+    throw CustomError.badRequest("El id User es obligatorio");
+  }
 
   const idAccedo = (await DB.Insert(accesos(), [
     accesos.correo,
@@ -110,9 +145,11 @@ export async function CreateAccesos({
     accesos.tipos,
     accesos.idusuario,
   ])
-    .Values([usuario, password, tipos, idUser])
+    .Values([correo, password, tipos, idusuario])
     .Returning(accesos.idacceso)
     .execute()) as number[];
+
+  console.log(idAccedo);
 
   if (!idAccedo)
     throw CustomError.badRequest("Ocurrio un Error al crear el acceso");
@@ -120,7 +157,7 @@ export async function CreateAccesos({
   if (idAccedo.length <= 0) {
     throw CustomError.badRequest("No se pudo crear");
   }
-  console.log(`Acceso creado con exito para ${usuario}`);
+  console.log(`Acceso creado con exito para ${correo}`);
   return idAccedo[0];
 }
 

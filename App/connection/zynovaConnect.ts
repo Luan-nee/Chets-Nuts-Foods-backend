@@ -33,7 +33,7 @@ export class ZynovaConnect {
         "Content-Type": "application/json",
         Authorization: `bearer ${CONNECT_ZYNOVA}`,
       },
-      body,
+      body: JSON.stringify(body),
     });
 
     const data = await response.json();

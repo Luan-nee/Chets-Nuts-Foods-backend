@@ -1,21 +1,21 @@
 import { typeRol } from "../../../types/global.js";
-import { createSessionValidator } from "../../validators/auth/sessionValidator.js";
+import { createAccesoValidator } from "../../validators/acceso/acceso.validator.js";
 
 export class CreateAccesDto {
-  public usuario: string;
+  public idusuario?: number;
   public password: string;
   public tipos: typeRol;
-  public idUser: number;
+  public correo: string;
 
-  private constructor({ idUser, usuario, password, tipos }: CreateAccesDto) {
-    this.usuario = usuario;
+  private constructor({ idusuario, password, tipos, correo }: CreateAccesDto) {
+    this.idusuario = idusuario;
     this.password = password;
     this.tipos = tipos;
-    this.idUser = idUser;
+    this.correo = correo;
   }
 
   static createSessionUserMain(input: any): [string?, CreateAccesDto?] {
-    const result = createSessionValidator(input);
+    const result = createAccesoValidator(input);
     if (!result.success) {
       return ["Error al iniciar Session", undefined];
     }
