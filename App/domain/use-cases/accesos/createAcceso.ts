@@ -110,7 +110,6 @@ export class CreateAccesoUseCase {
   async update(update: UpdateAccesDto) {
     const { accesos } = generateTables();
     const query: UpdateParam[] = [];
-    console.log(update);
 
     if (update.correo !== undefined) {
       query.push(UP(accesos.correo, update.correo));

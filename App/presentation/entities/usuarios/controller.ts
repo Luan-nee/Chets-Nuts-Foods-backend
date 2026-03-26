@@ -126,4 +126,21 @@ export class UsuariosController {
         CustomResponse.badRequest({ res, error });
       });
   };
+
+  getClientesFrecuentes = (req: Request, res: Response) => {
+    if (req.authpayload === undefined) {
+      CustomResponse.badRequest({ res, error: "No tienes permisos " });
+      return;
+    }
+
+    const userCase = new UsuariosUseCase();
+    userCase
+      .getClientes()
+      .then((data) => {
+        CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
+      });
+  };
 }

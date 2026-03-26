@@ -1,4 +1,4 @@
-import { DB, eq, UP } from "zormz";
+import { AVG, DB, eq, MAYOR, UP } from "zormz";
 import { UsuarioDto } from "../../dto/usuarios/usuario.dto.js";
 import { generateTables } from "../../../BD-Control.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
@@ -234,5 +234,29 @@ export class UsuariosUseCase {
       );
     }
     return user;
+  }
+
+  async getClientes() {
+    const { usuarios } = generateTables();
+
+    const [response] = (await DB.Select([AVG(usuarios.cantenvios, "promedio")])
+      .from(usuarios())
+      .execute()) as [{ promedio: number }];
+    const promedio = Number(response.promedio);
+
+    if (promedio === 0) {
+      return [];
+    }
+
+    const usuariosResponse = await DB.Select([
+      usuarios.nombres,
+      usuarios.apellidopaterno,
+      usuarios.apellidomaterno,
+      usuarios.dniuser,
+    ])
+      .from(usuarios())
+      .where(MAYOR(usuarios.cantenvios, `${promedio}`))
+      .execute();
+    return usuariosResponse;
   }
 }

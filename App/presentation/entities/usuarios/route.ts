@@ -8,6 +8,7 @@ export class UsuariosRouter {
     const usuarios = new UsuariosController();
 
     router.get("/", usuarios.getAll);
+    router.get("/clientes", usuarios.getClientesFrecuentes);
     router.post("/", adminAccess, usuarios.create);
     router.patch("/", adminAccess, usuarios.update);
     router.post("/dni", usuarios.getByDni);
