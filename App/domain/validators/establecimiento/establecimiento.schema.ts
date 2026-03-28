@@ -1,13 +1,10 @@
 import z from "zod";
 import { Validator } from "../validators.js";
+import { departamentosPeru } from "../../../consts.js";
 
 export const establecimientoSchema = {
-  departamento: z
-    .string()
-    .min(0)
-    .refine((valor) => Validator.isValidFullName(valor), {
-      error: "Los Departamentos del pais no contienen numeros",
-    }),
+  idEstablecimiento: z.number().min(0),
+  departamento: z.enum(departamentosPeru),
   descripcion: z
     .string()
     .refine((valor) => Validator.isValidDescription(valor), {
@@ -26,7 +23,9 @@ export const establecimientoSchema = {
   longitud: z.string(),
   nombreEstablecimiento: z
     .string()
-    .refine((nombre) => Validator.isValidUsername(nombre)),
+    .refine((nombre) => Validator.isValidAddress(nombre), {
+      error: "el nombre no puede contener caracteres especiales",
+    }),
   provincia: z
     .string()
     .trim()
@@ -47,4 +46,5 @@ export const establecimientoSchema = {
     })
     .optional(),
   ubigeo: z.string().trim().max(15),
+  activo: z.boolean(),
 };

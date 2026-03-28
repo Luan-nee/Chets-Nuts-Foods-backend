@@ -14,17 +14,17 @@ export class Validator {
 
   static isValidGeneralName = (val: string) =>
     /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\-_]+( [a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\-_]+)*$/.test(
-      val
+      val,
     );
 
   static isValidAddress = (val: string) =>
     /^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\-_.,]+( [a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ\-_.,]+)*$/.test(
-      val
+      val,
     );
 
   static isValidDescription = (val: string) =>
     /^[a-zA-Z0-9áéíóúñüÁÉÍÓÚÑÜ.,¡!¿?\-()[\]{}$%&*'_"@#+:]+(\s[a-zA-Z0-9áéíóúñüÁÉÍÓÚÑÜ.,¡!¿?\-()[\]{}$%&*'_"@#+:]+)*$/.test(
-      val
+      val,
     );
 
   static isValidFullName = (val: string) =>

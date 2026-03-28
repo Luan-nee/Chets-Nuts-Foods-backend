@@ -1,4 +1,8 @@
-import { EstadosTipoEstablecimiento } from "../../../consts.js";
+import {
+  departamentosPeru,
+  departamentosPeruType,
+  EstadosTipoEstablecimiento,
+} from "../../../consts.js";
 import { createEstablecimientoValidatos } from "../../validators/establecimiento/establecimientoValidator.js";
 
 export class CreateEstablecimientoDto {
@@ -10,7 +14,7 @@ export class CreateEstablecimientoDto {
   public longitud: string;
   public distrito: string;
   public provincia: string;
-  public departamento: string;
+  public departamento: departamentosPeruType;
   public ubigeo: string;
   public tipoEstado?: EstadosTipoEstablecimiento | undefined;
   public codigoSunat?: string;

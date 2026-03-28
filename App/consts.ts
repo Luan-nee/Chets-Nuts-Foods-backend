@@ -59,3 +59,33 @@ export type EstadosTipoEstablecimiento =
   | "no_registrado";
 
 export const MTCdata = "123456-2024-MTC/17";
+
+export const departamentosPeru = [
+  "AMAZONAS",
+  "ANCASH",
+  "APURIMAC",
+  "AREQUIPA",
+  "AYACUCHO",
+  "CAJAMARCA",
+  "CALLAO",
+  "CUSCO",
+  "HUANCAVELICA",
+  "HUANUCO",
+  "ICA",
+  "JUNIN",
+  "LA LIBERTAD",
+  "LAMBAYEQUE",
+  "LIMA",
+  "LORETO",
+  "MADRE DE DIOS",
+  "MOQUEGUA",
+  "PASCO",
+  "PIURA",
+  "PUNO",
+  "SAN MARTIN",
+  "TACNA",
+  "TUMBES",
+  "UCAYALI",
+] as const;
+
+export type departamentosPeruType = (typeof departamentosPeru)[number];

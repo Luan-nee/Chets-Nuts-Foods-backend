@@ -10,7 +10,7 @@ export class EntitiesRoutes {
     const router = Router();
     router.use("/usuarios", UsuariosRouter.routes);
     router.use("/empresa", DatosEmpresaRouter.routes);
-    router.use("/establecimiento", EstablecimientoRoutes.routes);
+    router.use("/establecimientos", EstablecimientoRoutes.routes);
     router.use("/accesos", adminAccess, AccesosRouter.routes);
     return router;
   }
