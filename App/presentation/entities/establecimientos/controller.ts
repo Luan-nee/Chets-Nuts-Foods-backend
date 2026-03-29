@@ -80,7 +80,6 @@ export class EstablecimientosController {
     const [error, updateDto] =
       UpdateEstablecimientoDTO.CreateEstablecimientoAccess(req.body);
 
-    console.log(error);
     console.log(updateDto);
     if (error !== undefined || updateDto === undefined) {
       CustomResponse.badRequest({ res, error });
@@ -91,7 +90,7 @@ export class EstablecimientosController {
     useEstablecimiento
       .update(updateDto)
       .then((data) => {
-        CustomResponse.badRequest({ res, error });
+        CustomResponse.success({ res, data });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });
