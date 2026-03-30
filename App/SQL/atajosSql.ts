@@ -171,17 +171,6 @@ export async function createVehiculoEmpresa({
 }: CreateCarroDto) {
   const { vehiculosempresa } = generateTables();
 
-  const verifiVehiculo = (await DB.Select([vehiculosempresa.idvehempresa])
-    .from(vehiculosempresa())
-    .where(eq(vehiculosempresa.placa, placa))
-    .execute()) as object[];
-
-  if (verifiVehiculo.length > 0) {
-    throw CustomError.badRequest(
-      `Este vehiculo con la placa ${placa} ya esta registrado.`,
-    );
-  }
-
   const [id] = (await DB.Insert(vehiculosempresa(), [
     vehiculosempresa.anio,
     vehiculosempresa.capacidadCarga,

@@ -128,6 +128,7 @@ export function generateTables() {
       vin: varchar(100).$(),
       numeroHabilitacion: varchar(150).$(),
       capacidadCarga: money().required().$(),
+      fechacreado: timestamp().now().$(),
     }),
   };
 }

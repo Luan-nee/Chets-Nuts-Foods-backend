@@ -6,6 +6,8 @@ export class CreateCarroDto {
   public modelo: string;
   public anio: string;
   public tipoVehiculo: string;
+  public vin?: string;
+  public numeroHabilitacion?: string;
   public capacidadCarga: number;
 
   private constructor({
@@ -15,6 +17,8 @@ export class CreateCarroDto {
     modelo,
     placa,
     tipoVehiculo,
+    vin,
+    numeroHabilitacion,
   }: CreateCarroDto) {
     this.anio = anio;
     this.capacidadCarga = capacidadCarga;
@@ -22,6 +26,8 @@ export class CreateCarroDto {
     this.modelo = modelo;
     this.placa = placa;
     this.tipoVehiculo = tipoVehiculo;
+    this.vin = vin;
+    this.numeroHabilitacion = numeroHabilitacion;
   }
 
   static createVehiculoAccess(input: any): [string?, CreateCarroDto?] {

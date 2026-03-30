@@ -3,6 +3,7 @@ import { Validator } from "../validators.js";
 
 export const vehiculosSchema = {
   idvehempresa: z.number().min(0),
+  idVehiculo: z.number().min(0),
   anio: z
     .string()
     .trim()
@@ -14,4 +15,6 @@ export const vehiculosSchema = {
   modelo: z.string().trim(),
   placa: z.string().trim(),
   tipoVehiculo: z.string().trim(),
+  vin: z.string().trim(),
+  numeroHabilitacion: z.string().trim(),
 };

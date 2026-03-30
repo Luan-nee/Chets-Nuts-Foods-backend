@@ -8,7 +8,24 @@ const createVehiculo = z.object({
   modelo: vehiculosSchema.modelo,
   placa: vehiculosSchema.placa,
   tipoVehiculo: vehiculosSchema.tipoVehiculo,
+  vin: vehiculosSchema.vin.optional(),
+  numeroHabilitacion: vehiculosSchema.numeroHabilitacion.optional(),
+});
+
+const updateVehiculo = z.object({
+  idVehiculo: vehiculosSchema.idVehiculo,
+  anio: vehiculosSchema.anio.optional(),
+  capacidadCarga: vehiculosSchema.capacidadCarga.optional(),
+  marca: vehiculosSchema.marca.optional(),
+  modelo: vehiculosSchema.modelo.optional(),
+  placa: vehiculosSchema.placa.optional(),
+  tipoVehiculo: vehiculosSchema.tipoVehiculo.optional(),
+  vin: vehiculosSchema.vin.optional(),
+  numeroHabilitacion: vehiculosSchema.numeroHabilitacion.optional(),
 });
 
 export const createVehiculoValidator = (object: unknown) =>
   createVehiculo.safeParse(object);
+
+export const updateVehiculoValidator = (object: unknown) =>
+  updateVehiculo.safeParse(object);
