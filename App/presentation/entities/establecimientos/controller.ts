@@ -3,6 +3,7 @@ import { CustomResponse } from "../../../core/res/custom.response.js";
 import { CreateEstablecimientoDto } from "../../../domain/dto/establecimientos/createEstablecimiento.dto.js";
 import { EstablecimientosUseCase } from "../../../domain/use-cases/establecimientos/establecimiento.use-case.js";
 import { UpdateEstablecimientoDTO } from "../../../domain/dto/establecimientos/updateEstablecimiento.dto.js";
+import { emitSocket } from "../../../controllerSockets/globalSocket.js";
 
 export class EstablecimientosController {
   create = (req: Request, res: Response) => {
@@ -23,7 +24,8 @@ export class EstablecimientosController {
 
     establecimientoUse
       .create(establecimientoDto)
-      .then((data) => {
+      .then(async (data) => {
+        await emitSocket(req, "newEstablecimiento", data);
         CustomResponse.success({ res, data });
       })
       .catch((error1) => {
@@ -89,7 +91,8 @@ export class EstablecimientosController {
     const useEstablecimiento = new EstablecimientosUseCase();
     useEstablecimiento
       .update(updateDto)
-      .then((data) => {
+      .then(async (data) => {
+        await emitSocket(req, "upEstablecimiento", data);
         CustomResponse.success({ res, data });
       })
       .catch((error) => {

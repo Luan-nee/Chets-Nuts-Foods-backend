@@ -9,6 +9,7 @@ export class UpdateCarroDto {
   public vin?: string;
   public numeroHabilitacion?: string;
   public capacidadCarga?: number;
+  public estado?: boolean;
 
   private constructor({
     anio,
@@ -19,6 +20,7 @@ export class UpdateCarroDto {
     vin,
     numeroHabilitacion,
     idVehiculo,
+    estado,
   }: UpdateCarroDto) {
     this.anio = anio;
     this.capacidadCarga = capacidadCarga;
@@ -28,6 +30,7 @@ export class UpdateCarroDto {
     this.vin = vin;
     this.numeroHabilitacion = numeroHabilitacion;
     this.idVehiculo = idVehiculo;
+    this.estado = estado;
   }
 
   static createVehiculoAccess(input: any): [string?, UpdateCarroDto?] {

@@ -2,7 +2,13 @@ import { departamentosPeruType } from "../consts.ts";
 
 export type tipeUser = "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
 
-export type socketsResponses = "newUser" | "updateUser";
+export type socketsResponses =
+  | "newUser"
+  | "updateUser"
+  | "newVehiculo"
+  | "upVehiculo"
+  | "upEstablecimiento"
+  | "newEstablecimiento";
 
 export type typeRol = "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
 
@@ -67,4 +73,27 @@ export interface updateEstablecimiento {
   tipoEstado?: EstadosTipoEstablecimiento | undefined;
   codigoSunat?: string;
   activo?: boolean;
+}
+
+interface CreateCarro {
+  anio: string;
+  capacidadCarga: number;
+  marca: string;
+  modelo: string;
+  placa: string;
+  tipoVehiculo: string;
+  vin?: string;
+  numeroHabilitacion?: string;
+}
+
+interface UpdateCarro {
+  idVehiculo: number;
+  anio?: string;
+  capacidadCarga?: string;
+  marca?: string;
+  modelo?: string;
+  tipoVehiculo?: string;
+  vin?: string;
+  numeroHabilitacion?: string;
+  estado?: boolean;
 }

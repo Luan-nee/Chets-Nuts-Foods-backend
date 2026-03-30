@@ -3,6 +3,7 @@ import { CustomResponse } from "../../../core/res/custom.response.js";
 import { CreateCarroDto } from "../../../domain/dto/autosEmpresa/createCarro.dto.js";
 import { CreateVehiculoUseCase } from "../../../domain/use-cases/vehiculos/createVehiculo.use-case.js";
 import { UpdateCarroDto } from "../../../domain/dto/autosEmpresa/updateCarro.dto.js";
+import { emitSocket } from "../../../controllerSockets/globalSocket.js";
 
 export class VehiculosEmpresaController {
   create = (req: Request, res: Response) => {
@@ -25,8 +26,15 @@ export class VehiculosEmpresaController {
 
     vehiculo
       .createVehiculo(vehiculoDto)
-      .then((data) => {
-        CustomResponse.success({ res, data });
+      .then(async (data) => {
+        await emitSocket(req, "newVehiculo", data[0]);
+        CustomResponse.success({
+          res,
+          data: {
+            message: "Vehiculo creado con exito",
+            idVehiculo: data[0].idvehempresa,
+          },
+        });
       })
       .catch((error2) => {
         CustomResponse.badRequest({ res, error: error2 });
@@ -119,8 +127,12 @@ export class VehiculosEmpresaController {
 
     vehiculo
       .updateVehiculo(updateDto)
-      .then((data) => {
-        CustomResponse.success({ res, data });
+      .then(async (data) => {
+        await emitSocket(req, "upVehiculo", data[0]);
+        CustomResponse.success({
+          res,
+          data: { message: "Actualizado con exito" },
+        });
       })
       .catch((error2) => {
         CustomResponse.badRequest({ res, error: error2 });

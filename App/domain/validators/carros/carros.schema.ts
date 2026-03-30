@@ -17,4 +17,5 @@ export const vehiculosSchema = {
   tipoVehiculo: z.string().trim(),
   vin: z.string().trim(),
   numeroHabilitacion: z.string().trim(),
+  estado: z.coerce.boolean(),
 };

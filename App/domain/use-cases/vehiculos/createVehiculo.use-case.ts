@@ -12,10 +12,23 @@ interface selectCarro {
   capacidadCarga: string;
 }
 
+interface selectVehiculoData {
+  idvehempresa: number;
+  placa: string;
+  marca: string;
+  modelo: string;
+  anio: string;
+  vin?: string;
+  numeroHabilitacion?: string;
+  capacidadCarga: string;
+  fechacreado: Date;
+}
+
 export class CreateVehiculoUseCase {
   async selectVehiculo(id: number) {
     const { vehiculosempresa } = generateTables();
     const automovil = (await DB.Select([
+      vehiculosempresa.idvehempresa,
       vehiculosempresa.placa,
       vehiculosempresa.marca,
       vehiculosempresa.modelo,
@@ -27,7 +40,7 @@ export class CreateVehiculoUseCase {
     ])
       .from(vehiculosempresa())
       .where(eq(vehiculosempresa.idvehempresa, id))
-      .execute()) as CreateCarroDto[];
+      .execute()) as selectVehiculoData[];
 
     return automovil;
   }
@@ -42,14 +55,14 @@ export class CreateVehiculoUseCase {
     ])
       .from(vehiculosempresa())
       .where(
-        OR(
-          eq(vehiculosempresa.marca, carro.marca),
-          eq(vehiculosempresa.modelo, carro.modelo),
+        AND(
+          eq(vehiculosempresa.placa, carro.placa),
           eq(vehiculosempresa.tipoVehiculo, carro.tipoVehiculo),
         ),
       )
       .execute()) as selectCarro[];
 
+    console.log(automovilValidate);
     if (automovilValidate.length > 0) {
       throw CustomError.badRequest("Este vehiculo ya esta registrado");
     }
@@ -93,10 +106,10 @@ export class CreateVehiculoUseCase {
       usuarios.rucuser,
       accesos.tipos,
     ])
-      .from(accesos())
-      .innerJOIN(usuarios(), eq(accesos.idusuario, usuarios.iduser))
-      .where(eq(usuarios.tipo, "CHOFER"))
-      .execute();
+      .from(usuarios())
+      .innerJOIN(accesos(), eq(usuarios.iduser, accesos.idusuario, false))
+      .where(eq(accesos.tipos, "CHOFER"))
+      .execute(true);
 
     return choferes;
   }
@@ -109,10 +122,20 @@ export class CreateVehiculoUseCase {
     numeroHabilitacion,
     tipoVehiculo,
     vin,
+    estado,
   }: UpdateCarroDto) {
     const { vehiculosempresa } = generateTables();
 
     const query: UpdateParam[] = [];
+
+    const verifyVec = await DB.Select([vehiculosempresa.idvehempresa])
+      .from(vehiculosempresa())
+      .where(eq(vehiculosempresa.idvehempresa, idVehiculo))
+      .execute();
+
+    if (verifyVec.length === 0) {
+      throw CustomError.badRequest("Este vehiculo no existe");
+    }
 
     if (anio !== undefined) {
       query.push(UP(vehiculosempresa.anio, anio));
@@ -144,6 +167,10 @@ export class CreateVehiculoUseCase {
       query.push(UP(vehiculosempresa.vin, vin));
     }
 
+    if (estado !== undefined) {
+      query.push(UP(vehiculosempresa.estado, `${estado}`, true));
+    }
+
     if (query.length === 0) {
       throw CustomError.badRequest("No hay datos para actualizar");
     }
@@ -152,6 +179,9 @@ export class CreateVehiculoUseCase {
       .set(query)
       .where(eq(vehiculosempresa.idvehempresa, idVehiculo))
       .execute();
-    return "ok";
+
+    const vehiculo = await this.selectVehiculo(idVehiculo);
+
+    return vehiculo;
   }
 }
