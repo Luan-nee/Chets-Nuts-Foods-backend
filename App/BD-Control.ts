@@ -87,6 +87,9 @@ export function generateTables() {
       destino: varchar(50).$(),
       clave: varchar(10).Required().$(),
       montocobrado: money().required().$(),
+      estadopaquete: varchar(50)
+        .Check(["ENTREGADO", "CAMINO", "DETENIDO", "CANCELADO", "REVISION"]) //revision esperando aprobacion de la sunat
+        .$(),
       observacion: varchar(300).$(), //en caso la policia lo detenga o ocurra algo con el paquete
       ultimaactualizacion: timestamp().onUpdate().$(),
     }),
@@ -94,12 +97,13 @@ export function generateTables() {
     salidatransporte: defineTable("salidatransporte", {
       idsalidatransporte: int().Pk().Required().$(),
       idvehiculo: int().Required().$(),
-      idchofer: int().Required().$(),
+      idchoferacceso: int().Required().$(),
       idorigenestablecimiento: int().Required().$(),
-      estado: varchar(50)
-        .Check(["ENTREGADO", "CAMINO", "DETENIDO", "CANCELADO", "REVISION"]) //revision esperando aprobacion de la sunat
-        .$(),
       fechasalida: timestamp().required().$(),
+      estadotransporte: varchar(50)
+        .Check(["INICIO", "EN CAMINO", "FINALIZADO", "CANCELADO"])
+        .Default("INICIO")
+        .$(),
       fechafinalizado: timestamp().$(),
       fechacreado: timestamp().now().$(),
     }),

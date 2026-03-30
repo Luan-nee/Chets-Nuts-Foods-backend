@@ -12,6 +12,12 @@ export type socketsResponses =
 
 export type typeRol = "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
 
+export type salidaTransType =
+  | "INICIO"
+  | "EN CAMINO"
+  | "FINALIZADO"
+  | "CANCELADO";
+
 export type EstadosTipoEstablecimiento =
   | "fiscal"
   | "anexo"
