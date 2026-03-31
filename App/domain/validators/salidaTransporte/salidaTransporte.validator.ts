@@ -11,13 +11,12 @@ const createSalidaTransporteSchema = z.object({
 
 const updateSalidaTransporteSchema = z.object({
   idsalidatransporte: salidaTransporteSchema.idsalidatransporte,
-  idvehiculo: salidaTransporteSchema.idVehiculo.optional(),
-  idchoferusuario: salidaTransporteSchema.idChoferAcceso.optional(),
-  idorigenestablecimiento:
+  idChoferAcceso: salidaTransporteSchema.idChoferAcceso.optional(),
+  idVehiculo: salidaTransporteSchema.idVehiculo.optional(),
+  estadoTransporte: salidaTransporteSchema.estadoTransporte.optional(),
+  fechaSalida: salidaTransporteSchema.fechaSalida.optional(),
+  idOrigenEstablecimiento:
     salidaTransporteSchema.idOrigenEstablecimiento.optional(),
-  fechasalida: salidaTransporteSchema.fechaSalida.optional(),
-  estadotransporte: salidaTransporteSchema.estadoTransporte.optional(),
-  fechafinalizado: salidaTransporteSchema.fechafinalizado.optional(),
 });
 
 export const createSalidaTransporteValidator = (object: unknown) =>

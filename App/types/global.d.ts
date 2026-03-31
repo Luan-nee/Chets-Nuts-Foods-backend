@@ -103,3 +103,37 @@ interface UpdateCarro {
   numeroHabilitacion?: string;
   estado?: boolean;
 }
+
+export interface transporteType {
+  idsalidatransporte: number;
+  estadotransporte: boolean;
+  fechasalida: Date;
+  fechacreado: Date;
+  fechafinalizado: Date;
+  idvehiculo: number;
+  idchoferacceso: number;
+}
+
+export interface vehiculoType {
+  placa: string;
+  marca: string;
+  modelo: string;
+  capacidadCarga: number;
+}
+
+export interface choferType {
+  idacceso: number;
+  nombres: string;
+  apellidomaterno: string;
+  apellidopaterno: string;
+  rucuser: string;
+  numeroLicenciaConducir: string;
+  edad: number;
+  numero: string;
+}
+
+export interface salidaTransporteType {
+  salidaTransporte: transporteType;
+  vehiculo: vehiculoType;
+  choferUser: choferType;
+}
