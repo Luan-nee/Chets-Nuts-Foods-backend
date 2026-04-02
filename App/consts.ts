@@ -89,3 +89,5 @@ export const departamentosPeru = [
 ] as const;
 
 export type departamentosPeruType = (typeof departamentosPeru)[number];
+
+export const pagePermises = ["http://localhost:5173"];

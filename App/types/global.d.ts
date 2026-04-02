@@ -2,6 +2,12 @@ import { departamentosPeruType } from "../consts.ts";
 
 export type tipeUser = "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
 
+export type roomsSocket =
+  | "ADMINS"
+  | "CHOFERES"
+  | "ESTABLECIMIENTO"
+  | "CLIENTES";
+
 export type socketsResponses =
   | "newUser"
   | "updateUser"
@@ -104,6 +110,15 @@ interface UpdateCarro {
   estado?: boolean;
 }
 
+interface createSalidaTransporte {
+  idVehiculo: number;
+  idChoferAcceso: number;
+  idOrigenEstablecimiento: number;
+  idDestinoEstablecimiento: number;
+  fechaSalida: Date;
+  estadoTransporte: salidaTransType;
+}
+
 export interface transporteType {
   idsalidatransporte: number;
   estadotransporte: boolean;
@@ -112,6 +127,8 @@ export interface transporteType {
   fechafinalizado: Date;
   idvehiculo: number;
   idchoferacceso: number;
+  idorigenestablecimiento: number;
+  iddestinoestablecimiento: number;
 }
 
 export interface vehiculoType {
@@ -132,8 +149,21 @@ export interface choferType {
   numero: string;
 }
 
+export interface establecimientoSelect {
+  idEst: number;
+  nombreEst: string;
+  ubigeo: string;
+  tipoestablecimiento: EstadosTipoEstablecimiento;
+  departamento: string;
+  codigoSunat: string;
+  provincia: string;
+  fechaCreacion: Date;
+}
+
 export interface salidaTransporteType {
   salidaTransporte: transporteType;
   vehiculo: vehiculoType;
   choferUser: choferType;
+  origenEstablecimiento: establecimientoSelect;
+  destinoEstablecimiento: establecimientoSelect;
 }

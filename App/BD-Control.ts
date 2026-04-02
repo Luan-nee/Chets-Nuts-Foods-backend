@@ -27,7 +27,7 @@ export function generateTables() {
     }),
     establecimientos: defineTable("establecimientos", {
       idEst: int().Pk().Required().$(),
-      idUsuarioResponsable: int().Required().$(),
+      idUsuarioResponsable: int().Unique().Required().$(),
       codigoSunat: varchar(5).$(),
       nombreEst: varchar(100).Required().$(),
       direccion: varchar(150).Required().$(),
@@ -99,6 +99,7 @@ export function generateTables() {
       idvehiculo: int().Required().$(),
       idchoferacceso: int().Required().$(),
       idorigenestablecimiento: int().Required().$(),
+      iddestinoestablecimiento: int().Required().$(),
       fechasalida: timestamp().required().$(),
       estadotransporte: varchar(50)
         .Check(["INICIO", "EN CAMINO", "FINALIZADO", "CANCELADO"])

@@ -5,6 +5,7 @@ import { tipeUser } from "./global.js";
 interface Authpayload {
   id: number;
   rol: tipeUser;
+  establecimiento?: number;
   exp?: number;
   [key: string]: any;
 }
