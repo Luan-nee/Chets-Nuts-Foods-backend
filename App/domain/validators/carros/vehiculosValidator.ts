@@ -22,7 +22,7 @@ const updateVehiculo = z.object({
   tipoVehiculo: vehiculosSchema.tipoVehiculo.optional(),
   vin: vehiculosSchema.vin.optional(),
   numeroHabilitacion: vehiculosSchema.numeroHabilitacion.optional(),
-  estado: vehiculosSchema.estado.optional(),
+  estadoVehiculo: vehiculosSchema.estadoVehiculo.optional(),
 });
 
 export const createVehiculoValidator = (object: unknown) =>

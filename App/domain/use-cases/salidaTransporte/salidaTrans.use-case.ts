@@ -1,7 +1,9 @@
-import { AND, DB, eq } from "zormz";
+import { AND, ANDD, DB, eq, MAYOR, MENOR, OR, ORQ, UP } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import { CreateSalidaTransporteDto } from "../../dto/salidaTransporte/createSalidaTransporte.dto.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
+import { getSalidaTransporte } from "./getByIDSalTrans.use-case.js";
+import { paramsDate } from "../../../types/params.js";
 
 interface validateResponse {
   response: boolean;
@@ -42,7 +44,7 @@ export class SalidaTransporteUseCase {
       .where(
         AND(
           eq(vehiculosempresa.idvehempresa, idVehiculo),
-          eq(vehiculosempresa.estado, true),
+          eq(vehiculosempresa.estadovehiculo, "OPERATIVO"),
         ),
       )
       .execute();
@@ -87,27 +89,135 @@ export class SalidaTransporteUseCase {
       throw CustomError.badRequest(validateRes.message);
     }
 
-    const { salidatransporte } = generateTables();
+    const { salidatransporte, vehiculosempresa } = generateTables();
+
+    const carroDisponible = await DB.Select([
+      salidatransporte.idsalidatransporte,
+    ])
+      .from(salidatransporte())
+      .where(
+        AND(
+          eq(salidatransporte.idchoferacceso, salidaDto.idChoferAcceso),
+          ORQ(salidatransporte.estadotransporte, "RESERVADO", "OCUPADO"),
+        ),
+      )
+      .execute();
+
+    if (carroDisponible.length > 0) {
+      throw CustomError.badRequest("Vehiculo ocupado");
+    }
 
     const valor = await DB.Insert(salidatransporte(), [
       salidatransporte.idvehiculo,
       salidatransporte.idchoferacceso,
       salidatransporte.idorigenestablecimiento,
+      salidatransporte.iddestinoestablecimiento,
       salidatransporte.fechasalida,
     ])
       .Values([
         salidaDto.idVehiculo,
         salidaDto.idChoferAcceso,
         salidaDto.idOrigenEstablecimiento,
-        salidaDto.fechaSalida.toString(),
+        salidaDto.idDestinoEstablecimiento,
+        salidaDto.fechaSalida.toISOString(),
       ])
       .Returning(salidatransporte.idsalidatransporte)
       .execute();
 
-    if (valor !== undefined) {
+    if (valor === undefined || valor.length === 0) {
       throw CustomError.badRequest(
         "Ocurrio un error al momento de crear el transporte",
       );
     }
+
+    await DB.Update(vehiculosempresa())
+      .set([UP(vehiculosempresa.estadovehiculo, "OCUPADO")])
+      .where(eq(vehiculosempresa.idvehempresa, salidaDto.idVehiculo))
+      .execute();
+
+    const getsalidaTransporte = await getSalidaTransporte(valor[0]);
+
+    return getsalidaTransporte;
+  }
+
+  async getSalidas(idEstablecimiento: number) {
+    const { salidatransporte } = generateTables();
+
+    let condicion = "";
+
+    if (idEstablecimiento === 0) {
+      condicion = ORQ(salidatransporte.estadotransporte, "INICIO", "EN CAMINO");
+    } else {
+      condicion = AND(
+        ORQ(salidatransporte.estadotransporte, "INICIO", "EN CAMINO"),
+        OR(
+          eq(salidatransporte.iddestinoestablecimiento, idEstablecimiento),
+          eq(salidatransporte.iddestinoestablecimiento, idEstablecimiento),
+        ),
+      );
+    }
+
+    const idsValores = await DB.Select([salidatransporte.idsalidatransporte])
+      .from(salidatransporte())
+      .where(condicion)
+      .execute();
+    return idsValores;
+  }
+
+  async historial(fecha: paramsDate) {
+    const { salidatransporte } = generateTables();
+
+    let condicion: string[] = [];
+
+    if (fecha.fechaInicio !== undefined) {
+      condicion.push(
+        MAYOR(salidatransporte.fechacreado, fecha.fechaInicio.toISOString()),
+      );
+    }
+
+    if (fecha.fechaFinal !== undefined) {
+      condicion.push(
+        MENOR(salidatransporte.fechafinalizado, fecha.fechaFinal.toISOString()),
+      );
+    }
+
+    if (fecha.estado !== undefined) {
+      condicion.push(eq(salidatransporte.estadotransporte, fecha.estado));
+    }
+
+    let andCondicion = "";
+
+    if (condicion.length !== 0) {
+      andCondicion += ANDD(condicion);
+    }
+
+    const filtrados = await DB.Select([
+      salidatransporte.idsalidatransporte,
+      salidatransporte.estadotransporte,
+      salidatransporte.fechacreado,
+      salidatransporte.fechafinalizado,
+      salidatransporte.fechasalida,
+    ])
+      .from(salidatransporte())
+      .where(andCondicion)
+      .execute();
+
+    return filtrados;
+  }
+
+  async getByID(id: number) {
+    const { salidatransporte } = generateTables();
+
+    const elemento = await DB.Select([salidatransporte.idsalidatransporte])
+      .from(salidatransporte())
+      .where(eq(salidatransporte.idsalidatransporte, id))
+      .execute();
+
+    if (elemento.length === 0) {
+      throw CustomError.badRequest("Esta salida no existe");
+    }
+
+    const salida = await getSalidaTransporte(id);
+    return salida;
   }
 }

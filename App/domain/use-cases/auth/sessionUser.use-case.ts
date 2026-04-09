@@ -10,6 +10,7 @@ interface IdReponse {
   idacceso: number;
   tipos: tipeUser;
   idusuario: number;
+  estado: boolean;
 }
 
 export default class SessionUserUseCase {
@@ -23,11 +24,13 @@ export default class SessionUserUseCase {
   }
 
   async sessionUser(data: LoginUserDto) {
-    const { accesos, usuarios, datosempresa } = generateTables();
+    const { accesos, usuarios, datosempresa, establecimientos } =
+      generateTables();
     const resutado = (await DB.Select([
       accesos.tipos,
       accesos.idacceso,
       accesos.idusuario,
+      accesos.estado,
     ])
       .from(accesos())
       .where(
@@ -38,12 +41,26 @@ export default class SessionUserUseCase {
       )
       .execute()) as IdReponse[];
 
-    if (!resutado) {
-      throw CustomError.badRequest("Usuario o contra Incorrectas");
-    }
-
     if (resutado.length <= 0) {
       throw CustomError.badRequest("Usuario o Contra Incorrectas");
+    }
+
+    if (!resutado[0].estado) {
+      throw CustomError.badRequest("Esta cuenta esta desabilitado");
+    }
+
+    const tokenBefore: Authpayload = {
+      id: resutado[0].idacceso,
+      rol: resutado[0].tipos,
+    };
+
+    if (resutado[0].tipos === "COLABORADOR") {
+      const establecimiento = (await DB.Select([establecimientos.idEst])
+        .from(establecimientos())
+        .where(eq(establecimientos.idEst, resutado[0].idacceso))
+        .execute()) as [{ idEst: number }];
+
+      tokenBefore.establecimiento = establecimiento[0].idEst;
     }
 
     const [user] = (await DB.Select([usuarios.nombres])
@@ -62,10 +79,7 @@ export default class SessionUserUseCase {
         "INICIASTE SESION PERO AUN EL SISTEMA NO FUNCIONARA, PRIMERO REGISTRAR LOS DATOS DE LA EMPRESA";
     }
 
-    const tokenZ = this.generarToken({
-      id: resutado[0].idacceso,
-      rol: resutado[0].tipos,
-    });
+    const tokenZ = this.generarToken(tokenBefore);
     return {
       rol: resutado[0].tipos,
       tokenZ,

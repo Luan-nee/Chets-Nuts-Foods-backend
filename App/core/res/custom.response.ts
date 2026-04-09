@@ -53,10 +53,13 @@ export class CustomResponse {
   }
 
   static badRequest({ res, error }: ErrorResponseArgs) {
+    console.log(error);
+    const error2 =
+      typeof error === "string" ? JSON.parse(error) : new Error(error).message;
     this.send({
       res,
       status: ResponseStatus.error,
-      message: error.message,
+      message: error2,
       statusCode: 400,
     });
   }

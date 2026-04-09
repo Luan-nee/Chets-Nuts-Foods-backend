@@ -133,7 +133,10 @@ export function generateTables() {
       vin: varchar(100).$(),
       numeroHabilitacion: varchar(150).$(),
       capacidadCarga: money().required().$(),
-      estado: bool().default(true).$(),
+      estadovehiculo: varchar(100)
+        .Check(["OPERATIVO", "INACTIVO", "RESERVADO", "OCUPADO"])
+        .Default("OPERATIVO")
+        .$(),
       fechacreado: timestamp().now().$(),
     }),
   };

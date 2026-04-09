@@ -15,6 +15,7 @@ async function deleteTables() {
     usuarios,
     vehiculosempresa,
     datosempresa,
+    salidatransporte,
   } = generateTables();
   await dropTable(accesos());
   await dropTable(establecimientos());
@@ -25,6 +26,7 @@ async function deleteTables() {
   await dropTable(usuarios());
   await dropTable(vehiculosempresa());
   await dropTable(datosempresa());
+  await dropTable(salidatransporte());
 }
 
 await deleteTables()

@@ -37,6 +37,7 @@ export class CreateVehiculoUseCase {
       vehiculosempresa.numeroHabilitacion,
       vehiculosempresa.capacidadCarga,
       vehiculosempresa.fechacreado,
+      vehiculosempresa.estadovehiculo,
     ])
       .from(vehiculosempresa())
       .where(eq(vehiculosempresa.idvehempresa, id))
@@ -79,12 +80,14 @@ export class CreateVehiculoUseCase {
     const { vehiculosempresa } = generateTables();
 
     const vehiculos = await DB.Select([
+      vehiculosempresa.idvehempresa,
       vehiculosempresa.placa,
       vehiculosempresa.marca,
       vehiculosempresa.modelo,
       vehiculosempresa.anio,
       vehiculosempresa.tipoVehiculo,
       vehiculosempresa.capacidadCarga,
+      vehiculosempresa.estadovehiculo,
     ])
       .from(vehiculosempresa())
       .execute();
@@ -122,7 +125,7 @@ export class CreateVehiculoUseCase {
     numeroHabilitacion,
     tipoVehiculo,
     vin,
-    estado,
+    estadoVehiculo,
   }: UpdateCarroDto) {
     const { vehiculosempresa } = generateTables();
 
@@ -167,8 +170,8 @@ export class CreateVehiculoUseCase {
       query.push(UP(vehiculosempresa.vin, vin));
     }
 
-    if (estado !== undefined) {
-      query.push(UP(vehiculosempresa.estado, `${estado}`, true));
+    if (estadoVehiculo !== undefined) {
+      query.push(UP(vehiculosempresa.estadovehiculo, estadoVehiculo));
     }
 
     if (query.length === 0) {

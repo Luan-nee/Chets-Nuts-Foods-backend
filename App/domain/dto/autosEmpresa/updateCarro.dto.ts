@@ -1,3 +1,4 @@
+import { estadoVehiculo } from "../../../types/global.js";
 import { updateVehiculoValidator } from "../../validators/carros/vehiculosValidator.js";
 
 export class UpdateCarroDto {
@@ -9,7 +10,7 @@ export class UpdateCarroDto {
   public vin?: string;
   public numeroHabilitacion?: string;
   public capacidadCarga?: number;
-  public estado?: boolean;
+  public estadoVehiculo?: estadoVehiculo;
 
   private constructor({
     anio,
@@ -20,7 +21,7 @@ export class UpdateCarroDto {
     vin,
     numeroHabilitacion,
     idVehiculo,
-    estado,
+    estadoVehiculo,
   }: UpdateCarroDto) {
     this.anio = anio;
     this.capacidadCarga = capacidadCarga;
@@ -30,7 +31,7 @@ export class UpdateCarroDto {
     this.vin = vin;
     this.numeroHabilitacion = numeroHabilitacion;
     this.idVehiculo = idVehiculo;
-    this.estado = estado;
+    this.estadoVehiculo = estadoVehiculo;
   }
 
   static createVehiculoAccess(input: any): [string?, UpdateCarroDto?] {

@@ -8,13 +8,16 @@ export type roomsSocket =
   | "ESTABLECIMIENTO"
   | "CLIENTES";
 
+export type estadoVehiculo = "OPERATIVO" | "INACTIVO" | "RESERVADO" | "OCUPADO";
+
 export type socketsResponses =
   | "newUser"
   | "updateUser"
   | "newVehiculo"
   | "upVehiculo"
   | "upEstablecimiento"
-  | "newEstablecimiento";
+  | "newEstablecimiento"
+  | "newSalidaTransporte";
 
 export type typeRol = "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
 
@@ -84,7 +87,7 @@ export interface updateEstablecimiento {
   ubigeo?: string;
   tipoEstado?: EstadosTipoEstablecimiento | undefined;
   codigoSunat?: string;
-  activo?: boolean;
+  estadoVehiculo?: estadoVehiculo;
 }
 
 interface CreateCarro {
@@ -107,7 +110,7 @@ interface UpdateCarro {
   tipoVehiculo?: string;
   vin?: string;
   numeroHabilitacion?: string;
-  estado?: boolean;
+  estadoVehiculo?: boolean;
 }
 
 interface createSalidaTransporte {
@@ -116,7 +119,6 @@ interface createSalidaTransporte {
   idOrigenEstablecimiento: number;
   idDestinoEstablecimiento: number;
   fechaSalida: Date;
-  estadoTransporte: salidaTransType;
 }
 
 export interface transporteType {

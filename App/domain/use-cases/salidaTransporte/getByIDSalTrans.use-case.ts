@@ -10,8 +10,13 @@ import {
 export async function getSalidaTransporte(
   id: number,
 ): Promise<salidaTransporteType> {
-  const { salidatransporte, vehiculosempresa, accesos, usuarios } =
-    generateTables();
+  const {
+    salidatransporte,
+    vehiculosempresa,
+    accesos,
+    usuarios,
+    establecimientos,
+  } = generateTables();
 
   const [transporte] = (await DB.Select([
     salidatransporte.idsalidatransporte,
@@ -21,6 +26,8 @@ export async function getSalidaTransporte(
     salidatransporte.fechafinalizado,
     salidatransporte.idvehiculo,
     salidatransporte.idchoferacceso,
+    salidatransporte.idorigenestablecimiento,
+    salidatransporte.iddestinoestablecimiento,
   ])
     .from(salidatransporte())
     .where(eq(salidatransporte.idsalidatransporte, id))
@@ -31,6 +38,7 @@ export async function getSalidaTransporte(
     vehiculosempresa.marca,
     vehiculosempresa.modelo,
     vehiculosempresa.capacidadCarga,
+    vehiculosempresa.estadovehiculo,
   ])
     .from(vehiculosempresa())
     .where(eq(vehiculosempresa.idvehempresa, transporte.idvehiculo))
@@ -50,9 +58,39 @@ export async function getSalidaTransporte(
     .innerJOIN(usuarios(), eq(accesos.idusuario, usuarios.iduser, false))
     .where(eq(accesos.idacceso, transporte.idchoferacceso))
     .execute()) as choferType[];
+
+  const [origenEstablecimiento] = await DB.Select([
+    establecimientos.nombreEst,
+    establecimientos.ubigeo,
+    establecimientos.tipoestablecimiento,
+    establecimientos.departamento,
+    establecimientos.codigoSunat,
+    establecimientos.provincia,
+    establecimientos.fechaCreacion,
+  ])
+    .from(establecimientos())
+    .where(eq(establecimientos.idEst, transporte.idorigenestablecimiento))
+    .execute();
+
+  const [destinoEstablecimiento] = await DB.Select([
+    establecimientos.idEst,
+    establecimientos.nombreEst,
+    establecimientos.ubigeo,
+    establecimientos.tipoestablecimiento,
+    establecimientos.departamento,
+    establecimientos.codigoSunat,
+    establecimientos.provincia,
+    establecimientos.fechaCreacion,
+  ])
+    .from(establecimientos())
+    .where(eq(establecimientos.idEst, transporte.iddestinoestablecimiento))
+    .execute();
+
   return {
     salidaTransporte: transporte,
     choferUser: chofer,
     vehiculo,
+    origenEstablecimiento,
+    destinoEstablecimiento,
   };
 }
