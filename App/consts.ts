@@ -20,13 +20,13 @@ export const filterTypeValues = {
   before: "before",
 } as const;
 
-export const maxPageSize = 100;
+export const maxPageSize = 10;
 
 export const defaultQueries = {
   search: "",
   sort_by: "",
   order: orderValues.desc,
-  page: 1,
+  page: 0,
   page_size: 30,
   filter: "",
   filter_value: undefined,

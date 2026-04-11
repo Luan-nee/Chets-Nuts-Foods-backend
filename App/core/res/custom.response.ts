@@ -15,12 +15,14 @@ export class CustomResponse {
     error,
     message,
     statusCode = 200,
+    pagination,
   }: SendResponseArgs) {
     const response = {
       status,
       message,
       data,
       error,
+      pagination,
     };
 
     if (authorization !== undefined) {
@@ -41,7 +43,13 @@ export class CustomResponse {
     res.status(statusCode).json(response);
   }
 
-  static success({ res, message, data, authorization }: SuccesArgs) {
+  static success({
+    res,
+    message,
+    data,
+    authorization,
+    pagination,
+  }: SuccesArgs) {
     this.send({
       res,
       data,
@@ -49,6 +57,7 @@ export class CustomResponse {
       status: ResponseStatus.success,
       statusCode: 200,
       authorization,
+      pagination,
     });
   }
 

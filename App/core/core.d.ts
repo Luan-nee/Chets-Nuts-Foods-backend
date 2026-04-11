@@ -4,6 +4,13 @@ import { ResponseStatus } from "../consts";
 export type ResponseStatusType =
   (typeof ResponseStatus)[keyof typeof ResponseStatus];
 
+export interface paginationResponde {
+  total_data: number;
+  total_paginas: number;
+  pagina_actual: number;
+  datos_por_pagina: number;
+}
+
 export interface SendResponseArgs {
   res: Response;
   message?: string;
@@ -12,6 +19,7 @@ export interface SendResponseArgs {
   statusCode?: number;
   error?: any;
   authorization?: string;
+  pagination?: paginationResponde;
 }
 
 export interface userToken {
@@ -21,7 +29,7 @@ export interface userToken {
 
 export type SuccesArgs = Pick<
   SendResponseArgs,
-  "res" | "message" | "data" | "error" | "authorization"
+  "res" | "message" | "data" | "error" | "authorization" | "pagination"
 >;
 
 export type ErrorResponseArgs = Pick<

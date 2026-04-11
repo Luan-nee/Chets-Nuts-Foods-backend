@@ -1,4 +1,4 @@
-import { AND, DB, eq, OR, ORD, UP } from "zormz";
+import { AND, COUNT, DB, eq, OR, ORD, UP } from "zormz";
 import { CreateAccesDto } from "../../dto/auth/createAcces.dto.js";
 import { generateTables } from "../../../BD-Control.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
@@ -6,6 +6,8 @@ import { CreateAccesos, InsertUser } from "../../../SQL/atajosSql.js";
 import { UpdateAccesDto } from "../../dto/auth/UpdateAccess.dto.js";
 import { UpdateParam } from "../../../consts.js";
 import { UsuarioDto } from "../../dto/usuarios/usuario.dto.js";
+import { PageDataDto } from "../../query-params/pageData.dto.js";
+import { paginationResponde } from "../../../core/core.js";
 
 interface accesoRepeat {
   correo: string;
@@ -85,7 +87,7 @@ export class CreateAccesoUseCase {
     return "ok";
   }
 
-  async getAll() {
+  async getAll(page: PageDataDto) {
     const { accesos, usuarios } = generateTables();
 
     const dataAccess = await DB.Select([
@@ -98,13 +100,28 @@ export class CreateAccesoUseCase {
     ])
       .from(accesos())
       .innerJOIN(usuarios(), eq(accesos.idusuario, usuarios.iduser, false))
+      .where()
+      .LIMIT(10)
+      .OFFSET(page.page * 10)
       .execute();
 
     if (dataAccess === undefined) {
       throw CustomError.badRequest("Ocurrio un error al realizar la consulta");
     }
 
-    return dataAccess;
+    const [busqueda] = await DB.Select([COUNT(accesos.idacceso, "cantidad")])
+      .from(accesos())
+      .execute();
+
+    //paginationResponde;
+
+    const paginas: paginationResponde = {
+      total_data: Number(busqueda.cantidad),
+      datos_por_pagina: 10,
+      pagina_actual: page.page,
+      total_paginas: Math.trunc(Number(busqueda.cantidad) / 10),
+    };
+    return { data: dataAccess, paginasResponse: paginas };
   }
 
   async update(update: UpdateAccesDto) {

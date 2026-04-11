@@ -4,6 +4,7 @@ import { CreateAccesDto } from "../../../domain/dto/auth/createAcces.dto.js";
 import { CreateAccesoUseCase } from "../../../domain/use-cases/accesos/createAcceso.js";
 import { UpdateAccesDto } from "../../../domain/dto/auth/UpdateAccess.dto.js";
 import { UsuarioDto } from "../../../domain/dto/usuarios/usuario.dto.js";
+import { PageDataDto } from "../../../domain/query-params/pageData.dto.js";
 
 export class AccesosController {
   create = (req: Request, res: Response) => {
@@ -43,13 +44,13 @@ export class AccesosController {
       CustomResponse.badRequest({ res, error: "No tienes permisos" });
       return;
     }
-
+    const page = PageDataDto.create(req.query);
     const accesoUse = new CreateAccesoUseCase();
 
     accesoUse
-      .getAll()
-      .then((data) => {
-        CustomResponse.success({ res, data });
+      .getAll(page)
+      .then(({ data, paginasResponse }) => {
+        CustomResponse.success({ res, data, pagination: paginasResponse });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });
