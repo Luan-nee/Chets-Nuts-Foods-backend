@@ -139,5 +139,12 @@ export function generateTables() {
         .$(),
       fechacreado: timestamp().now().$(),
     }),
+    productsdefect: defineTable("productsdefect", {
+      idproductdefect: int().Pk().Required().$(),
+      creatoracceso: int().Required().$(),
+      nombre: varchar(250).Required().$(),
+      descripcion: varchar(300).$(),
+      fechacreation: timestamp().now().$(),
+    }),
   };
 }

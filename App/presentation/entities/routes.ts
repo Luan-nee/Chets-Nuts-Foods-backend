@@ -6,6 +6,7 @@ import { AccesosRouter } from "./accesos/route.js";
 import { adminAccess } from "../middleware/adminAccess.middleware.js";
 import { RoutesVehiculos } from "./vehiculosEmpresa/route.js";
 import { RoutesSalidaTransporte } from "./salidaTransporte/route.js";
+import { RoutesProductDefect } from "./productDefect/routes.js";
 
 export class EntitiesRoutes {
   static get routes() {
@@ -16,6 +17,7 @@ export class EntitiesRoutes {
     router.use("/accesos", adminAccess, AccesosRouter.routes);
     router.use("/vehiculos", RoutesVehiculos.routes);
     router.use("/salidas", RoutesSalidaTransporte.routes);
+    router.use("/productos", RoutesProductDefect.routes);
     return router;
   }
 }

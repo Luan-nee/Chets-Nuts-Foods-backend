@@ -15,6 +15,7 @@ async function generarTablas() {
     vehiculosempresa,
     datosempresa,
     salidatransporte,
+    productsdefect,
   } = generateTables();
 
   await generateTable(accesos(), accesos.$columns);
@@ -27,6 +28,7 @@ async function generarTablas() {
   await generateTable(vehiculosempresa(), vehiculosempresa.$columns);
   await generateTable(datosempresa(), datosempresa.$columns);
   await generateTable(salidatransporte(), salidatransporte.$columns);
+  await generateTable(productsdefect(), productsdefect.$columns);
 }
 
 await generarTablas()
