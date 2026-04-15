@@ -18,7 +18,8 @@ export type socketsResponses =
   | "upEstablecimiento"
   | "newEstablecimiento"
   | "newSalidaTransporte"
-  | "newProductDefect";
+  | "newProductDefect"
+  | "updateProductDefect";
 
 export type typeRol = "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
 

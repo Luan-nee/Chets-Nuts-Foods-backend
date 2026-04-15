@@ -4,13 +4,7 @@ import { generateTables } from "../../../BD-Control.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
 import { PageDataDto } from "../../query-params/pageData.dto.js";
 import { paginationResponde } from "../../../core/core.js";
-
-interface productDefect {
-  idproductdefect: number;
-  nombre: string;
-  descripcion: string;
-  fechacreation: Date;
-}
+import { getByIDProductDefect } from "./getByIdProductDefect.js";
 
 export class CreateProductDefectUseCase {
   async create(producto: CreateProductsDefectDto, creatorAcceso: number) {
@@ -51,15 +45,7 @@ export class CreateProductDefectUseCase {
       throw CustomError.internalServer("Error al crear el producto");
     }
 
-    const [productoNuevo] = (await DB.Select([
-      productsdefect.idproductdefect,
-      productsdefect.nombre,
-      productsdefect.descripcion,
-      productsdefect.fechacreation,
-    ])
-      .from(productsdefect())
-      .where(eq(productsdefect.idproductdefect, id[0]))
-      .execute()) as productDefect[];
+    const productoNuevo = await getByIDProductDefect(id[0]);
 
     return productoNuevo;
   }

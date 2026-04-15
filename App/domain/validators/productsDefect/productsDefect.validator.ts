@@ -8,10 +8,8 @@ const createProductsDefectSchema = z.object({
 
 const updateProductsDefectSchema = z.object({
   idProductDefect: productsDefectSchema.idProductDefect,
-  creatorAcceso: productsDefectSchema.creatorAcceso.optional(),
   nombre: productsDefectSchema.nombre.optional(),
   descripcion: productsDefectSchema.descripcion.optional(),
-  fechaCreacion: productsDefectSchema.fechaCreacion.optional(),
 });
 
 export const createProductsDefectValidator = (object: unknown) =>

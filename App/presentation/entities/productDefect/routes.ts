@@ -7,6 +7,7 @@ export class RoutesProductDefect {
     const controller = new ProductosDefectController();
     routes.get("/", controller.getAll);
     routes.post("/", controller.create);
+    routes.patch("/", controller.update);
     return routes;
   }
 }
