@@ -14,6 +14,7 @@ interface parameterValidate {
   idChoferAcceso: number;
   idVehiculo: number;
   idorigenestablecimiento: number;
+  iddestinoestablecimiento: number;
 }
 
 export class SalidaTransporteUseCase {
@@ -21,6 +22,7 @@ export class SalidaTransporteUseCase {
     idChoferAcceso,
     idVehiculo,
     idorigenestablecimiento,
+    iddestinoestablecimiento,
   }: parameterValidate): Promise<validateResponse> {
     const { accesos, vehiculosempresa, establecimientos } = generateTables();
 
@@ -48,6 +50,7 @@ export class SalidaTransporteUseCase {
         ),
       )
       .execute();
+
     if (resultadoVehiculo.length === 0) {
       return {
         response: false,
@@ -68,7 +71,24 @@ export class SalidaTransporteUseCase {
     if (resultadoEstablecimiento.length === 0) {
       return {
         response: false,
-        message: "Establecimiento no encontrado",
+        message: `Establecimiento Origen no encontrado no encontrado`,
+      };
+    }
+
+    const establecimientoSalida = await DB.Select([establecimientos.idEst])
+      .from(establecimientos())
+      .where(
+        AND(
+          eq(establecimientos.idEst, iddestinoestablecimiento),
+          eq(establecimientos.activo, true),
+        ),
+      )
+      .execute();
+
+    if (establecimientoSalida.length === 0) {
+      return {
+        response: false,
+        message: "Establecimiento de destino no encontrado",
       };
     }
 
@@ -79,10 +99,22 @@ export class SalidaTransporteUseCase {
   }
 
   async create(salidaDto: CreateSalidaTransporteDto) {
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    const fechaCreate = new Date(salidaDto.fechaSalida);
+    fechaCreate.setHours(0, 0, 0, 0);
+
+    if (fechaCreate < hoy) {
+      throw CustomError.badRequest(
+        "La fecha no puede ser Inferior a la de hoy",
+      );
+    }
+
     const validateRes = await this.validate({
       idVehiculo: salidaDto.idVehiculo,
       idChoferAcceso: salidaDto.idChoferAcceso,
       idorigenestablecimiento: salidaDto.idOrigenEstablecimiento,
+      iddestinoestablecimiento: salidaDto.idDestinoEstablecimiento,
     });
 
     if (!validateRes.response) {
