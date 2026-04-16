@@ -9,8 +9,9 @@ export class RoutesSalidaTransporte {
 
     route.get("/", controller.getAll);
     route.get("/:id", controller.getByID);
-    route.post("/", adminAccess, controller.create);
 
+    route.post("/", adminAccess, controller.create);
+    route.patch("/", adminAccess, controller.update);
     return route;
   }
 }

@@ -32,13 +32,17 @@ export class SalidaTransporteUseCase {
         AND(
           eq(accesos.idacceso, idChoferAcceso),
           eq(accesos.estado, true),
+          eq(accesos.estadoacceso, "DISPONIBLE"),
           eq(accesos.tipos, "CHOFER"),
         ),
       )
       .execute();
 
     if (resultadoAcceso.length === 0) {
-      return { response: false, message: "Este acceso no existe" };
+      return {
+        response: false,
+        message: "Este acceso no existe o esta ocupado",
+      };
     }
 
     const resultadoVehiculo = await DB.Select([vehiculosempresa.idvehempresa])
@@ -121,7 +125,7 @@ export class SalidaTransporteUseCase {
       throw CustomError.badRequest(validateRes.message);
     }
 
-    const { salidatransporte, vehiculosempresa } = generateTables();
+    const { salidatransporte, vehiculosempresa, accesos } = generateTables();
 
     const carroDisponible = await DB.Select([
       salidatransporte.idsalidatransporte,
@@ -165,6 +169,11 @@ export class SalidaTransporteUseCase {
     await DB.Update(vehiculosempresa())
       .set([UP(vehiculosempresa.estadovehiculo, "OCUPADO")])
       .where(eq(vehiculosempresa.idvehempresa, salidaDto.idVehiculo))
+      .execute();
+
+    await DB.Update(accesos())
+      .set([UP(accesos.estadoacceso, "OCUPADO")])
+      .where(eq(accesos.idacceso, salidaDto.idChoferAcceso))
       .execute();
 
     const getsalidaTransporte = await getSalidaTransporte(valor[0]);

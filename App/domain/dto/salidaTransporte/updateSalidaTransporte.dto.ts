@@ -6,6 +6,7 @@ export class UpdateSalidaTransporteDto {
   public idVehiculo?: number;
   public idChoferAcceso?: number;
   public idOrigenEstablecimiento?: number;
+  public idDestinoEstablecimiento?: number;
   public fechaSalida?: Date;
   public estadoTransporte?: salidaTransType;
 
@@ -16,11 +17,13 @@ export class UpdateSalidaTransporteDto {
     idOrigenEstablecimiento,
     idVehiculo,
     idsalidatransporte,
+    idDestinoEstablecimiento,
   }: UpdateSalidaTransporteDto) {
     this.idsalidatransporte = idsalidatransporte;
     this.idVehiculo = idVehiculo;
     this.idChoferAcceso = idChoferAcceso;
     this.idOrigenEstablecimiento = idOrigenEstablecimiento;
+    this.idDestinoEstablecimiento = idDestinoEstablecimiento;
     this.fechaSalida = fechaSalida;
     this.estadoTransporte = estadoTransporte;
   }

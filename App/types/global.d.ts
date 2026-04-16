@@ -9,7 +9,7 @@ export type roomsSocket =
   | "CLIENTES";
 
 export type estadoVehiculo = "OPERATIVO" | "INACTIVO" | "RESERVADO" | "OCUPADO";
-
+export type accesoEstado = "DISPONIBLE" | "OCUPADO" | "OBSERVACION";
 export type socketsResponses =
   | "newUser"
   | "updateUser"
@@ -19,7 +19,9 @@ export type socketsResponses =
   | "newEstablecimiento"
   | "newSalidaTransporte"
   | "newProductDefect"
-  | "updateProductDefect";
+  | "updateProductDefect"
+  | "updateSalidaTransporte"
+  | "deleteSalidaTransporte";
 
 export type typeRol = "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
 

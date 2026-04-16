@@ -95,6 +95,7 @@ export class CreateAccesoUseCase {
       accesos.correo,
       accesos.estado,
       accesos.tipos,
+      accesos.estadoacceso,
       usuarios.dniuser,
       usuarios.nombres,
     ])

@@ -12,6 +12,10 @@ export function generateTables() {
       correo: varchar(200).Required().$(),
       contra: varchar(50).Required().$(),
       estado: bool().default(true).$(),
+      estadoacceso: varchar(50)
+        .Check(["DISPONIBLE", "OCUPADO", "OBSERVACION"])
+        .Default("DISPONIBLE")
+        .$(),
       fechaCreacion: timestamp().now().$(),
     }),
     datosempresa: defineTable("datosempresa", {

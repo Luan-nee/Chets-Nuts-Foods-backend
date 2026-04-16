@@ -17,6 +17,8 @@ const updateSalidaTransporteSchema = z.object({
   fechaSalida: salidaTransporteSchema.fechaSalida.optional(),
   idOrigenEstablecimiento:
     salidaTransporteSchema.idOrigenEstablecimiento.optional(),
+  idDestinoEstablecimiento:
+    salidaTransporteSchema.idDestinoEstablecimiento.optional(),
 });
 
 export const createSalidaTransporteValidator = (object: unknown) =>
