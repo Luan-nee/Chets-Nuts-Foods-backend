@@ -8,6 +8,13 @@ export type roomsSocket =
   | "ESTABLECIMIENTO"
   | "CLIENTES";
 
+export type estadoPaquete =
+  | "ENTREGADO"
+  | "CAMINO"
+  | "DETENIDO"
+  | "CANCELADO"
+  | "REVISION";
+
 export type estadoVehiculo = "OPERATIVO" | "INACTIVO" | "RESERVADO" | "OCUPADO";
 export type accesoEstado = "DISPONIBLE" | "OCUPADO" | "OBSERVACION";
 export type socketsResponses =
@@ -21,7 +28,8 @@ export type socketsResponses =
   | "newProductDefect"
   | "updateProductDefect"
   | "updateSalidaTransporte"
-  | "deleteSalidaTransporte";
+  | "deleteSalidaTransporte"
+  | "createpaquete";
 
 export type typeRol = "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
 

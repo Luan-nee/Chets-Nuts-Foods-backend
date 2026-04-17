@@ -86,7 +86,7 @@ export function generateTables() {
       idenvio: int().Pk().Required().$(),
       idusuario: int().Required().$(),
       idusuarioDestino: int().Required().$(),
-      idsalidatransporte: int().Required().$(),
+      idsalidatransporte: int().$(),
       idDestinoEstablecimiento: int().Required().$(),
       destino: varchar(50).$(),
       clave: varchar(10).Required().$(),
@@ -96,6 +96,7 @@ export function generateTables() {
         .$(),
       observacion: varchar(300).$(), //en caso la policia lo detenga o ocurra algo con el paquete
       ultimaactualizacion: timestamp().onUpdate().$(),
+      fechacreado: timestamp().now().$(),
     }),
 
     salidatransporte: defineTable("salidatransporte", {

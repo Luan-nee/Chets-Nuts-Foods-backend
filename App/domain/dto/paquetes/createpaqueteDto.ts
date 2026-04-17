@@ -1,43 +1,46 @@
+import { estadoPaquete } from "../../../types/global.js";
 import { createDatosEmpresaValidator } from "../../validators/datosEmpresa/datosEmpresaValidator.js";
+import { createPaquetesValidator } from "../../validators/paquetes/paquetes.validator.js";
 
 export class CreatePaqueteDto {
-  public idusuario: number;
-  public idchofer: number;
-  public idvehiculo: number;
-  public idusuariodestino: number;
-  public idorigenestablecimiento: number;
-  public iddestinoestablecimiento: number;
+  public idUsuario: number;
+  public idUsuarioDestino: number;
+  public idSalidaTransporte: number;
+  public idDestinoEstablecimiento?: number;
+  public destino?: string;
   public clave: string;
-  public montocobrado: number;
-  public destino: string;
+  public montoCobrado: number;
+  public estadoPaquete: estadoPaquete;
+  public observacion?: string;
 
   private constructor({
     clave,
     destino,
-    idchofer,
-    iddestinoestablecimiento,
-    idorigenestablecimiento,
-    idusuario,
-    idusuariodestino,
-    idvehiculo,
-    montocobrado,
+    observacion,
+    estadoPaquete,
+    idSalidaTransporte,
+    idUsuario,
+    idUsuarioDestino,
+    montoCobrado,
+    idDestinoEstablecimiento,
   }: CreatePaqueteDto) {
-    this.idusuario = idusuario;
-    this.idchofer = idchofer;
-    this.idvehiculo = idvehiculo;
-    this.idusuariodestino = idusuariodestino;
-    this.iddestinoestablecimiento = iddestinoestablecimiento;
-    this.idorigenestablecimiento = idorigenestablecimiento;
     this.clave = clave;
     this.destino = destino;
-    this.montocobrado = montocobrado;
+    this.estadoPaquete = estadoPaquete;
+    this.idSalidaTransporte = idSalidaTransporte;
+    this.idUsuario = idUsuario;
+    this.idUsuarioDestino = idUsuarioDestino;
+    this.montoCobrado = montoCobrado;
+    this.idDestinoEstablecimiento = idDestinoEstablecimiento;
+    this.observacion = observacion;
     console.log("agregando datos");
   }
 
-  static createPaquete(input: any) {
-    const validator = createDatosEmpresaValidator(input);
+  static createPaquete(input: any): [string?, CreatePaqueteDto?] {
+    const validator = createPaquetesValidator(input);
     if (!validator.success) {
       return [validator.error.message, undefined];
     }
+    return [undefined, new CreatePaqueteDto(validator.data)];
   }
 }

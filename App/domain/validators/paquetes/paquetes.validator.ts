@@ -2,27 +2,27 @@ import z from "zod";
 import { paquetesSchema } from "./paquetes.schema.js";
 
 const createPaquetesSchema = z.object({
-  idusuario: paquetesSchema.idusuario,
-  idusuarioDestino: paquetesSchema.idusuarioDestino,
-  idsalidatransporte: paquetesSchema.idsalidatransporte,
-  idDestinoEstablecimiento: paquetesSchema.idDestinoEstablecimiento,
-  destino: paquetesSchema.destino,
   clave: paquetesSchema.clave,
-  montocobrado: paquetesSchema.montocobrado,
-  estadopaquete: paquetesSchema.estadopaquete.default("CAMINO"),
+  destino: paquetesSchema.destino.optional(),
   observacion: paquetesSchema.observacion,
+  estadoPaquete: paquetesSchema.estadoPaquete,
+  idSalidaTransporte: paquetesSchema.idsalidatransporte,
+  idUsuario: paquetesSchema.idUsuario,
+  idUsuarioDestino: paquetesSchema.idUsuarioDestino,
+  montoCobrado: paquetesSchema.montoCobrado,
+  idDestinoEstablecimiento: paquetesSchema.idDestinoEstablecimiento.optional(),
 });
 
 const updatePaquetesSchema = z.object({
-  idenvio: paquetesSchema.idenvio,
-  idusuario: paquetesSchema.idusuario.optional(),
-  idusuarioDestino: paquetesSchema.idusuarioDestino.optional(),
+  idenvio: paquetesSchema.idEnvio,
+  idUsuario: paquetesSchema.idUsuario.optional(),
+  idUsuarioDestino: paquetesSchema.idUsuarioDestino.optional(),
   idsalidatransporte: paquetesSchema.idsalidatransporte.optional(),
   idDestinoEstablecimiento: paquetesSchema.idDestinoEstablecimiento.optional(),
   destino: paquetesSchema.destino.optional(),
   clave: paquetesSchema.clave.optional(),
-  montocobrado: paquetesSchema.montocobrado.optional(),
-  estadopaquete: paquetesSchema.estadopaquete.optional(),
+  montocobrado: paquetesSchema.montoCobrado.optional(),
+  estadopaquete: paquetesSchema.estadoPaquete.optional(),
   observacion: paquetesSchema.observacion.optional(),
 });
 
