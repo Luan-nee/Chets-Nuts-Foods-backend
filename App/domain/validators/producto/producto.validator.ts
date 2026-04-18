@@ -2,9 +2,8 @@ import z from "zod";
 import { productoEnvioSchema } from "./producto.schema.js";
 
 const createProductoSchema = z.object({
-  idenvio: productoEnvioSchema.idenvio,
   nombreproducto: productoEnvioSchema.nombreproducto,
-  observacion: productoEnvioSchema.observacion,
+  observacion: productoEnvioSchema.observacion.optional(),
   peso: productoEnvioSchema.peso,
 });
 

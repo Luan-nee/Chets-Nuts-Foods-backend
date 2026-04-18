@@ -54,7 +54,7 @@ export function generateTables() {
       idenvio: int().Required().$(),
       nombreproducto: varchar(150).Required().$(),
       observacion: varchar(150).$(), //en caso de ser vidrio
-      peso: varchar(50).Required().$(), //kg
+      peso: money(10, 3).required().$(), //kg
       fechacreacion: timestamp().now().$(),
       fechaactualizado: timestamp().onUpdate().$(),
     }),

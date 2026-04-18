@@ -20,12 +20,5 @@ export const productoEnvioSchema = {
       error: "La observación contiene caracteres no permitidos",
     })
     .optional(),
-  peso: z
-    .string()
-    .trim()
-    .max(50)
-    .refine((valor) => /^\d+(\.\d+)?\s*(kg|KG|Kg|kilogramo|kilogramos)?$/.test(valor), {
-      error: "El peso debe estar en formato numérico con unidad (ej: 10 kg)",
-    }),
+  peso: z.coerce.number().min(0),
 };
-

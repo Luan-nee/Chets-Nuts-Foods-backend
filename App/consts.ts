@@ -91,3 +91,7 @@ export const departamentosPeru = [
 export type departamentosPeruType = (typeof departamentosPeru)[number];
 
 export const pagePermises = ["http://localhost:5173"];
+
+export const cacheEnvioUsuario = new Map<number, number[]>();
+
+export const usuariosConectados = new Map<number, Set<string>>();

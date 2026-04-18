@@ -1,7 +1,7 @@
 import http from "http";
 import { Socket, Server as SocketIOServer } from "socket.io";
 import { validatorTokenSocket } from "./controllerSockets/validateTokenSockets.js";
-import { pagePermises } from "./consts.js";
+import { pagePermises, usuariosConectados } from "./consts.js";
 
 export default class SocketControl {
   private io: SocketIOServer | null;
@@ -26,14 +26,27 @@ export default class SocketControl {
       const tokenBefore = usuario.handshake.auth.token as string;
       const user = await validatorTokenSocket(tokenBefore);
       if (!user.estado) {
-        this.io?.disconnectSockets();
+        usuario.disconnect();
       }
+      if (!usuariosConectados.has(user.codigo)) {
+        usuariosConectados.set(user.codigo, new Set());
+      }
+
+      usuariosConectados.get(user.codigo)?.add(usuario.id);
 
       if (user.message === "ESTABLECIMIENTO" && user.codigo !== undefined) {
         usuario.join(user.message + user.codigo);
       } else {
         usuario.join(user.message);
       }
+
+      usuario.on("disconnet", () => {
+        const sockets = usuariosConectados.get(user.codigo);
+        sockets?.delete(usuario.id);
+        if (sockets?.size === 0) {
+          usuariosConectados.delete(user.codigo);
+        }
+      });
     });
   }
 }
