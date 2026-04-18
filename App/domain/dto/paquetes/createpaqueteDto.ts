@@ -10,14 +10,12 @@ export class CreatePaqueteDto {
   public destino?: string;
   public clave: string;
   public montoCobrado: number;
-  public estadoPaquete: estadoPaquete;
   public observacion?: string;
 
   private constructor({
     clave,
     destino,
     observacion,
-    estadoPaquete,
     idSalidaTransporte,
     idUsuario,
     idUsuarioDestino,
@@ -26,7 +24,6 @@ export class CreatePaqueteDto {
   }: CreatePaqueteDto) {
     this.clave = clave;
     this.destino = destino;
-    this.estadoPaquete = estadoPaquete;
     this.idSalidaTransporte = idSalidaTransporte;
     this.idUsuario = idUsuario;
     this.idUsuarioDestino = idUsuarioDestino;

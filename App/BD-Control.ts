@@ -86,15 +86,24 @@ export function generateTables() {
       idenvio: int().Pk().Required().$(),
       idusuario: int().Required().$(),
       idusuarioDestino: int().Required().$(),
-      idsalidatransporte: int().$(),
-      idDestinoEstablecimiento: int().Required().$(),
+      idsalidatransporte: int().Required().$(),
+      idDestinoEstablecimiento: int().$(),
       destino: varchar(50).$(),
       clave: varchar(10).Required().$(),
       montocobrado: money().required().$(),
       estadopaquete: varchar(50)
-        .Check(["ENTREGADO", "CAMINO", "DETENIDO", "CANCELADO", "REVISION"]) //revision esperando aprobacion de la sunat
+        .Check([
+          "ENTREGADO",
+          "CAMINO",
+          "DETENIDO",
+          "HOME",
+          "CANCELADO",
+          "REVISION",
+        ]) //revision esperando aprobacion de la sunat
+        .Default("HOME")
         .$(),
       observacion: varchar(300).$(), //en caso la policia lo detenga o ocurra algo con el paquete
+      cantidadproduct: int().Default(0).$(),
       ultimaactualizacion: timestamp().onUpdate().$(),
       fechacreado: timestamp().now().$(),
     }),

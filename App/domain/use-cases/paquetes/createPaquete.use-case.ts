@@ -78,7 +78,7 @@ export class CreatePaqueteUseCase {
       paquetes.idusuarioDestino,
       paquetes.idsalidatransporte,
       paquetes.clave,
-      paquetes.estadopaquete,
+      paquetes.montocobrado,
     ];
 
     const queryData = [
@@ -86,7 +86,7 @@ export class CreatePaqueteUseCase {
       paqueteDto.idUsuarioDestino,
       paqueteDto.idSalidaTransporte,
       paqueteDto.clave,
-      paqueteDto.estadoPaquete,
+      paqueteDto.montoCobrado,
     ];
 
     if (paqueteDto.idDestinoEstablecimiento !== undefined) {

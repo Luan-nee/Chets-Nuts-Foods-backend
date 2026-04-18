@@ -13,7 +13,8 @@ export type estadoPaquete =
   | "CAMINO"
   | "DETENIDO"
   | "CANCELADO"
-  | "REVISION";
+  | "REVISION"
+  | "HOME";
 
 export type estadoVehiculo = "OPERATIVO" | "INACTIVO" | "RESERVADO" | "OCUPADO";
 export type accesoEstado = "DISPONIBLE" | "OCUPADO" | "OBSERVACION";

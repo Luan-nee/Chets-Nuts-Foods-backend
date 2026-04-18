@@ -5,7 +5,6 @@ const createPaquetesSchema = z.object({
   clave: paquetesSchema.clave,
   destino: paquetesSchema.destino.optional(),
   observacion: paquetesSchema.observacion,
-  estadoPaquete: paquetesSchema.estadoPaquete,
   idSalidaTransporte: paquetesSchema.idsalidatransporte,
   idUsuario: paquetesSchema.idUsuario,
   idUsuarioDestino: paquetesSchema.idUsuarioDestino,

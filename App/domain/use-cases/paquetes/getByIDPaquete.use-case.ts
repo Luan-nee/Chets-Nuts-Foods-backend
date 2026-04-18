@@ -8,7 +8,7 @@ interface paqueteResponse {
   idusuario: number;
   idusuarioDestino: number;
   idsalidatransporte: number;
-  idDestinoEstablecimiento?: number;
+  idDestinoEstablecimiento?: number | null;
   destino?: string;
   clave: string;
   montocobrado: number;
@@ -75,7 +75,10 @@ export async function getpaqueteId(idPaquete: number) {
     throw CustomError.badRequest("Este usuario no existe");
   }
   let establecimientoData: establecimientoResponse | undefined = undefined;
-  if (datosPaquete.idDestinoEstablecimiento !== undefined) {
+  if (
+    datosPaquete.idDestinoEstablecimiento !== undefined &&
+    datosPaquete.idDestinoEstablecimiento !== null
+  ) {
     [establecimientoData] = (await DB.Select([
       establecimientos.nombreEst,
       establecimientos.departamento,
