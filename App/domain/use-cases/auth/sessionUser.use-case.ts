@@ -13,6 +13,10 @@ interface IdReponse {
   estado: boolean;
 }
 
+interface idEstablecimiento {
+  idEst: number;
+}
+
 export default class SessionUserUseCase {
   private generarToken(input: Authpayload, duration?: number) {
     const token = JWTadapter.createAccessToken({
@@ -58,9 +62,13 @@ export default class SessionUserUseCase {
       const establecimiento = (await DB.Select([establecimientos.idEst])
         .from(establecimientos())
         .where(eq(establecimientos.idEst, resutado[0].idacceso))
-        .execute()) as [{ idEst: number }];
+        .execute(true)) as idEstablecimiento[];
 
-      tokenBefore.establecimiento = establecimiento[0].idEst;
+      console.log(establecimiento);
+
+      if (establecimiento.length !== 0) {
+        tokenBefore.establecimiento = establecimiento[0].idEst;
+      }
     }
 
     const [user] = (await DB.Select([usuarios.nombres])

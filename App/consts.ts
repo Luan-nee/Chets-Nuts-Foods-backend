@@ -90,7 +90,7 @@ export const departamentosPeru = [
 
 export type departamentosPeruType = (typeof departamentosPeru)[number];
 
-export const pagePermises = ["http://localhost:5173"];
+export const pagePermises: string[] = ["http://localhost:5173"];
 
 export const cacheEnvioUsuario = new Map<number, number[]>();
 

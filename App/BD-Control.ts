@@ -122,7 +122,6 @@ export function generateTables() {
       fechafinalizado: timestamp().$(),
       fechacreado: timestamp().now().$(),
     }),
-
     seguimientopaquetes: defineTable("seguimientopaquetes", {
       idseg: int().Pk().Required().$(),
       idpaquete: int().Required().$(),
