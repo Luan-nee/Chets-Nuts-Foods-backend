@@ -51,7 +51,12 @@ export class AccesosController {
     accesoUse
       .getAll(page)
       .then(({ data, paginasResponse }) => {
-        CustomResponse.success({ res, data, pagination: paginasResponse });
+        CustomResponse.success({
+          res,
+          message: "Accesos obtenidos correctamente",
+          data,
+          pagination: paginasResponse,
+        });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });
