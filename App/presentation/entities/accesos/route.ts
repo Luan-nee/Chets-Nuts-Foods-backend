@@ -7,6 +7,7 @@ export class AccesosRouter {
     const controller = new AccesosController();
 
     router.get("/", controller.getAll);
+    router.get("/roles", controller.getRules);
     router.get("/:id", controller.getByID);
     router.post("/", controller.create);
     router.patch("/", controller.update);

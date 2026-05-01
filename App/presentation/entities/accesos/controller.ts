@@ -5,6 +5,7 @@ import { CreateAccesoUseCase } from "../../../domain/use-cases/accesos/createAcc
 import { UpdateAccesDto } from "../../../domain/dto/auth/UpdateAccess.dto.js";
 import { UsuarioDto } from "../../../domain/dto/usuarios/usuario.dto.js";
 import { PageDataDto } from "../../../domain/query-params/pageData.dto.js";
+import { NumericId } from "../../../domain/query-params/numericId-dto.js";
 
 export class AccesosController {
   create = (req: Request, res: Response) => {
@@ -93,23 +94,28 @@ export class AccesosController {
       });
       return;
     }
-
-    const id = Number(req.params.id);
-
-    if (id === undefined || typeof id !== "number") {
-      CustomResponse.badRequest({ res, error: "Id erroneo" });
+    const [error, id] = NumericId.create(req.params);
+    if (error !== undefined || id === undefined) {
+      CustomResponse.badRequest({ res, error: "Id INVALIDO" });
       return;
     }
 
     const accesoUse = new CreateAccesoUseCase();
 
     accesoUse
-      .getByID(id)
+      .getByID(id.id)
       .then((data) => {
         CustomResponse.success({ res, data });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });
       });
+  };
+
+  getRules = async (req: Request, res: Response) => {
+    const accesoUse = new CreateAccesoUseCase();
+    const rutas = await accesoUse.getRoles();
+    console.log(rutas);
+    CustomResponse.success({ res, data: rutas });
   };
 }

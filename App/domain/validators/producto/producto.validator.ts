@@ -4,14 +4,16 @@ import { productoEnvioSchema } from "./producto.schema.js";
 const createProductoSchema = z.object({
   nombreproducto: productoEnvioSchema.nombreproducto,
   observacion: productoEnvioSchema.observacion.optional(),
-  peso: productoEnvioSchema.peso,
+  pesounitario: productoEnvioSchema.pesounitario,
+  cantidad: productoEnvioSchema.cantidad,
 });
 
 const updateProductoSchema = z.object({
   idenvio: productoEnvioSchema.idenvio.optional(),
   nombreproducto: productoEnvioSchema.nombreproducto.optional(),
   observacion: productoEnvioSchema.observacion,
-  peso: productoEnvioSchema.peso.optional(),
+  pesounitario: productoEnvioSchema.pesounitario.optional(),
+  cantidad: productoEnvioSchema.cantidad.optional(),
 });
 
 export const createProductoValidator = (object: unknown) =>

@@ -182,3 +182,11 @@ export interface salidaTransporteType {
   origenEstablecimiento: establecimientoSelect;
   destinoEstablecimiento: establecimientoSelect;
 }
+
+export interface createSalidaTransporte {
+  fechaSalida: Date;
+  idChoferAcceso: number;
+  idOrigenEstablecimiento: number;
+  idDestinoEstablecimiento: number;
+  idVehiculo: number;
+}

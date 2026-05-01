@@ -21,7 +21,12 @@ export const filterTypeValues = {
 } as const;
 
 export const maxPageSize = 10;
-
+export const roles = [
+  { id: 1, rol: "ADMIN" },
+  { id: 2, rol: "CHOFER" },
+  { id: 3, rol: "CLIENTE" },
+  { id: 4, rol: "COLABORADOR" },
+];
 export const defaultQueries = {
   search: "",
   sort_by: "",

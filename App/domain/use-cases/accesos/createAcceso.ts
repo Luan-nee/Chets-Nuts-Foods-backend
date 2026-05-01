@@ -4,7 +4,7 @@ import { generateTables } from "../../../BD-Control.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
 import { CreateAccesos, InsertUser } from "../../../SQL/atajosSql.js";
 import { UpdateAccesDto } from "../../dto/auth/UpdateAccess.dto.js";
-import { UpdateParam } from "../../../consts.js";
+import { roles, UpdateParam } from "../../../consts.js";
 import { UsuarioDto } from "../../dto/usuarios/usuario.dto.js";
 import { PageDataDto } from "../../query-params/pageData.dto.js";
 import { paginationResponde } from "../../../core/core.js";
@@ -181,12 +181,17 @@ export class CreateAccesoUseCase {
       .from(accesos())
       .innerJOIN(usuarios(), eq(accesos.idusuario, usuarios.iduser, false))
       .where(eq(accesos.idacceso, id))
-      .execute();
+      .execute(true);
 
     if (dataAccess === undefined) {
       throw CustomError.badRequest("Ocurrio un error al realizar la consulta");
     }
 
     return dataAccess;
+  }
+
+  async getRoles() {
+    console.log(roles);
+    return roles;
   }
 }

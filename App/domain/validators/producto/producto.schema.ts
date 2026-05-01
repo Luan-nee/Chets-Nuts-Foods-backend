@@ -11,7 +11,8 @@ export const productoEnvioSchema = {
     .max(150)
     .refine((valor) => Validator.isValidGeneralName(valor), {
       error: "El nombre del producto contiene caracteres no permitidos",
-    }),
+    })
+    .transform((val) => val.toLocaleLowerCase()),
   observacion: z
     .string()
     .trim()
@@ -20,5 +21,8 @@ export const productoEnvioSchema = {
       error: "La observación contiene caracteres no permitidos",
     })
     .optional(),
-  peso: z.coerce.number().min(0),
+  pesounitario: z.coerce.number().min(0),
+  cantidad: z.coerce.number().int().min(1).default(1),
+  fechacreacion: z.coerce.date().optional(),
+  fechaactualizado: z.coerce.date().optional(),
 };

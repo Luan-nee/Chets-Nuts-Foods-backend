@@ -3,12 +3,19 @@ import { createProductoValidator } from "../../validators/producto/producto.vali
 export class CreateProductoPaqueteDto {
   public nombreproducto: string;
   public observacion?: string;
-  public peso: number;
+  public cantidad: number;
+  public pesounitario: number;
 
-  constructor({ nombreproducto, peso, observacion }: CreateProductoPaqueteDto) {
+  constructor({
+    nombreproducto,
+    pesounitario,
+    observacion,
+    cantidad,
+  }: CreateProductoPaqueteDto) {
     this.nombreproducto = nombreproducto;
     this.observacion = observacion;
-    this.peso = peso;
+    this.pesounitario = pesounitario;
+    this.cantidad = cantidad;
   }
 
   static create(input: any): [string?, CreateProductoPaqueteDto?] {
