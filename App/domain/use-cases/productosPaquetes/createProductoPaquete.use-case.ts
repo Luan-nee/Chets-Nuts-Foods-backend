@@ -1,4 +1,4 @@
-import { DB, eq, UP } from "zormz";
+import { AND, DB, eq, UP } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import { CreateProductoPaqueteDto } from "../../dto/productosPaquete/createProducto.dto.js";
 import { estadoPaquete, salidaTransType } from "../../../types/global.js";
@@ -62,6 +62,7 @@ export class CreateProductoPaqueteUseCase {
 
   async getProductoPaquete(
     idPaquete: number,
+    nombreproducto: string,
   ): Promise<null | productoValidate> {
     const { productos } = generateTables();
 
@@ -73,7 +74,12 @@ export class CreateProductoPaqueteUseCase {
       productos.cantidad,
     ])
       .from(productos())
-      .where(eq(productos.idenvio, idPaquete))
+      .where(
+        AND(
+          eq(productos.idenvio, idPaquete),
+          eq(productos.nombreproducto, nombreproducto),
+        ),
+      )
       .execute()) as productoValidate[];
 
     if (producto.length === 0) {
@@ -85,7 +91,7 @@ export class CreateProductoPaqueteUseCase {
   async validatePesoAutomovil(idPaquete: number, peso: number) {
     const { vehiculosempresa, paquetes, salidatransporte } = generateTables();
 
-    const idVehiculo = await DB.Select([salidatransporte.idvehiculo])
+    const idVehiculo = (await DB.Select([salidatransporte.idvehiculo])
       .from(salidatransporte())
       .innerJOIN(
         paquetes(),
@@ -96,7 +102,9 @@ export class CreateProductoPaqueteUseCase {
         ),
       )
       .where(eq(paquetes.idenvio, idPaquete))
-      .execute();
+      .execute(true)) as { idvehiculo: number }[];
+
+    console.log(idVehiculo);
     if (idVehiculo.length > 1 || idVehiculo.length === 0) {
       throw CustomError.badRequest(
         "El vehiculo no existe o no esta registrado",
@@ -105,7 +113,7 @@ export class CreateProductoPaqueteUseCase {
 
     const validateV = (await DB.Select([vehiculosempresa.capacidadCarga])
       .from(vehiculosempresa())
-      .where(eq(vehiculosempresa.idvehempresa, idVehiculo[0]))
+      .where(eq(vehiculosempresa.idvehempresa, idVehiculo[0].idvehiculo))
       .execute()) as { capacidadCarga: number }[];
 
     if (validateV.length === 0) {
@@ -143,11 +151,21 @@ export class CreateProductoPaqueteUseCase {
       data.push(productoDto.observacion);
     }
 
-    const productoVal = await this.getProductoPaquete(idpaquete);
+    const productoVal = await this.getProductoPaquete(
+      idpaquete,
+      productoDto.nombreproducto,
+    );
+
     if (productoVal === null) {
       const pesoTotal = productoDto.cantidad * productoDto.pesounitario;
+      console.log(productoDto.cantidad);
+      console.log(productoDto.pesounitario);
+      console.log(pesoTotal);
 
       await this.validatePesoAutomovil(idpaquete, pesoTotal);
+
+      query.push(productos.pesototal);
+      data.push(pesoTotal);
 
       const idProductoNuevo = await DB.Insert(productos(), query)
         .Values(data)

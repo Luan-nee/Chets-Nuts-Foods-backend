@@ -3,6 +3,7 @@ import { CustomResponse } from "../../../core/res/custom.response.js";
 import { CreateProductoPaqueteDto } from "../../../domain/dto/productosPaquete/createProducto.dto.js";
 import { NumericId } from "../../../domain/query-params/numericId-dto.js";
 import { CreateProductoPaqueteUseCase } from "../../../domain/use-cases/productosPaquetes/createProductoPaquete.use-case.js";
+import { GetAllProductosPaqueteUseCase } from "../../../domain/use-cases/productosPaquetes/getAllProductoPaquete.js";
 
 export class ControllerProductosPaquetes {
   registrarProducto = (req: Request, res: Response) => {
@@ -52,5 +53,16 @@ export class ControllerProductosPaquetes {
       CustomResponse.badRequest({ res, error });
       return;
     }
+
+    const useproduct = new GetAllProductosPaqueteUseCase();
+
+    useproduct
+      .execute(id.id)
+      .then((data) => {
+        CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
+      });
   };
 }
