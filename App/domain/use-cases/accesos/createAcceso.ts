@@ -87,6 +87,7 @@ export class CreateAccesoUseCase {
       password,
       tipos,
     });
+
     return "ok";
   }
 
