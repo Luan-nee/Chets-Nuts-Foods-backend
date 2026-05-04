@@ -44,7 +44,10 @@ export class GetAllProductosPaqueteUseCase {
       const suma = Number(acumulador) + Number(produc.pesototal);
       return suma;
     }, 0);
-    return [productosPaquetes, { totalPesoPaquete: pesoTotalPaquete }];
+    return {
+      productos: productosPaquetes,
+      resumen: { totalPesoPaquete: pesoTotalPaquete },
+    };
   }
 
   async execute(idpaquete: number) {

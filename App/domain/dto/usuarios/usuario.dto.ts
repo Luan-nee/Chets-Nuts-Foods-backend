@@ -1,8 +1,13 @@
+import { ZodIssue } from "zod/v3";
 import {
   createUsuarioValidator,
   dniUsuarioValidator,
   rucUsuarioValidator,
 } from "../../validators/usuario/usuario.validator.js";
+
+type Result =
+  | { error: ZodIssue[]; data?: undefined }
+  | { error?: undefined; data: UsuarioDto };
 
 export class UsuarioDto {
   public nombre: string;
@@ -46,7 +51,8 @@ export class UsuarioDto {
   static createUserDto(input: any): [string?, UsuarioDto?] {
     const validator = createUsuarioValidator(input);
     if (!validator.success) {
-      return [validator.error.message, undefined];
+      const errorres = validator.error.issues.map((err) => err.message);
+      return [JSON.stringify(errorres), undefined];
     }
 
     return [undefined, new UsuarioDto(validator.data)];
