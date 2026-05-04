@@ -1,17 +1,16 @@
 import z from "zod";
 import { seguimientoSchema } from "./seguimiento.schema.js";
 
-// Schema para crear un nuevo seguimiento
 const createSeguimientoSchema = z.object({
-  idpaquete: seguimientoSchema.idpaquete,
-  idcontrolestablecimiento: seguimientoSchema.idcontrolestablecimiento,
-  latitud: seguimientoSchema.latitud,
-  longitud: seguimientoSchema.longitud,
-  direccion: seguimientoSchema.direccion,
-  comentario: seguimientoSchema.comentario,
+  idcontrolestablecimiento:
+    seguimientoSchema.idcontrolestablecimiento.optional(),
+  titulo: seguimientoSchema.titulo,
+  latitud: seguimientoSchema.latitud.optional(),
+  longitud: seguimientoSchema.longitud.optional(),
+  direccion: seguimientoSchema.direccion.optional(),
+  comentario: seguimientoSchema.comentario.optional(),
 });
 
-// Schema para actualizar un seguimiento
 const updateSeguimientoSchema = z.object({
   idpaquete: seguimientoSchema.idpaquete.optional(),
   idcontrolestablecimiento: seguimientoSchema.idcontrolestablecimiento,
@@ -26,4 +25,3 @@ export const createSeguimientoValidator = (object: unknown) =>
 
 export const updateSeguimientoValidator = (object: unknown) =>
   updateSeguimientoSchema.safeParse(object);
-

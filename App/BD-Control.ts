@@ -133,6 +133,7 @@ export function generateTables() {
       latitud: varchar(50).$(),
       longitud: varchar(50).$(),
       direccion: varchar(70).$(),
+      titulo: varchar(100).Required().$(),
       comentario: varchar(150)
         .Comment("En caso quiera agregar alguna informacion")
         .$(),
@@ -148,6 +149,7 @@ export function generateTables() {
       vin: varchar(100).$(),
       numeroHabilitacion: varchar(150).$(),
       capacidadCarga: money().required().$(),
+      tipo: varchar(100).Check(["PUBLICO", "PRIVADO"]).Default("PRIVADO").$(),
       estadovehiculo: varchar(100)
         .Check(["OPERATIVO", "INACTIVO", "RESERVADO", "OCUPADO"])
         .Default("OPERATIVO")

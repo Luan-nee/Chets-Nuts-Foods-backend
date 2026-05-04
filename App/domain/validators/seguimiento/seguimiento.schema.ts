@@ -4,6 +4,14 @@ import { Validator } from "../validators.js";
 export const seguimientoSchema = {
   idseg: z.coerce.number().int().positive().optional(),
   idpaquete: z.coerce.number().int().positive(),
+  titulo: z
+    .string()
+    .max(100)
+    .min(5)
+    .trim()
+    .refine((title) => Validator.isValidFullName(title), {
+      error: "El titulo no puede contener caracteres especiales",
+    }),
   idcontrolestablecimiento: z.coerce.number().int().positive().optional(),
   latitud: z
     .string()
@@ -38,4 +46,3 @@ export const seguimientoSchema = {
     })
     .optional(),
 };
-

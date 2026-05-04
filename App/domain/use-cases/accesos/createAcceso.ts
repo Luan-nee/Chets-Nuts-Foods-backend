@@ -36,6 +36,7 @@ export class CreateAccesoUseCase {
       usuarios.numeroLicenciaConducir,
       usuarios.numero,
       usuarios.rucuser,
+      usuarios.dniuser,
     ])
       .from(usuarios())
       .where(eq(usuarios.iduser, iduserCase))
@@ -49,7 +50,7 @@ export class CreateAccesoUseCase {
 
     const validAccesoRepeat = (await DB.Select([accesos.correo, accesos.estado])
       .from(accesos())
-      .where(AND(eq(accesos.correo, correo), eq(accesos.contra, password)))
+      .where(OR(eq(accesos.correo, correo), eq(accesos.contra, password)))
       .execute()) as accesoRepeat[] | undefined;
 
     if (validAccesoRepeat !== undefined && validAccesoRepeat.length > 0) {
