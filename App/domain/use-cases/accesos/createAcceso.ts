@@ -63,7 +63,10 @@ export class CreateAccesoUseCase {
       throw CustomError.badRequest("Este usuario existe pero esta inabilitado");
     }
 
-    if (validUser[0].rucuser === undefined || validUser[0].rucuser === null) {
+    if (
+      (validUser[0].rucuser === undefined || validUser[0].rucuser === null) &&
+      tipos === "CHOFER"
+    ) {
       throw CustomError.badRequest(
         "Para registrar un colaborador este debe tener un ruc",
       );
