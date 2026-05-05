@@ -7,6 +7,7 @@ interface valorSocket {
   codigo: number;
   tiempo: number;
   estado: boolean;
+  id: number;
 }
 
 export async function validatorTokenSocket(
@@ -28,6 +29,7 @@ export async function validatorTokenSocket(
         codigo: 1,
         tiempo,
         estado: true,
+        id: decodeAuthpayload.id,
       };
     }
 
@@ -40,6 +42,7 @@ export async function validatorTokenSocket(
         codigo: decodeAuthpayload.establecimiento,
         tiempo,
         estado: true,
+        id: decodeAuthpayload.id,
       };
     }
 
@@ -49,6 +52,7 @@ export async function validatorTokenSocket(
         message: "CHOFERES",
         codigo: 2,
         tiempo,
+        id: decodeAuthpayload.id,
       };
     }
 
@@ -57,6 +61,7 @@ export async function validatorTokenSocket(
       estado: false,
       tiempo,
       codigo: 3,
+      id: decodeAuthpayload.id,
     };
   } catch (error) {
     console.log(error);
@@ -65,6 +70,7 @@ export async function validatorTokenSocket(
       message: "CLIENTES",
       tiempo: 1,
       codigo: 404,
+      id: 0,
     };
   }
 }

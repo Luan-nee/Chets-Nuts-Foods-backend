@@ -2,6 +2,7 @@ import http from "http";
 import { Socket, Server as SocketIOServer } from "socket.io";
 import { validatorTokenSocket } from "./controllerSockets/validateTokenSockets.js";
 import { pagePermises, usuariosConectados } from "./consts.js";
+import { ManagerSockets } from "./controllerSockets/managerSockets.js";
 
 export default class SocketControl {
   private io: SocketIOServer | null;
@@ -23,21 +24,31 @@ export default class SocketControl {
     if (this.io === null) throw new Error("La conexion es obligatorio");
     this.io.on("connection", async (usuario) => {
       console.log(`usuario : ${usuario.id}`);
+
+      if (usuario.handshake.auth.token === undefined) {
+        usuario.disconnect();
+      }
+
       const tokenBefore = usuario.handshake.auth.token as string;
       const user = await validatorTokenSocket(tokenBefore);
+
       if (!user.estado) {
         usuario.disconnect();
       }
-      if (!usuariosConectados.has(user.codigo)) {
-        usuariosConectados.set(user.codigo, new Set());
+
+      const { paquetes, salidatransporte } =
+        await ManagerSockets.managerControls(
+          user.message,
+          user.id,
+          user.codigo,
+        );
+
+      if (paquetes !== undefined) {
+        usuario.join(paquetes);
       }
 
-      usuariosConectados.get(user.codigo)?.add(usuario.id);
-
-      if (user.message === "ESTABLECIMIENTO" && user.codigo !== undefined) {
-        usuario.join(user.message + user.codigo);
-      } else {
-        usuario.join(user.message);
+      if (salidatransporte !== undefined) {
+        usuario.join(salidatransporte);
       }
 
       usuario.on("disconnet", () => {

@@ -6,7 +6,9 @@ export type roomsSocket =
   | "ADMINS"
   | "CHOFERES"
   | "ESTABLECIMIENTO"
-  | "CLIENTES";
+  | "CLIENTES"
+  | "PAQUETES"
+  | "SALIDATRANSPORTE";
 
 export type estadoPaquete =
   | "ENTREGADO"

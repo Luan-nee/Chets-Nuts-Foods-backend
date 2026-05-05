@@ -12,6 +12,7 @@ export class RoutesPaquetes {
 
     routes.get("/:id", controller.getAll);
     routes.get("/:id/productos", controllerProductos.getAllProductos);
+    routes.get("/:id/seguimiento", controllerSeguimiento.getAll);
     routes.get("/data/:id", controller.getByID);
 
     routes.post("/", controller.create);
