@@ -18,4 +18,5 @@ export const vehiculosSchema = {
   vin: z.string().trim(),
   numeroHabilitacion: z.string().trim(),
   estadoVehiculo: z.enum(["RESERVADO", "INACTIVO", "OPERATIVO"]),
+  tipo: z.enum(["PUBLICO", "PRIVADO"]).optional(),
 };

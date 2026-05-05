@@ -1,3 +1,4 @@
+import { responseZodError } from "../../../core/config/responseZodError.js";
 import { createVehiculoValidator } from "../../validators/carros/vehiculosValidator.js";
 
 export class CreateCarroDto {
@@ -9,6 +10,7 @@ export class CreateCarroDto {
   public vin?: string;
   public numeroHabilitacion?: string;
   public capacidadCarga: number;
+  public tipo?: "PUBLICO" | "PRIVADO";
 
   private constructor({
     anio,
@@ -19,6 +21,7 @@ export class CreateCarroDto {
     tipoVehiculo,
     vin,
     numeroHabilitacion,
+    tipo,
   }: CreateCarroDto) {
     this.anio = anio;
     this.capacidadCarga = capacidadCarga;
@@ -28,12 +31,14 @@ export class CreateCarroDto {
     this.tipoVehiculo = tipoVehiculo;
     this.vin = vin;
     this.numeroHabilitacion = numeroHabilitacion;
+    this.tipo = tipo;
   }
 
   static createVehiculoAccess(input: any): [string?, CreateCarroDto?] {
     const resultado = createVehiculoValidator(input);
     if (!resultado.success) {
-      return [resultado.error.message, undefined];
+      const datos = responseZodError(resultado);
+      return [datos, undefined];
     }
     return [undefined, new CreateCarroDto(resultado.data)];
   }

@@ -1,10 +1,13 @@
-import { AND, DB, eq, OR, UP } from "zormz";
+import { AND, COUNT, DB, eq, OR, UP } from "zormz";
 import { CreateCarroDto } from "../../dto/autosEmpresa/createCarro.dto.js";
 import { generateTables } from "../../../BD-Control.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
 import { createVehiculoEmpresa } from "../../../SQL/atajosSql.js";
 import { UpdateCarroDto } from "../../dto/autosEmpresa/updateCarro.dto.js";
 import { UpdateParam } from "../../../consts.js";
+import { VehiculoQueryDto } from "../../query-params/vehiculos/vehiculoQueryDto.js";
+import { count } from "console";
+import { paginationResponseSuccess } from "../../../core/config/paginationResponseSucces.js";
 
 interface selectCarro {
   placa: string;
@@ -63,7 +66,6 @@ export class CreateVehiculoUseCase {
       )
       .execute()) as selectCarro[];
 
-    console.log(automovilValidate);
     if (automovilValidate.length > 0) {
       throw CustomError.badRequest("Este vehiculo ya esta registrado");
     }
@@ -76,9 +78,18 @@ export class CreateVehiculoUseCase {
     return automovil;
   }
 
-  async getAllVehiculo() {
+  async getAllVehiculo(query: VehiculoQueryDto) {
     const { vehiculosempresa } = generateTables();
 
+    const condicional = AND(
+      query.estado !== "ALL" && query.estado !== undefined
+        ? eq(vehiculosempresa.estadovehiculo, query.estado)
+        : "",
+      query.tipo !== "ALL" && query.tipo !== undefined
+        ? eq(vehiculosempresa.tipo, query.tipo)
+        : "",
+    );
+    console.log(condicional.length);
     const vehiculos = await DB.Select([
       vehiculosempresa.idvehempresa,
       vehiculosempresa.placa,
@@ -87,12 +98,29 @@ export class CreateVehiculoUseCase {
       vehiculosempresa.anio,
       vehiculosempresa.tipoVehiculo,
       vehiculosempresa.capacidadCarga,
+      vehiculosempresa.tipo,
       vehiculosempresa.estadovehiculo,
     ])
       .from(vehiculosempresa())
+      .where(condicional.length <= 4 ? undefined : condicional)
+      .OFFSET(query.page * 10)
+      .LIMIT(10)
       .execute();
 
-    return vehiculos;
+    const [cantidadVehiculo] = (await DB.Select([
+      COUNT(vehiculosempresa.idvehempresa, "cantidad"),
+    ])
+      .from(vehiculosempresa())
+      .execute(true)) as { cantidad: number }[];
+
+    console.log(cantidadVehiculo);
+
+    const pageResponse = paginationResponseSuccess(
+      Number(cantidadVehiculo.cantidad),
+      query.page,
+    );
+
+    return { data: vehiculos, paginasResponse: pageResponse };
   }
 
   async getChoferes() {

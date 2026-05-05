@@ -170,18 +170,46 @@ export async function createVehiculoEmpresa({
   modelo,
   placa,
   tipoVehiculo,
+  numeroHabilitacion,
+  tipo,
+  vin,
 }: CreateCarroDto) {
   const { vehiculosempresa } = generateTables();
 
-  const [id] = (await DB.Insert(vehiculosempresa(), [
+  const query = [
     vehiculosempresa.anio,
     vehiculosempresa.capacidadCarga,
     vehiculosempresa.marca,
     vehiculosempresa.modelo,
     vehiculosempresa.placa,
     vehiculosempresa.tipoVehiculo,
-  ])
-    .Values([anio, capacidadCarga, marca, modelo, placa, tipoVehiculo])
+  ];
+  const valores: any[] = [
+    anio,
+    capacidadCarga,
+    marca,
+    modelo,
+    placa,
+    tipoVehiculo,
+  ];
+
+  if (numeroHabilitacion !== undefined) {
+    query.push(vehiculosempresa.numeroHabilitacion);
+    valores.push(numeroHabilitacion);
+  }
+
+  if (tipo !== undefined) {
+    query.push(vehiculosempresa.tipo);
+    valores.push(tipo);
+  }
+
+  if (vin !== undefined) {
+    query.push(vehiculosempresa.vin);
+    valores.push(vin);
+  }
+
+  const [id] = (await DB.Insert(vehiculosempresa(), query)
+    .Values(valores)
     .Returning(vehiculosempresa.idvehempresa)
     .execute()) as number[];
 

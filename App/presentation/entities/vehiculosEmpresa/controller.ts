@@ -4,6 +4,7 @@ import { CreateCarroDto } from "../../../domain/dto/autosEmpresa/createCarro.dto
 import { CreateVehiculoUseCase } from "../../../domain/use-cases/vehiculos/createVehiculo.use-case.js";
 import { UpdateCarroDto } from "../../../domain/dto/autosEmpresa/updateCarro.dto.js";
 import { emitSocket } from "../../../controllerSockets/globalSocket.js";
+import { VehiculoQueryDto } from "../../../domain/query-params/vehiculos/vehiculoQueryDto.js";
 
 export class VehiculosEmpresaController {
   create = (req: Request, res: Response) => {
@@ -50,12 +51,19 @@ export class VehiculosEmpresaController {
       return;
     }
 
+    const [query, errores] = VehiculoQueryDto.create(req.query);
+
     const vehiculo = new CreateVehiculoUseCase();
 
     vehiculo
-      .getAllVehiculo()
-      .then((data) => {
-        CustomResponse.success({ res, data });
+      .getAllVehiculo(query)
+      .then(({ data, paginasResponse }) => {
+        CustomResponse.success({
+          res,
+          data,
+          message: errores,
+          pagination: paginasResponse,
+        });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });

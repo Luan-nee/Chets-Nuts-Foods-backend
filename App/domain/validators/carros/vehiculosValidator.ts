@@ -10,6 +10,7 @@ const createVehiculo = z.object({
   tipoVehiculo: vehiculosSchema.tipoVehiculo,
   vin: vehiculosSchema.vin.optional(),
   numeroHabilitacion: vehiculosSchema.numeroHabilitacion.optional(),
+  tipo: vehiculosSchema.tipo,
 });
 
 const updateVehiculo = z.object({
