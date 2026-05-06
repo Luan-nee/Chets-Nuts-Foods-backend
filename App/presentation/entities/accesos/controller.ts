@@ -35,7 +35,6 @@ export class AccesosController {
         CustomResponse.success({ res, data });
       })
       .catch((err) => {
-        console.log(err);
         CustomResponse.badRequest({ res, error: err });
       });
   };

@@ -50,12 +50,15 @@ export class CreateAccesoUseCase {
 
     const validAccesoRepeat = (await DB.Select([accesos.correo, accesos.estado])
       .from(accesos())
-      .where(OR(eq(accesos.correo, correo), eq(accesos.contra, password)))
+      .where(OR(eq(accesos.correo, correo), eq(accesos.idusuario, iduserCase)))
       .execute()) as accesoRepeat[] | undefined;
 
     if (validAccesoRepeat !== undefined && validAccesoRepeat.length > 0) {
-      throw CustomError.badRequest("Este usuario ya esta registrado");
+      throw CustomError.badRequest(
+        "Este usuario con el DNI ya esta en uso para un acceso",
+      );
     }
+
     if (
       validAccesoRepeat !== undefined &&
       validAccesoRepeat.length === 1 &&

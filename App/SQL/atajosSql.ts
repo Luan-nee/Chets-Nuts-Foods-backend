@@ -118,14 +118,11 @@ export async function InsertUser({
     console.log(`Usuario ${nombre} Creado con exito `);
     return id;
   } else {
-    throw CustomError.badRequest("Este usuario ya esta registrado");
-    /*
     const upt = await DB.Update(usuarios())
       .set(query)
       .where(eq(usuarios.iduser, existUser[0].iduser))
       .execute();
-*/
-    // return existUser[0].iduser;
+    return existUser[0].iduser;
   }
 }
 
