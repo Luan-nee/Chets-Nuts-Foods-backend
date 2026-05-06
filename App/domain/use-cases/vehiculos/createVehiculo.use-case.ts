@@ -86,7 +86,7 @@ export class CreateVehiculoUseCase {
         ? eq(vehiculosempresa.estadovehiculo, query.estado)
         : "",
       query.tipo !== "ALL" && query.tipo !== undefined
-        ? eq(vehiculosempresa.tipo, query.tipo)
+        ? eq(vehiculosempresa.tiposervicio, query.tipo)
         : "",
     );
     console.log(condicional.length);
@@ -97,8 +97,8 @@ export class CreateVehiculoUseCase {
       vehiculosempresa.modelo,
       vehiculosempresa.anio,
       vehiculosempresa.tipoVehiculo,
+      vehiculosempresa.tiposervicio,
       vehiculosempresa.capacidadCarga,
-      vehiculosempresa.tipo,
       vehiculosempresa.estadovehiculo,
     ])
       .from(vehiculosempresa())

@@ -199,7 +199,7 @@ export async function createVehiculoEmpresa({
   }
 
   if (tipo !== undefined) {
-    query.push(vehiculosempresa.tipo);
+    query.push(vehiculosempresa.tiposervicio);
     valores.push(tipo);
   }
 

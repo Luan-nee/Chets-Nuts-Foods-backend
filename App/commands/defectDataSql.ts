@@ -53,7 +53,7 @@ async function generarTablas() {
   });
 
   const idAcceso3 = await CreateAccesos({
-    correo: "luandelsol@gmail.com",
+    correo: "luandelsol2@gmail.com",
     password: "chofer123",
     tipos: "CHOFER",
     idusuario: id3,

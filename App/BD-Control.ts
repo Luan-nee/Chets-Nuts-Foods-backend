@@ -149,9 +149,12 @@ export function generateTables() {
       vin: varchar(100).$(),
       numeroHabilitacion: varchar(150).$(),
       capacidadCarga: money().required().$(),
-      tipo: varchar(100).Check(["PUBLICO", "PRIVADO"]).Default("PRIVADO").$(),
+      tiposervicio: varchar(100)
+        .Check(["PUBLICO", "PRIVADO"])
+        .Default("PRIVADO")
+        .$(),
       estadovehiculo: varchar(100)
-        .Check(["OPERATIVO", "INACTIVO", "RESERVADO", "OCUPADO"])
+        .Check(["OPERATIVO", "INACTIVO", "RESERVADO"])
         .Default("OPERATIVO")
         .$(),
       fechacreado: timestamp().now().$(),
