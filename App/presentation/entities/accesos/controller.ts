@@ -32,7 +32,11 @@ export class AccesosController {
     accesoUseCase
       .createExec(userDto, accesoDto)
       .then((data) => {
-        CustomResponse.success({ res, data });
+        CustomResponse.success({
+          res,
+          data,
+          message: "usuario creado con exito",
+        });
       })
       .catch((err) => {
         CustomResponse.badRequest({ res, error: err });
@@ -44,7 +48,11 @@ export class AccesosController {
       CustomResponse.badRequest({ res, error: "No tienes permisos" });
       return;
     }
-    const page = PageDataDto.create(req.query);
+    const [page, error] = PageDataDto.create(req.query);
+    if (error !== undefined) {
+      CustomResponse.badRequest({ res, error: error });
+      return;
+    }
     const accesoUse = new CreateAccesoUseCase();
 
     accesoUse
@@ -93,9 +101,10 @@ export class AccesosController {
       });
       return;
     }
+    console.log(req.params);
     const [error, id] = NumericId.create(req.params);
     if (error !== undefined || id === undefined) {
-      CustomResponse.badRequest({ res, error: "Id INVALIDO" });
+      CustomResponse.badRequest({ res, error });
       return;
     }
 
@@ -103,8 +112,8 @@ export class AccesosController {
 
     accesoUse
       .getByID(id.id)
-      .then((data) => {
-        CustomResponse.success({ res, data });
+      .then(({ data, mensaje }) => {
+        CustomResponse.success({ res, data, message: mensaje });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });

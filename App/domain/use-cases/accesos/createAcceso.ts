@@ -98,6 +98,8 @@ export class CreateAccesoUseCase {
   async getAll(page: PageDataDto) {
     const { accesos, usuarios } = generateTables();
 
+    console.log(page);
+
     const dataAccess = await DB.Select([
       accesos.idacceso,
       accesos.correo,
@@ -111,8 +113,8 @@ export class CreateAccesoUseCase {
       .innerJOIN(usuarios(), eq(accesos.idusuario, usuarios.iduser, false))
       .where()
       .LIMIT(10)
-      .OFFSET(page.page * 10)
-      .execute();
+      .OFFSET((page.page - 1) * 10)
+      .execute(true);
 
     if (dataAccess === undefined) {
       throw CustomError.badRequest("Ocurrio un error al realizar la consulta");
@@ -128,7 +130,7 @@ export class CreateAccesoUseCase {
       total_data: Number(busqueda.cantidad),
       datos_por_pagina: 10,
       pagina_actual: page.page,
-      total_paginas: Math.trunc(Number(busqueda.cantidad) / 10),
+      total_paginas: Math.trunc(Number(busqueda.cantidad) / 10) + 1,
     };
     return { data: dataAccess, paginasResponse: paginas };
   }
@@ -170,7 +172,7 @@ export class CreateAccesoUseCase {
 
   async getByID(id: number) {
     const { accesos, usuarios } = generateTables();
-
+    let mensaje = "consulta exitosa";
     const dataAccess = await DB.Select([
       accesos.idacceso,
       accesos.correo,
@@ -192,10 +194,16 @@ export class CreateAccesoUseCase {
       .execute(true);
 
     if (dataAccess === undefined) {
-      throw CustomError.badRequest("Ocurrio un error al realizar la consulta");
+      throw CustomError.internalServer(
+        "Ocurrio un error al realizar la consulta",
+      );
     }
 
-    return dataAccess;
+    if (dataAccess.length === 0) {
+      mensaje = `No existe este usuario con el ID ${id} en el sistema`;
+    }
+
+    return { data: dataAccess[0], mensaje };
   }
 
   async getRoles() {

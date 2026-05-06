@@ -18,10 +18,8 @@ export const queryBaseSchema = {
     .optional(),
   page: z.coerce
     .number()
-    .default(defaultQueries.page)
-    .transform((valor) => {
-      if (valor < 1) return 0;
-      if (valor > maxPageSize) return maxPageSize;
-      return valor;
-    }),
+    .min(1, {
+      error: "No puede ser negativo el parametro page",
+    })
+    .default(defaultQueries.page),
 };

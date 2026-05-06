@@ -1,3 +1,4 @@
+import { responseZodError } from "../../core/config/responseZodError.js";
 import { ParamNumericIdValidator } from "./queryParams-validator.js";
 
 export class NumericId {
@@ -8,10 +9,9 @@ export class NumericId {
   }
   static create(input: any): [string?, NumericId?] {
     const resultado = ParamNumericIdValidator(input);
-    console.log(resultado);
     if (!resultado.success) {
-      console.log(resultado.error.message);
-      return ["Id invalido", undefined];
+      const error = responseZodError(resultado);
+      return [error, undefined];
     }
     return [undefined, new NumericId(resultado.data)];
   }
