@@ -2,12 +2,18 @@ import z from "zod";
 import { Validator } from "../validators.js";
 
 export const accesoSchema = {
-  idacceso: z.coerce.number().int().positive(),
-  idusuario: z.coerce.number().int().positive(),
+  idacceso: z.coerce
+    .number({ error: "El idacceso no puede ser una letra o un booleano" })
+    .int({ error: "El id no puede contener decimales" })
+    .positive(),
+  idusuario: z.coerce
+    .number({ error: "El idusuario no puede ser una letra o booleano" })
+    .int({ error: "El id no puede tener decimales" })
+    .positive(),
   tipos: z.preprocess(
     (val) => (typeof val === "string" ? val.toUpperCase() : val),
     z.enum(["ADMIN", "CHOFER", "CLIENTE", "COLABORADOR"], {
-      error: "Solo esta permitido CHOFER , CLIENTE y COLABORADOR",
+      error: "Tipos Solo esta permitido CHOFER , CLIENTE y COLABORADOR",
     }),
   ),
   correo: z.string().trim().max(200).toLowerCase(),
@@ -18,5 +24,7 @@ export const accesoSchema = {
     .refine((valor) => Validator.isValidPassword(valor), {
       error: "La contraseña contiene caracteres no permitidos",
     }),
-  estado: z.boolean().default(true),
+  estado: z
+    .boolean({ error: "estado solo esta permitido true o false" })
+    .default(true),
 };

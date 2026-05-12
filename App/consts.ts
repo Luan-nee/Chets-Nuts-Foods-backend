@@ -31,7 +31,7 @@ export const defaultQueries = {
   search: "",
   sort_by: "",
   order: orderValues.desc,
-  page: 0,
+  page: 1,
   page_size: 30,
   filter: "",
   filter_value: undefined,

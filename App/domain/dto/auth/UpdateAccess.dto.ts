@@ -1,3 +1,4 @@
+import { responseZodError } from "../../../core/config/responseZodError.js";
 import { typeRol } from "../../../types/global.js";
 import { updateAccesoValidator } from "../../validators/acceso/acceso.validator.js";
 
@@ -26,7 +27,8 @@ export class UpdateAccesDto {
     const resultado = updateAccesoValidator(input);
 
     if (!resultado.success) {
-      return [resultado.error.message, undefined];
+      const error = responseZodError(resultado);
+      return [error, undefined];
     }
     return [undefined, new UpdateAccesDto(resultado.data)];
   }

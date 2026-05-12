@@ -114,7 +114,7 @@ export class CreateAccesoUseCase {
       .where()
       .LIMIT(10)
       .OFFSET((page.page - 1) * 10)
-      .execute(true);
+      .execute();
 
     if (dataAccess === undefined) {
       throw CustomError.badRequest("Ocurrio un error al realizar la consulta");
@@ -138,6 +138,15 @@ export class CreateAccesoUseCase {
   async update(update: UpdateAccesDto) {
     const { accesos } = generateTables();
     const query: UpdateParam[] = [];
+
+    const validate = await DB.Select([accesos.idacceso])
+      .from(accesos())
+      .where(eq(accesos.idacceso, update.idacceso))
+      .execute();
+
+    if (validate.length === 0) {
+      throw CustomError.badRequest("Este id no existe como registro");
+    }
 
     if (update.correo !== undefined) {
       query.push(UP(accesos.correo, update.correo));
