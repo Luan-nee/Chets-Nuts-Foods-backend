@@ -4,10 +4,7 @@ import {
   dniUsuarioValidator,
   rucUsuarioValidator,
 } from "../../validators/usuario/usuario.validator.js";
-
-type Result =
-  | { error: ZodIssue[]; data?: undefined }
-  | { error?: undefined; data: UsuarioDto };
+import { responseZodError } from "../../../core/config/responseZodError.js";
 
 export class UsuarioDto {
   public nombre: string;
@@ -51,8 +48,8 @@ export class UsuarioDto {
   static createUserDto(input: any): [string?, UsuarioDto?] {
     const validator = createUsuarioValidator(input);
     if (!validator.success) {
-      const errorres = validator.error.issues.map((err) => err.message);
-      return [JSON.stringify(errorres), undefined];
+      const errorres = responseZodError(validator);
+      return [errorres, undefined];
     }
 
     return [undefined, new UsuarioDto(validator.data)];
@@ -61,7 +58,8 @@ export class UsuarioDto {
   static validDniUserDto(input: any): [string?, string?] {
     const validator = dniUsuarioValidator(input);
     if (!validator.success) {
-      return [validator.error.message, undefined];
+      const error = responseZodError(validator);
+      return [error, undefined];
     }
     return [undefined, validator.data.dni];
   }
@@ -69,7 +67,8 @@ export class UsuarioDto {
   static validRucUserDto(input: any): [string?, string?] {
     const validator = rucUsuarioValidator(input);
     if (!validator.success) {
-      return [validator.error.message, undefined];
+      const error = responseZodError(validator);
+      return [error, undefined];
     }
     return [undefined, validator.data.ruc];
   }

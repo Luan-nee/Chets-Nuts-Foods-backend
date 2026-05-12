@@ -31,14 +31,14 @@ export const usuarioSchema = {
   dniuser: z
     .string()
     .trim()
-    .length(8)
+    .length(8, { error: "DNI invalido" })
     .refine((valor) => Validator.isOnlyNumbers(valor), {
       error: "El DNI debe contener solo números y tener 8 dígitos",
     }),
   rucuser: z
     .string()
     .trim()
-    .length(11)
+    .length(11, { error: "RUC invalido" })
     .refine((valor) => Validator.isOnlyNumbers(valor), {
       error: "El RUC debe contener solo números y tener 11 dígitos",
     }),
@@ -60,7 +60,7 @@ export const usuarioSchema = {
     })
     .optional(),
   sexo: z.enum(["MASCULINO", "FEMENINO"], {
-    error: "Solo esta permitido masculino o femenino",
+    error: "Solo esta permitido MASCULINO o FEMENINO",
   }),
   correo: z.string().trim().min(6),
 };

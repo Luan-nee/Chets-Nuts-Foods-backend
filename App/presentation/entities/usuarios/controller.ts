@@ -24,7 +24,11 @@ export class UsuariosController {
       .create(userDto)
       .then((data) => {
         emitSocket(req, "newUser", data);
-        CustomResponse.success({ res, data });
+        CustomResponse.success({
+          res,
+          data,
+          message: "El usuario fue creado con exito",
+        });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });
