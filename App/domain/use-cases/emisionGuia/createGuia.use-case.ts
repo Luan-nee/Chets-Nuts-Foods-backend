@@ -16,6 +16,7 @@ import {
   usuariosData,
   vehiculoType,
 } from "./guiaTypes.js";
+import { CreateGuiaRemisionDto } from "../../dto/guiaRemision/createGuiaRemisionDto.js";
 
 export class CreateGuiaUseCase {
   async validatePaquete(
@@ -218,7 +219,7 @@ export class CreateGuiaUseCase {
     );
 
     const pesoTotal = responseProducts.reduce(
-      (acumulador, producto) => acumulador + producto.pesototal,
+      (acumulador, producto) => acumulador + Number(producto.pesototal),
       0,
     );
 
@@ -227,7 +228,7 @@ export class CreateGuiaUseCase {
         cantidad: producto.cantidad,
         codigo_interno: `P00${producto.id}`,
         descripcion: producto.nombreproducto,
-        unidad_de_medida: "NIU",
+        unidad_de_medida: "KGM",
       };
     });
 
@@ -253,7 +254,10 @@ export class CreateGuiaUseCase {
     return vehiculo;
   }
 
-  private async generateGuiaRemision(paqueteData: paqueteValidate) {
+  private async generateGuiaRemision(
+    paqueteData: paqueteValidate,
+    dtoGuia: CreateGuiaRemisionDto,
+  ) {
     const { guiasremision } = generateTables();
 
     const usuarios = await this.getUsuariosPackage(
@@ -315,17 +319,25 @@ export class CreateGuiaUseCase {
 
     const datos: GuiaRemisionDTO = {
       documento: "guia_remision_remitente",
-      motivo_de_traslado: "01",
-      destinatario_tipo_de_documento: "01",
+      motivo_de_traslado: dtoGuia.motivoTraslado || "01",
+      destinatario_tipo_de_documento:
+        dtoGuia.docDestinatario === "DNI" ||
+        dtoGuia.docDestinatario === undefined
+          ? "01"
+          : "06",
       destinatario_denominacion: usuarios.userDestino.nombres,
       destinatario_numero_de_documento: usuarios.userDestino.dniuser,
-      fecha_de_emision: salidatransporte.fechacreado.toDateString(),
-      hora_de_emision: salidatransporte.fechacreado.getHours().toString(),
-      fecha_inicio_de_traslado: salidatransporte.fechasalida.toDateString(),
+      fecha_de_emision: salidatransporte.fechacreado
+        .toISOString()
+        .split("T")[0],
+      hora_de_emision: `${salidatransporte.fechacreado.getHours()}:${salidatransporte.fechacreado.getMinutes()}`,
+      fecha_inicio_de_traslado: salidatransporte.fechasalida
+        .toISOString()
+        .split("T")[0],
       numero: "1",
-      modalidad_de_transporte: "01",
+      modalidad_de_transporte: dtoGuia.modalidadTransporte || "02",
       numero_de_bultos: items.cantidadTotal,
-      peso_bruto_unidad_de_medida: "NIU",
+      peso_bruto_unidad_de_medida: "KGM",
       peso_bruto_total: items.pesoTotal,
       punto_de_llegada_direccion:
         establecimiento.establecimientoDestino.direccion,
@@ -353,13 +365,13 @@ export class CreateGuiaUseCase {
     return datos;
   }
 
-  async execute(idpaquete: number) {
+  async execute(idpaquete: number, dtoGuia: CreateGuiaRemisionDto) {
     const [error, responseValidate] = await this.validate(idpaquete);
     if (error !== undefined || responseValidate === undefined) {
       throw CustomError.badRequest(`Error : ${error}`);
     }
 
-    const guia = await this.generateGuiaRemision(responseValidate);
+    const guia = await this.generateGuiaRemision(responseValidate, dtoGuia);
     console.log(guia);
   }
 }
