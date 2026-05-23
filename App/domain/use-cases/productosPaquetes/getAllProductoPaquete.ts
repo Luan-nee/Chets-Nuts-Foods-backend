@@ -28,6 +28,7 @@ export class GetAllProductosPaqueteUseCase {
     const productosPaquetes = (await DB.Select([
       productos.nombreproducto,
       productos.observacion,
+      productos.cantidad,
       productos.pesounitario,
       productos.pesototal,
       productos.fechacreacion,

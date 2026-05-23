@@ -103,7 +103,7 @@ export class CreateVehiculoUseCase {
     ])
       .from(vehiculosempresa())
       .where(condicional.length <= 4 ? undefined : condicional)
-      .OFFSET(query.page * 10)
+      .OFFSET((query.page - 1) * 10)
       .LIMIT(10)
       .execute();
 
@@ -111,7 +111,7 @@ export class CreateVehiculoUseCase {
       COUNT(vehiculosempresa.idvehempresa, "cantidad"),
     ])
       .from(vehiculosempresa())
-      .execute(true)) as { cantidad: number }[];
+      .execute()) as { cantidad: number }[];
 
     console.log(cantidadVehiculo);
 

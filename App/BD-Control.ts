@@ -81,7 +81,10 @@ export function generateTables() {
       idpaquete: int().$(),
       numero: varchar().$(),
       qrUrl: varchar(200).$(),
-      fechaConfirmacion: timestamp().now().$(),
+      confirmado: bool().default(false).$(),
+      datagenerate: varchar(700).$(),
+      fechaupdate: timestamp().onUpdate().$(),
+      fechaConfirmacion: timestamp().$(),
     }),
     paquetes: defineTable("paquetes", {
       //envios
@@ -114,6 +117,7 @@ export function generateTables() {
       idsalidatransporte: int().Pk().Required().$(),
       idvehiculo: int().Required().$(),
       idchoferacceso: int().Required().$(),
+      idchoferaccesosecundario: int().$(),
       idorigenestablecimiento: int().Required().$(),
       iddestinoestablecimiento: int().Required().$(),
       fechasalida: timestamp().required().$(),

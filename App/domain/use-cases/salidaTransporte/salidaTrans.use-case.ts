@@ -167,7 +167,7 @@ export class SalidaTransporteUseCase {
     }
 
     await DB.Update(vehiculosempresa())
-      .set([UP(vehiculosempresa.estadovehiculo, "OCUPADO")])
+      .set([UP(vehiculosempresa.estadovehiculo, "INACTIVO")])
       .where(eq(vehiculosempresa.idvehempresa, salidaDto.idVehiculo))
       .execute();
 

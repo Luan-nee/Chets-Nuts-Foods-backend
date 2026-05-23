@@ -2,6 +2,7 @@ import { Router } from "express";
 import { PaquetesController } from "./controller.js";
 import { ControllerProductosPaquetes } from "./controllerProductosPaquetes.js";
 import { controllerSeguimientoPaquete } from "./controllerSeguimiento.js";
+import { controllerGuiaRemision } from "./controllerGuia.js";
 
 export class RoutesPaquetes {
   static get routes() {
@@ -9,6 +10,7 @@ export class RoutesPaquetes {
     const controller = new PaquetesController();
     const controllerProductos = new ControllerProductosPaquetes();
     const controllerSeguimiento = new controllerSeguimientoPaquete();
+    const controllerGuia = new controllerGuiaRemision();
 
     routes.get("/:id", controller.getAll);
     routes.get("/:id/productos", controllerProductos.getAllProductos);
@@ -18,6 +20,7 @@ export class RoutesPaquetes {
     routes.post("/", controller.create);
     routes.post("/:id/producto", controllerProductos.registrarProducto);
     routes.post("/:id/seguimiento", controllerSeguimiento.create);
+    routes.post("/:id/guia", controllerGuia.create);
 
     return routes;
   }
