@@ -15,17 +15,7 @@ async function generarTablas() {
     apellidopaterno: "vilca",
     dni: "75276127",
     numero: "925543023",
-    edad: 22,
-    sexo: "MASCULINO",
-  });
-
-  const id2 = await InsertUser({
-    nombre: "YUKIO",
-    apellidomaterno: "QUISPE",
-    apellidopaterno: "ROJAS",
-    dni: "75276126",
-    numero: "925543023",
-    edad: 22,
+    edad: 21,
     sexo: "MASCULINO",
   });
 
@@ -39,8 +29,8 @@ async function generarTablas() {
   });
 
   const idAcceso1 = await CreateAccesos({
-    correo: "zviamontevilca@gmail.com",
-    password: "zainmaster123",
+    correo: "correoprueba@gmail.com",
+    password: "ybanacceso",
     tipos: "ADMIN",
     idusuario: idR,
   });
@@ -88,7 +78,7 @@ async function generarTablas() {
     longitud: "1200",
     nombreEstablecimiento: "Prueba 1",
     tipoEstado: "oficina",
-    ubigeo: "12345667",
+    ubigeo: "170101",
   });
 }
 
