@@ -9,6 +9,7 @@ import {
 import { NumericId } from "../../../domain/query-params/numericId-dto.js";
 import { GetAllPaqueteUseCase } from "../../../domain/use-cases/paquetes/getAllPaquete.js";
 import { getpaqueteId } from "../../../domain/use-cases/paquetes/getByIDPaquete.use-case.js";
+import { UpdatePaqueteDto } from "../../../domain/dto/paquetes/updatePaquetesDto.js";
 
 export class PaquetesController {
   create = (req: Request, res: Response) => {
@@ -105,6 +106,46 @@ export class PaquetesController {
       })
       .catch((err) => {
         CustomResponse.badRequest({ res, error: err });
+      });
+  };
+
+  update = (req: Request, res: Response) => {
+    if (req.authpayload === undefined) {
+      CustomResponse.badRequest({
+        res,
+        error: " No tienes permisos de estar aqui",
+      });
+      return;
+    }
+
+    const [error, idpaquete] = NumericId.create(req.params);
+
+    if (idpaquete === undefined || error !== undefined) {
+      CustomResponse.badRequest({ res, error });
+      return;
+    }
+
+    console.log(idpaquete);
+    const [error2, paqueteUpdate] = UpdatePaqueteDto.createUpdatePaquete(
+      req.body,
+    );
+
+    console.log(paqueteUpdate);
+
+    if (error2 !== undefined || paqueteUpdate === undefined) {
+      CustomResponse.badRequest({ res, error: error2 });
+      return;
+    }
+
+    const paqueteUse = new CreatePaqueteUseCase();
+
+    paqueteUse
+      .update(paqueteUpdate, idpaquete.id)
+      .then((data) => {
+        CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
       });
   };
 }

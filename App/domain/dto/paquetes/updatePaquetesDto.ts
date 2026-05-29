@@ -1,15 +1,13 @@
-import { estadoPaquete } from "../../../types/global.js";
-import { createDatosEmpresaValidator } from "../../validators/datosEmpresa/datosEmpresaValidator.js";
-import { createPaquetesValidator } from "../../validators/paquetes/paquetes.validator.js";
+import { updatePaquetesValidator } from "../../validators/paquetes/paquetes.validator.js";
 
-export class CreatePaqueteDto {
-  public idUsuario: number;
-  public idUsuarioDestino: number;
-  public idSalidaTransporte: number;
+export class UpdatePaqueteDto {
+  public idUsuario?: number;
+  public idUsuarioDestino?: number;
+  public idSalidaTransporte?: number;
   public idDestinoEstablecimiento?: number;
   public destino?: string;
-  public clave: string;
-  public montoCobrado: number;
+  public clave?: string;
+  public montoCobrado?: number;
   public observacion?: string;
 
   private constructor({
@@ -21,7 +19,7 @@ export class CreatePaqueteDto {
     idUsuarioDestino,
     montoCobrado,
     idDestinoEstablecimiento,
-  }: CreatePaqueteDto) {
+  }: UpdatePaqueteDto) {
     this.clave = clave;
     this.destino = destino;
     this.idSalidaTransporte = idSalidaTransporte;
@@ -32,11 +30,11 @@ export class CreatePaqueteDto {
     this.observacion = observacion;
   }
 
-  static createPaquete(input: any): [string?, CreatePaqueteDto?] {
-    const validator = createPaquetesValidator(input);
+  static createUpdatePaquete(input: any): [string?, UpdatePaqueteDto?] {
+    const validator = updatePaquetesValidator(input);
     if (!validator.success) {
       return [validator.error.message, undefined];
     }
-    return [undefined, new CreatePaqueteDto(validator.data)];
+    return [undefined, new UpdatePaqueteDto(validator.data)];
   }
 }

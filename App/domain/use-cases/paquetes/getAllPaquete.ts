@@ -1,6 +1,5 @@
 import { DB, eq } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
-import { CustomError } from "../../../core/res/Custom.error.js";
 
 export class GetAllPaqueteUseCase {
   async execute(idsalida: number) {

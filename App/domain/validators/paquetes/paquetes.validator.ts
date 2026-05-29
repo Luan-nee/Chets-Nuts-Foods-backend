@@ -13,15 +13,13 @@ const createPaquetesSchema = z.object({
 });
 
 const updatePaquetesSchema = z.object({
-  idenvio: paquetesSchema.idEnvio,
   idUsuario: paquetesSchema.idUsuario.optional(),
   idUsuarioDestino: paquetesSchema.idUsuarioDestino.optional(),
   idsalidatransporte: paquetesSchema.idsalidatransporte.optional(),
   idDestinoEstablecimiento: paquetesSchema.idDestinoEstablecimiento.optional(),
   destino: paquetesSchema.destino.optional(),
   clave: paquetesSchema.clave.optional(),
-  montocobrado: paquetesSchema.montoCobrado.optional(),
-  estadopaquete: paquetesSchema.estadoPaquete.optional(),
+  montoCobrado: paquetesSchema.montoCobrado.optional(),
   observacion: paquetesSchema.observacion.optional(),
 });
 
