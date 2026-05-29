@@ -125,12 +125,10 @@ export class PaquetesController {
       return;
     }
 
-    console.log(idpaquete);
+    const idEstablecimiento = req.authpayload.establecimiento;
     const [error2, paqueteUpdate] = UpdatePaqueteDto.createUpdatePaquete(
       req.body,
     );
-
-    console.log(paqueteUpdate);
 
     if (error2 !== undefined || paqueteUpdate === undefined) {
       CustomResponse.badRequest({ res, error: error2 });
@@ -142,6 +140,23 @@ export class PaquetesController {
     paqueteUse
       .update(paqueteUpdate, idpaquete.id)
       .then((data) => {
+        if (idEstablecimiento !== undefined) {
+          emitRoomSocket({
+            data,
+            req,
+            response: "ESTABLECIMIENTO",
+            valore: "updatePaquete",
+            codigo: idEstablecimiento,
+          });
+        }
+
+        emitRoomSocket({
+          data,
+          req,
+          response: "ADMINS",
+          valore: "updatePaquete",
+        });
+
         CustomResponse.success({ res, data });
       })
       .catch((error) => {

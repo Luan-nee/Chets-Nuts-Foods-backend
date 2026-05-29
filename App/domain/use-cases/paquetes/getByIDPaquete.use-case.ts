@@ -1,4 +1,4 @@
-import { DB, eq, ORQ } from "zormz";
+import { COUNT, DB, eq, ORQ, SUM } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import { estadoPaquete } from "../../../types/global.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
@@ -34,7 +34,7 @@ interface establecimientoResponse {
 }
 
 export async function getpaqueteId(idPaquete: number) {
-  const { paquetes, usuarios, establecimientos } = generateTables();
+  const { paquetes, usuarios, establecimientos, productos } = generateTables();
 
   const [datosPaquete] = (await DB.Select([
     paquetes.idenvio,
@@ -52,6 +52,14 @@ export async function getpaqueteId(idPaquete: number) {
     .from(paquetes())
     .where(eq(paquetes.idenvio, idPaquete))
     .execute()) as paqueteResponse[];
+
+  const [logist] = (await DB.Select([
+    SUM(productos.pesototal, "pesoTotal"),
+    COUNT(productos.id, "cantidad"),
+  ])
+    .from(productos())
+    .where(eq(productos.idenvio, idPaquete))
+    .execute()) as { pesoTotal: number; cantidad: number }[];
 
   const usuariosResponse = (await DB.Select([
     usuarios.nombres,
@@ -93,6 +101,8 @@ export async function getpaqueteId(idPaquete: number) {
   const [user1, user2] = usuariosResponse;
 
   return {
+    pesoTotalProductos: Number(logist.pesoTotal),
+    totalProductos: logist.cantidad,
     paquete: {
       idpaquete: datosPaquete.idenvio,
       clave: datosPaquete.clave,
