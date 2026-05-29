@@ -1,9 +1,23 @@
-import { AND, ANDD, DB, eq, MAYOR, MENOR, OR, ORQ, UP } from "zormz";
+import {
+  AND,
+  ANDD,
+  COUNT,
+  DB,
+  eq,
+  MAYOR,
+  MENOR,
+  OR,
+  ORQ,
+  SUM,
+  UP,
+} from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import { CreateSalidaTransporteDto } from "../../dto/salidaTransporte/createSalidaTransporte.dto.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
 import { getSalidaTransporte } from "./getByIDSalTrans.use-case.js";
 import { paramsDate } from "../../../types/params.js";
+import { pagePermises } from "../../../consts.js";
+import { paginationResponseSuccess } from "../../../core/config/paginationResponseSucces.js";
 
 interface validateResponse {
   response: boolean;
@@ -181,7 +195,7 @@ export class SalidaTransporteUseCase {
     return getsalidaTransporte;
   }
 
-  async getSalidas(idEstablecimiento: number) {
+  async getSalidas(idEstablecimiento: number, page: number) {
     const { salidatransporte } = generateTables();
 
     let condicion = "";
@@ -198,11 +212,30 @@ export class SalidaTransporteUseCase {
       );
     }
 
-    const idsValores = await DB.Select([salidatransporte.idsalidatransporte])
+    const idsValores = await DB.Select([
+      salidatransporte.idsalidatransporte,
+      salidatransporte.estadotransporte,
+      salidatransporte.fechasalida,
+    ])
       .from(salidatransporte())
       .where(condicion)
+      .OFFSET((page - 1) * 10)
+      .LIMIT(10)
       .execute();
-    return idsValores;
+
+    const [cantidadSalidaTransporte] = (await DB.Select([
+      COUNT(salidatransporte.idsalidatransporte, "cantidad"),
+    ])
+      .from(salidatransporte())
+      .where(condicion)
+      .execute()) as { cantidad: number }[];
+
+    const pageResponse = paginationResponseSuccess(
+      cantidadSalidaTransporte.cantidad,
+      page,
+    );
+
+    return { data: idsValores, pagination: pageResponse };
   }
 
   async historial(fecha: paramsDate) {

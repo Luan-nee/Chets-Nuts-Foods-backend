@@ -83,6 +83,7 @@ export class PaquetesController {
         CustomResponse.badRequest({ res, error: err });
       });
   };
+
   getByID = (req: Request, res: Response) => {
     if (req.authpayload === undefined) {
       CustomResponse.badRequest({

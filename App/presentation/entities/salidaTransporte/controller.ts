@@ -6,6 +6,7 @@ import { emitRoomSocket } from "../../../controllerSockets/globalSocket.js";
 import { NumericId } from "../../../domain/query-params/numericId-dto.js";
 import { UpdateSalidaTransporteDto } from "../../../domain/dto/salidaTransporte/updateSalidaTransporte.dto.js";
 import { UpdateSalidaTransUseCase } from "../../../domain/use-cases/salidaTransporte/updateSalidaTrans.use-case.js";
+import { PageDataDto } from "../../../domain/query-params/pageData.dto.js";
 
 export class SalidaTransporteController {
   create = (req: Request, res: Response) => {
@@ -64,6 +65,10 @@ export class SalidaTransporteController {
       return;
     }
 
+    const [page, errorResponse] = PageDataDto.create(req.query);
+
+    console.log(page);
+
     const idEstablecimiento = req.authpayload.establecimiento;
     let idValor = 0;
     if (idEstablecimiento !== undefined) {
@@ -73,9 +78,9 @@ export class SalidaTransporteController {
     const salTransUse = new SalidaTransporteUseCase();
 
     salTransUse
-      .getSalidas(idValor)
-      .then((data) => {
-        CustomResponse.success({ res, data });
+      .getSalidas(idValor, page.page)
+      .then(({ data, pagination }) => {
+        CustomResponse.success({ res, data, pagination });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });

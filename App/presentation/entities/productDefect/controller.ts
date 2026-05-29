@@ -44,7 +44,7 @@ export class ProductosDefectController {
       return;
     }
 
-    const page = PageDataDto.create(req.query);
+    const [page] = PageDataDto.create(req.query);
     const use = new CreateProductDefectUseCase();
 
     use

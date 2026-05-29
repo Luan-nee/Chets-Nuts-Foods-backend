@@ -183,6 +183,7 @@ export interface salidaTransporteType {
   choferUser: choferType;
   origenEstablecimiento: establecimientoSelect;
   destinoEstablecimiento: establecimientoSelect;
+  espacioDisponible?: number;
 }
 
 export interface createSalidaTransporte {

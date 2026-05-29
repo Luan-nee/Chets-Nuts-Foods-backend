@@ -1,4 +1,4 @@
-import { DB, eq } from "zormz";
+import { DB, eq, SUM } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import {
   choferType,
@@ -16,6 +16,8 @@ export async function getSalidaTransporte(
     accesos,
     usuarios,
     establecimientos,
+    paquetes,
+    productos,
   } = generateTables();
 
   const [transporte] = (await DB.Select([
@@ -32,6 +34,14 @@ export async function getSalidaTransporte(
     .from(salidatransporte())
     .where(eq(salidatransporte.idsalidatransporte, id))
     .execute()) as transporteType[];
+
+  const [sumaPaquetes] = (await DB.Select([
+    SUM(productos.pesototal, "totalPeso"),
+  ])
+    .from(productos())
+    .innerJOIN(paquetes(), eq(paquetes.idenvio, productos.idenvio, false))
+    .where(eq(paquetes.idenvio, transporte.idsalidatransporte))
+    .execute()) as { totalPeso: string }[];
 
   const [vehiculo] = (await DB.Select([
     vehiculosempresa.placa,
@@ -92,5 +102,7 @@ export async function getSalidaTransporte(
     vehiculo,
     origenEstablecimiento,
     destinoEstablecimiento,
+    espacioDisponible:
+      Number(vehiculo.capacidadCarga) - Number(sumaPaquetes.totalPeso),
   };
 }
