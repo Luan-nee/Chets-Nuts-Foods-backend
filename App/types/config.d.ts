@@ -33,3 +33,8 @@ export type verifyTokenType = (args: {
   options?: VerifyOptions;
   secret?: string;
 }) => string | JwtPayload | Jwt;
+
+export interface JsonSyntaxError extends SyntaxError {
+  status?: number;
+  body?: any;
+}
