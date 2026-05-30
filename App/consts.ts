@@ -1,4 +1,5 @@
 import { UP } from "zormz";
+import { SchedulerTask } from "./services/schedulerTask.js";
 
 export const ResponseStatus = {
   success: "success",
@@ -100,3 +101,10 @@ export const pagePermises: string[] = ["http://localhost:5173"];
 export const cacheEnvioUsuario = new Map<number, number[]>();
 
 export const usuariosConectados = new Map<number, Set<string>>();
+
+export const schedulerTask = new SchedulerTask();
+
+export const datosInicio = {
+  ultimaRevision: "29-06-2026 12:00:00",
+  saltoHoras: 1,
+};

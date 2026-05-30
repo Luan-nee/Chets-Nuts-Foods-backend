@@ -170,5 +170,19 @@ export function generateTables() {
       descripcion: varchar(300).$(),
       fechacreation: timestamp().now().$(),
     }),
+
+    notificaciones: defineTable("notificaciones", {
+      idnotificacion: int().Pk().Required().$(),
+      titulonotificacion: varchar(150).Required().$(),
+      descripcion: varchar(350).$(),
+      estado: bool().default(true).$(),
+      tipo: varchar(50)
+        .Check(["socket", "anuncio", "informe"])
+        .Default("anuncio")
+        .$(),
+      detalletipo: varchar(50).$(),
+      fechaejecute: timestamp().required().$(),
+      fechacreate: timestamp().now().$(),
+    }),
   };
 }
