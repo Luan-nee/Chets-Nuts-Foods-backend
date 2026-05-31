@@ -22,7 +22,7 @@ interface roomSockets {
 interface roomSocketInterno {
   conexion: SocketIOServer;
   messaje: string;
-  response: (roomsSocket | string)[];
+  response: roomsSocket | string[];
   valore: socketsResponses;
 }
 

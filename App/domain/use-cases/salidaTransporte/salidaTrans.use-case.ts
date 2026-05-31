@@ -18,6 +18,8 @@ import { getSalidaTransporte } from "./getByIDSalTrans.use-case.js";
 import { paramsDate } from "../../../types/params.js";
 import { pagePermises } from "../../../consts.js";
 import { paginationResponseSuccess } from "../../../core/config/paginationResponseSucces.js";
+import { NotificacionesUseCase } from "../notificaciones/notificaciones.use-case.js";
+import { detallesSockets } from "../../../types/global.js";
 
 interface validateResponse {
   response: boolean;
@@ -179,6 +181,40 @@ export class SalidaTransporteUseCase {
         "Ocurrio un error al momento de crear el transporte",
       );
     }
+
+    const detallesUpdate: detallesSockets = {
+      socketGroup: ["ADMINS", "ESTABLECIMIENTO", "SALIDATRANSPORTE"],
+      update: true,
+      querys: [
+        {
+          tabla: salidatransporte(),
+          condicional: eq(salidatransporte.idsalidatransporte, valor[0]),
+          setDatas: [UP(salidatransporte.estadotransporte, `EN CAMINO`)],
+        },
+      ],
+      socketEmitData: "updateSalidaTransporte",
+      contenido: "Carro saliendo a la hora acordada",
+    };
+
+    const notificacion: NotificacionesUseCase = {
+      titulonotificacion: `El transporte con la hora ${salidaDto.fechaSalida} esta partiendo`,
+      fechaejecute: salidaDto.fechaSalida,
+      tipo: "socket",
+      descripcion: JSON.stringify(detallesUpdate),
+    };
+
+    const horaAnticipada = new Date(salidaDto.fechaSalida);
+
+    horaAnticipada.setMinutes(horaAnticipada.getMinutes() - 20);
+
+    NotificacionesUseCase.createNotificacion({
+      titulonotificacion: `Transporte a punto de partir`,
+      tipo: "anuncio",
+      fechaejecute: horaAnticipada,
+      descripcion: `El transporte con el ID: ${valor[0]} esta a 20m de salir, por favor abordar las cosas o bien actualizar la fecha `,
+    });
+
+    NotificacionesUseCase.createNotificacion(notificacion);
 
     await DB.Update(vehiculosempresa())
       .set([UP(vehiculosempresa.estadovehiculo, "INACTIVO")])

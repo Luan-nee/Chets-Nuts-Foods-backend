@@ -33,7 +33,8 @@ export type socketsResponses =
   | "updateSalidaTransporte"
   | "deleteSalidaTransporte"
   | "createpaquete"
-  | "updatePaquete";
+  | "updatePaquete"
+  | "notificacion";
 
 export type typeRol = "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
 

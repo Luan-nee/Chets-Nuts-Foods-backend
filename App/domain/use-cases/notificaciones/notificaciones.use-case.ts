@@ -45,6 +45,10 @@ export class NotificacionesUseCase {
   static async createNotificacion(notificacion: NotificacionesUseCase) {
     const { notificaciones } = generateTables();
 
+    notificacion.fechaejecute.setHours(
+      notificacion.fechaejecute.getHours() + 5,
+    );
+
     const inserts: any[] = [
       notificacion.titulonotificacion,
       notificacion.descripcion,
