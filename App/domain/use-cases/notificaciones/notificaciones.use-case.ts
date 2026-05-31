@@ -1,4 +1,4 @@
-import { AND, DB, eq, MAYOR, MENOR } from "zormz";
+import { AND, DB, eq, MAYOR, MENOR, UP } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 
 type tipoNotificaciones = "socket" | "anuncio" | "informe";
@@ -9,7 +9,7 @@ interface parametrosType {
   estado: boolean;
 }
 
-interface notificacionesTypes {
+export interface notificacionesTypes {
   idnotificacion: number;
   titulonotificacion: string;
   descripcion: string;
@@ -100,13 +100,21 @@ export class NotificacionesUseCase {
       .from(notificaciones())
       .where(
         AND(
-          MAYOR(notificaciones.fechaejecute, fechainicio.toISOString()),
-          MENOR(notificaciones.fechaejecute, fechaFinal.toISOString()),
+          MAYOR(notificaciones.fechaejecute, `'${fechainicio.toISOString()}'`),
+          MENOR(notificaciones.fechaejecute, `'${fechaFinal.toISOString()}'`),
           eq(notificaciones.estado, estado),
         ),
       )
       .execute()) as notificacionesTypes[];
 
     return response;
+  }
+
+  static async updateNotificaciones(id: number) {
+    const { notificaciones } = generateTables();
+    await DB.Update(notificaciones())
+      .set([UP(notificaciones.estado, `${false}`, false)])
+      .where(eq(notificaciones.idnotificacion, id))
+      .execute();
   }
 }

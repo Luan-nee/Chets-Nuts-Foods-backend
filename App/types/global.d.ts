@@ -1,4 +1,4 @@
-import { departamentosPeruType } from "../consts.ts";
+import { departamentosPeruType, UpdateParam } from "../consts.ts";
 
 export type tipeUser = "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
 
@@ -193,4 +193,18 @@ export interface createSalidaTransporte {
   idOrigenEstablecimiento: number;
   idDestinoEstablecimiento: number;
   idVehiculo: number;
+}
+
+export interface updateCampos {
+  tabla: string;
+  condicional: string;
+  setDatas: UpdateParam[];
+}
+
+export interface detallesSockets {
+  contenido: string;
+  socketGroup: roomsSocket[];
+  socketEmitData: socketsResponses;
+  update: boolean;
+  querys: updateCampos[];
 }

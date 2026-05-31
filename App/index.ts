@@ -3,6 +3,9 @@ import APP from "./app.js";
 import { env } from "process";
 import SocketControl from "./socketsControl.js";
 import { initBD } from "../database/conexion.js";
+import cron from "node-cron";
+import { startTasks, tareasPendientes } from "./tasks/taskAlertas.js";
+import { schedulerTask } from "./consts.js";
 
 initBD();
 const server = http.createServer(APP);
@@ -19,3 +22,9 @@ const httpServer = server.listen(PORT, () => {
 const socketsControl = new SocketControl(httpServer);
 socketsControl.principalConection();
 APP.locals.io = socketsControl.getIo();
+
+tareasPendientes(socketsControl.getIo());
+
+cron.schedule("0 */1 * * *", () => {
+  startTasks(socketsControl.getIo());
+});

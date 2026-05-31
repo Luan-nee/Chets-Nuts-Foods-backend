@@ -54,7 +54,6 @@ export class AccesosController {
       return;
     }
     const accesoUse = new CreateAccesoUseCase();
-
     accesoUse
       .getAll(page)
       .then(({ data, paginasResponse }) => {

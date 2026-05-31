@@ -174,7 +174,7 @@ export function generateTables() {
     notificaciones: defineTable("notificaciones", {
       idnotificacion: int().Pk().Required().$(),
       titulonotificacion: varchar(150).Required().$(),
-      descripcion: varchar(350).$(),
+      descripcion: varchar(350).Comment("cuando es socket llega json").$(),
       estado: bool().default(true).$(),
       tipo: varchar(50)
         .Check(["socket", "anuncio", "informe"])

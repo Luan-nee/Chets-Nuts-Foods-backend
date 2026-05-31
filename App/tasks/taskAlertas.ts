@@ -1,23 +1,85 @@
 import { datosInicio, schedulerTask } from "../consts.js";
-import { NotificacionesUseCase } from "../domain/use-cases/notificaciones/notificaciones.use-case.js";
+import { emitRoomSocketInterno } from "../controllerSockets/globalSocket.js";
+import {
+  notificacionesTypes,
+  NotificacionesUseCase,
+} from "../domain/use-cases/notificaciones/notificaciones.use-case.js";
+import { ConsultasInternas } from "../services/consultasInternas.js";
+import { detallesSockets } from "../types/global.js";
+import { Server as SocketIOServer } from "socket.io";
 
-export async function startTasks() {
+async function taskprivates(
+  tareas: notificacionesTypes[],
+  conexion: SocketIOServer,
+) {
+  tareas.forEach((tarea) => {
+    const descripciones: detallesSockets = JSON.parse(tarea.descripcion);
+    schedulerTask.agregarTarea(
+      tarea.idnotificacion,
+      tarea.fechaejecute,
+      async () => {
+        try {
+          console.log("prueba de tareas ");
+          if (tarea.tipo === "socket") {
+            const tasks = descripciones.querys.map((n) => {
+              ConsultasInternas.Update(n.tabla, n.condicional, n.setDatas);
+              emitRoomSocketInterno({
+                valore: descripciones.socketEmitData,
+                conexion,
+                messaje: tarea.tipo,
+                response: descripciones.socketGroup,
+              });
+            });
+            await Promise.all(tasks);
+          }
+          await NotificacionesUseCase.updateNotificaciones(
+            tarea.idnotificacion,
+          );
+        } catch (error) {
+          console.log("ups Ocurrio un error");
+          console.log(error);
+        }
+      },
+    );
+  });
+}
+
+export async function startTasks(conexion: SocketIOServer) {
   const fechaPrincipal = new Date();
 
-  const fechaAumentada = new Date(
-    fechaPrincipal.setHours(fechaPrincipal.getHours() + datosInicio.saltoHoras),
-  );
+  const fechaAumentada = new Date(fechaPrincipal);
 
+  fechaAumentada.setHours(fechaPrincipal.getHours() + datosInicio.saltoHoras);
   console.log("inicio de tareas");
+
+  console.log(fechaPrincipal);
+  console.log(fechaAumentada);
+
   const tareas = await NotificacionesUseCase.getNotificaciones({
     fechainicio: fechaPrincipal,
     fechaFinal: fechaAumentada,
     estado: true,
   });
 
-  tareas.forEach((tarea) => {
-    schedulerTask.agregarTarea(tarea.idnotificacion, tarea.fechaejecute, () => {
-      console.log("prueba de tareas ");
-    });
+  await taskprivates(tareas, conexion);
+}
+
+export async function tareasPendientes(conexion: SocketIOServer) {
+  const fechaPrincipal = new Date();
+
+  const fechadisminuida = new Date(fechaPrincipal);
+  fechaPrincipal.setHours(fechaPrincipal.getHours() + datosInicio.saltoHoras);
+  fechadisminuida.setHours(fechaPrincipal.getHours() - datosInicio.saltoHoras);
+
+  console.log("recuperando tareas");
+  console.log(fechaPrincipal);
+  console.log(fechadisminuida);
+
+  const tareas = await NotificacionesUseCase.getNotificaciones({
+    fechainicio: fechadisminuida,
+    fechaFinal: fechaPrincipal,
+    estado: true,
   });
+
+  await taskprivates(tareas, conexion);
 }
