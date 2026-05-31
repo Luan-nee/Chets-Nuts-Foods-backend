@@ -26,4 +26,8 @@ export class SchedulerTask {
       this.tareas.delete(id);
     }
   }
+
+  getTasks() {
+    return [...this.tareas.keys()];
+  }
 }

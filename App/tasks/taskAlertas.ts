@@ -12,7 +12,14 @@ async function taskprivates(
   tareas: notificacionesTypes[],
   conexion: SocketIOServer,
 ) {
-  tareas.forEach((tarea) => {
+  const oldTasks = schedulerTask.getTasks();
+
+  const nuevasTareas = tareas.filter(
+    (tarea) => !oldTasks.includes(tarea.idnotificacion),
+  );
+  console.log(nuevasTareas);
+
+  nuevasTareas.forEach((tarea) => {
     const descripciones: detallesSockets = JSON.parse(tarea.descripcion);
     schedulerTask.agregarTarea(
       tarea.idnotificacion,
