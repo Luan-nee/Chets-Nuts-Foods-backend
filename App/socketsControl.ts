@@ -22,19 +22,27 @@ export default class SocketControl {
 
   principalConection() {
     if (this.io === null) throw new Error("La conexion es obligatorio");
+
+    this.io.use(async (socket, next) => {
+      const token = socket.handshake.auth.token;
+      if (!token) {
+        console.log("Un intento de token invalido");
+        return next(new Error("TOKEN_INVALIDO"));
+      }
+      const user = await validatorTokenSocket(token);
+      if (!user.estado) {
+        console.log("intento de colarse rechazado");
+        return next(new Error("TOKEN_EXPIRADO"));
+      }
+      socket.data.user = user;
+      next();
+    });
+
     this.io.on("connection", async (usuario) => {
       console.log(`usuario : ${usuario.id}`);
 
-      if (usuario.handshake.auth.token === undefined) {
-        usuario.disconnect();
-      }
-
       const tokenBefore = usuario.handshake.auth.token as string;
       const user = await validatorTokenSocket(tokenBefore);
-
-      if (!user.estado) {
-        usuario.disconnect();
-      }
 
       const { paquetes, salidatransporte } =
         await ManagerSockets.managerControls(
