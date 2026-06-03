@@ -67,7 +67,7 @@ export class NotificacionesUseCase {
     }
 
     if (notificacion.tipo !== undefined) {
-      parametros.push(notificaciones.tipo);
+      parametros.push(notificaciones.tiponotificacion);
       inserts.push(notificacion.tipo);
     }
 
@@ -96,7 +96,7 @@ export class NotificacionesUseCase {
       notificaciones.titulonotificacion,
       notificaciones.descripcion,
       notificaciones.estado,
-      notificaciones.tipo,
+      notificaciones.tiponotificacion,
       notificaciones.detalletipo,
       notificaciones.fechaejecute,
       notificaciones.fechacreate,
