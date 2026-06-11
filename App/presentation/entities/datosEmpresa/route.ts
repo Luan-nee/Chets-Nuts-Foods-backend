@@ -7,7 +7,11 @@ export class DatosEmpresaRouter {
     const router = Router();
     const controllerDatos = new DatosEmpresaController();
 
+    router.get("/", adminAccess, controllerDatos.getdatos);
+
     router.post("/", adminAccess, controllerDatos.create);
+
+    router.patch("/", adminAccess, controllerDatos.update);
 
     return router;
   }

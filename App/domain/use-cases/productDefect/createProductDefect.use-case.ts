@@ -61,7 +61,7 @@ export class CreateProductDefectUseCase {
     ])
       .from(productsdefect())
       .LIMIT(10)
-      .OFFSET(pagina.page * 10)
+      .OFFSET((pagina.page - 1) * 10)
       .execute();
 
     const [cantidad] = await DB.Select([
@@ -74,7 +74,7 @@ export class CreateProductDefectUseCase {
       pagina_actual: pagina.page,
       datos_por_pagina: 10,
       total_data: Number(cantidad.cantidad),
-      total_paginas: Math.trunc(Number(cantidad.cantidad) / 10),
+      total_paginas: Math.trunc(Number(cantidad.cantidad) / 10) + 1,
     };
 
     return { data, pagination };
