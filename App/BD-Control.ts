@@ -130,7 +130,7 @@ export function generateTables() {
     }),
     seguimientopaquetes: defineTable("seguimientopaquetes", {
       idseg: int().Pk().Required().$(),
-      idpaquete: int().Required().$(),
+      idsalidatransporte: int().Required().$(),
       idcontrolestablecimiento: int()
         .Comment("En caso de haber pasado por algun establecimiento")
         .$(),
@@ -174,7 +174,7 @@ export function generateTables() {
     notificaciones: defineTable("notificaciones", {
       idnotificacion: int().Pk().Required().$(),
       titulonotificacion: varchar(150).Required().$(),
-      descripcion: varchar(350).Comment("cuando es socket llega json").$(),
+      descripcion: varchar(650).Comment("cuando es socket llega json").$(),
       estado: bool().default(true).$(),
       tiponotificacion: varchar(50)
         .Check(["socket", "anuncio", "informe"])

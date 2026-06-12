@@ -4,6 +4,7 @@ import { CreateSeguimientoDto } from "../../../domain/dto/seguimiento/createSegu
 import { NumericId } from "../../../domain/query-params/numericId-dto.js";
 import { CreateSeguimientoUseCase } from "../../../domain/use-cases/seguimiento/createSeguimiento.use-case.js";
 import { GetSeguimientoUseCase } from "../../../domain/use-cases/seguimiento/getSeguimientos.use-case.js";
+import { emitSocket } from "../../../controllerSockets/globalSocket.js";
 
 export class controllerSeguimientoPaquete {
   create = (req: Request, res: Response) => {
@@ -62,6 +63,41 @@ export class controllerSeguimientoPaquete {
       .getAllSeguimiento(id.id)
       .then((data) => {
         CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
+      });
+  };
+
+  sendPaquete = (req: Request, res: Response) => {
+    if (req.authpayload === undefined) {
+      CustomResponse.badRequest({
+        res,
+        error: " NO tienes permisos de estar aqui",
+      });
+      return;
+    }
+
+    const [errorID, id] = NumericId.create(req.params);
+
+    if (errorID !== undefined || id === undefined) {
+      CustomResponse.badRequest({ res, error: errorID });
+      return;
+    }
+
+    const [error, seguimientoDto] = CreateSeguimientoDto.create(req.body);
+
+    if (error !== undefined || seguimientoDto === undefined) {
+      CustomResponse.badRequest({ res, error });
+      return;
+    }
+
+    const useCase = new CreateSeguimientoUseCase();
+    useCase
+      .entregaPaquete(id.id, seguimientoDto)
+      .then((data) => {
+        emitSocket(req, "updatePaquete", data);
+        CustomResponse.success({ res, message: "Entregado con exito" });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });

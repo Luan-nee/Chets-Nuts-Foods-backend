@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 import { CustomResponse } from "../../../core/res/custom.response.js";
 import { CreateSalidaTransporteDto } from "../../../domain/dto/salidaTransporte/createSalidaTransporte.dto.js";
 import { SalidaTransporteUseCase } from "../../../domain/use-cases/salidaTransporte/salidaTrans.use-case.js";
-import { emitRoomSocket } from "../../../controllerSockets/globalSocket.js";
+import {
+  emitRoomSocket,
+  emitSocket,
+} from "../../../controllerSockets/globalSocket.js";
 import { NumericId } from "../../../domain/query-params/numericId-dto.js";
 import { UpdateSalidaTransporteDto } from "../../../domain/dto/salidaTransporte/updateSalidaTransporte.dto.js";
 import { UpdateSalidaTransUseCase } from "../../../domain/use-cases/salidaTransporte/updateSalidaTrans.use-case.js";
@@ -27,29 +30,11 @@ export class SalidaTransporteController {
     salTransUse
       .create(salTransDTO)
       .then(async (data) => {
-        await emitRoomSocket({
-          data,
-          req,
-          response: "ESTABLECIMIENTO",
-          valore: "newSalidaTransporte",
-          codigo: data.origenEstablecimiento.idEst,
+        await emitSocket(req, "newSalidaTransporte", data);
+        CustomResponse.success({
+          res,
+          data: `salida transporte ${data.salidaTransporte.idsalidatransporte} creado con exito.`,
         });
-        await emitRoomSocket({
-          data,
-          req,
-          response: "ESTABLECIMIENTO",
-          valore: "newSalidaTransporte",
-          codigo: data.destinoEstablecimiento.idEst,
-        });
-
-        await emitRoomSocket({
-          data,
-          req,
-          response: "ADMINS",
-          valore: "newEstablecimiento",
-        });
-
-        CustomResponse.success({ res, data: "creado con exito" });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });

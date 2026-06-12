@@ -8,6 +8,7 @@ import { RoutesVehiculos } from "./vehiculosEmpresa/route.js";
 import { RoutesSalidaTransporte } from "./salidaTransporte/route.js";
 import { RoutesProductDefect } from "./productDefect/routes.js";
 import { RoutesPaquetes } from "./paquetes/routes.js";
+import { RoutesSeguimientoSalidaTransporte } from "./seguimientoSalidaTransporte/routes.js";
 
 export class EntitiesRoutes {
   static get routes() {
@@ -20,6 +21,7 @@ export class EntitiesRoutes {
     router.use("/salidas", RoutesSalidaTransporte.routes);
     router.use("/productos", RoutesProductDefect.routes);
     router.use("/paquetes", RoutesPaquetes.routes);
+    router.use("/seguimiento", RoutesSeguimientoSalidaTransporte.routes);
     return router;
   }
 }

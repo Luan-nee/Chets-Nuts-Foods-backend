@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { PaquetesController } from "./controller.js";
 import { ControllerProductosPaquetes } from "./controllerProductosPaquetes.js";
-import { controllerSeguimientoPaquete } from "./controllerSeguimiento.js";
+import { controllerSeguimientoPaquete } from "../seguimientoSalidaTransporte/controllerSeguimiento.js";
 import { controllerGuiaRemision } from "./controllerGuia.js";
 
 export class RoutesPaquetes {
@@ -9,17 +9,14 @@ export class RoutesPaquetes {
     const routes = Router();
     const controller = new PaquetesController();
     const controllerProductos = new ControllerProductosPaquetes();
-    const controllerSeguimiento = new controllerSeguimientoPaquete();
     const controllerGuia = new controllerGuiaRemision();
 
     routes.get("/:id", controller.getAll);
     routes.get("/:id/productos", controllerProductos.getAllProductos);
-    routes.get("/:id/seguimiento", controllerSeguimiento.getAll);
     routes.get("/data/:id", controller.getByID);
 
     routes.post("/", controller.create);
     routes.post("/:id/producto", controllerProductos.registrarProducto);
-    routes.post("/:id/seguimiento", controllerSeguimiento.create);
     routes.post("/:id/guia", controllerGuia.create);
 
     routes.patch("/:id", controller.update);

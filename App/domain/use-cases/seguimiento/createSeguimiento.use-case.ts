@@ -1,19 +1,30 @@
-import { DB, eq } from "zormz";
+import { DB, eq, UP } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import { CreateSeguimientoDto } from "../../dto/seguimiento/createSeguimiento.dto.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
+import { estadoPaquete } from "../../../types/global.js";
+import { UpdateParam } from "../../../consts.js";
+import { getpaqueteId } from "../paquetes/getByIDPaquete.use-case.js";
+
+interface paqueteResponse {
+  idsalidatransporte: number;
+  estadopaquete: estadoPaquete;
+  fechacreado: Date;
+}
 
 export class CreateSeguimientoUseCase {
-  async validatePaquete(id: number) {
-    const { paquetes } = generateTables();
+  async validateSalidatransporte(id: number) {
+    const { salidatransporte } = generateTables();
 
-    const datos = (await DB.Select([paquetes.idenvio])
-      .from(paquetes())
-      .where(eq(paquetes.idenvio, id))
-      .execute()) as { idenvio: number }[];
+    const dataresponse = (await DB.Select([salidatransporte.idsalidatransporte])
+      .from(salidatransporte())
+      .where(eq(salidatransporte.idsalidatransporte, id))
+      .execute()) as { idsalidatransporte: number }[];
 
-    if (datos.length === 0) {
-      throw CustomError.badRequest(`El paquete con el ID: ${id} no existe`);
+    if (dataresponse.length === 0) {
+      throw CustomError.badRequest(
+        `La salida de transporte con el ID: ${id} no existe`,
+      );
     }
   }
 
@@ -38,10 +49,14 @@ export class CreateSeguimientoUseCase {
   async create(id: number, seguimiento: CreateSeguimientoDto) {
     const { seguimientopaquetes } = generateTables();
 
-    const query = [seguimientopaquetes.titulo];
-    const data: any[] = [seguimiento.titulo];
+    const query = [
+      seguimientopaquetes.titulo,
+      seguimientopaquetes.idsalidatransporte,
+    ];
+    const data: any[] = [seguimiento.titulo, id];
 
-    await this.validatePaquete(id);
+    await this.validateSalidatransporte(id);
+
     if (seguimiento.idcontrolestablecimiento !== undefined) {
       await this.validateEstablecimiento(seguimiento.idcontrolestablecimiento);
       query.push(seguimientopaquetes.idcontrolestablecimiento);
@@ -67,7 +82,6 @@ export class CreateSeguimientoUseCase {
       query.push(seguimientopaquetes.longitud);
       data.push(seguimiento.longitud);
     }
-
     const idRetorno = await DB.Insert(seguimientopaquetes(), query)
       .Values(data)
       .Returning(seguimientopaquetes.idseg)
@@ -79,5 +93,45 @@ export class CreateSeguimientoUseCase {
       );
     }
     return idRetorno[0];
+  }
+
+  async entregaPaquete(idpaquete: number, seguimiento: CreateSeguimientoDto) {
+    const { paquetes } = generateTables();
+
+    const paquete = (await DB.Select([
+      paquetes.idsalidatransporte,
+      paquetes.estadopaquete,
+      paquetes.fechacreado,
+    ])
+      .from(paquetes())
+      .where(eq(paquetes.idenvio, idpaquete))
+      .execute()) as paqueteResponse[];
+
+    if (paquete.length === 0 || paquete[0].estadopaquete === "ENTREGADO") {
+      throw CustomError.badRequest("Este paquete no existe o ya fue entregado");
+    }
+
+    seguimiento.comentario += `Entrega del paquete ID:${idpaquete}`;
+
+    await this.create(paquete[0].idsalidatransporte, seguimiento);
+
+    const campoUpdate: UpdateParam[] = [];
+
+    campoUpdate.push(
+      UP(
+        paquetes.observacion,
+        `El paquete fue entregado en: %direccion:${seguimiento.direccion}% - %${seguimiento.latitud}% - %longitud:${seguimiento.longitud}% `,
+      ),
+    );
+
+    campoUpdate.push(UP(paquetes.estadopaquete, "ENTREGADO"));
+
+    await DB.Update(paquetes())
+      .set(campoUpdate)
+      .where(eq(paquetes.idenvio, idpaquete))
+      .execute();
+
+    const paqueteResponse = await getpaqueteId(idpaquete);
+    return paqueteResponse;
   }
 }

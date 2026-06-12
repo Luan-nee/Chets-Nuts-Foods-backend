@@ -34,23 +34,7 @@ export class PaquetesController {
     paqueteUse
       .execute(paqueteDto)
       .then((data) => {
-        if (idEstablecimiento !== undefined) {
-          emitRoomSocket({
-            data,
-            req,
-            response: "ESTABLECIMIENTO",
-            valore: "createpaquete",
-            codigo: idEstablecimiento,
-          });
-        }
-
-        emitRoomSocket({
-          data,
-          req,
-          response: "ADMINS",
-          valore: "createpaquete",
-        });
-
+        emitSocket(req, "createpaquete", data);
         CustomResponse.success({ res, data: "Paquete generado con exito" });
       })
       .catch((err) => {
@@ -140,23 +124,7 @@ export class PaquetesController {
     paqueteUse
       .update(paqueteUpdate, idpaquete.id)
       .then((data) => {
-        if (idEstablecimiento !== undefined) {
-          emitRoomSocket({
-            data,
-            req,
-            response: "ESTABLECIMIENTO",
-            valore: "updatePaquete",
-            codigo: idEstablecimiento,
-          });
-        }
-
-        emitRoomSocket({
-          data,
-          req,
-          response: "ADMINS",
-          valore: "updatePaquete",
-        });
-
+        emitSocket(req, "updatePaquete", data);
         CustomResponse.success({ res, data });
       })
       .catch((error) => {

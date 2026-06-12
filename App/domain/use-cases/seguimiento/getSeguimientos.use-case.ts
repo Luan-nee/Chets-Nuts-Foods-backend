@@ -15,7 +15,7 @@ export class GetSeguimientoUseCase {
       seguimientopaquetes.comentario,
     ])
       .from(seguimientopaquetes())
-      .where(eq(seguimientopaquetes.idpaquete, id))
+      .where(eq(seguimientopaquetes.idsalidatransporte, id))
       .OrderBy({ idseg: "DESC" })
       .execute();
 
