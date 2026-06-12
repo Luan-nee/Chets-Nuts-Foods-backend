@@ -74,7 +74,7 @@ export class DatosEmpresaUseCase {
     const response = await DB.Insert(datosempresa(), campos)
       .Values(querys)
       .Returning(datosempresa.idDatosEmpresa)
-      .execute(true);
+      .execute();
 
     if (response === undefined) {
       throw CustomError.badRequest(

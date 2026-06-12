@@ -7,6 +7,7 @@ export class CreateSalidaTransporteDto {
   public idOrigenEstablecimiento: number;
   public idDestinoEstablecimiento: number;
   public fechaSalida: Date;
+  public horasalida: string;
 
   private constructor({
     fechaSalida,
@@ -14,12 +15,14 @@ export class CreateSalidaTransporteDto {
     idOrigenEstablecimiento,
     idDestinoEstablecimiento,
     idVehiculo,
+    horasalida,
   }: CreateSalidaTransporteDto) {
     this.idVehiculo = idVehiculo;
     this.idChoferAcceso = idChoferAcceso;
     this.idOrigenEstablecimiento = idOrigenEstablecimiento;
     this.idDestinoEstablecimiento = idDestinoEstablecimiento;
     this.fechaSalida = fechaSalida;
+    this.horasalida = horasalida;
   }
 
   static createSalidaTransporte(

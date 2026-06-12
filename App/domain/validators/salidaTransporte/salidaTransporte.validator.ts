@@ -7,6 +7,7 @@ const createSalidaTransporteSchema = z.object({
   idOrigenEstablecimiento: salidaTransporteSchema.idOrigenEstablecimiento,
   idDestinoEstablecimiento: salidaTransporteSchema.idDestinoEstablecimiento,
   fechaSalida: salidaTransporteSchema.fechaSalida,
+  horasalida: salidaTransporteSchema.horasalida,
 });
 
 const updateSalidaTransporteSchema = z.object({

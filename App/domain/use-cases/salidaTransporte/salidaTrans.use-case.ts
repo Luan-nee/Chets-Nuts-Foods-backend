@@ -122,7 +122,11 @@ export class SalidaTransporteUseCase {
     const hoy = new Date();
     hoy.setHours(0, 0, 0, 0);
     const fechaCreate = new Date(salidaDto.fechaSalida);
-    fechaCreate.setHours(0, 0, 0, 0);
+    const horas = salidaDto.horasalida.split(":");
+    console.log(horas);
+    if (horas! == undefined) {
+      fechaCreate.setHours(horas[0], horas[1], 0, 0);
+    }
 
     if (fechaCreate < hoy) {
       throw CustomError.badRequest(
@@ -171,7 +175,7 @@ export class SalidaTransporteUseCase {
         salidaDto.idChoferAcceso,
         salidaDto.idOrigenEstablecimiento,
         salidaDto.idDestinoEstablecimiento,
-        salidaDto.fechaSalida.toISOString(),
+        fechaCreate.toISOString().substring(0, 19).replace("T", " "),
       ])
       .Returning(salidatransporte.idsalidatransporte)
       .execute();
