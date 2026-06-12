@@ -75,11 +75,11 @@ export class NotificacionesUseCase {
       parametros.push(notificaciones.detalletipo);
       inserts.push(notificacion.detalletipo);
     }
-
+    console.log(inserts);
     const id = await DB.Insert(notificaciones(), parametros)
       .Values(inserts)
       .Returning(notificaciones.idnotificacion)
-      .execute();
+      .execute(true);
 
     return id;
   }

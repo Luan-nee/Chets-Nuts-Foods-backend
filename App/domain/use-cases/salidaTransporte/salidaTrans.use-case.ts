@@ -16,7 +16,6 @@ import { CreateSalidaTransporteDto } from "../../dto/salidaTransporte/createSali
 import { CustomError } from "../../../core/res/Custom.error.js";
 import { getSalidaTransporte } from "./getByIDSalTrans.use-case.js";
 import { paramsDate } from "../../../types/params.js";
-import { pagePermises } from "../../../consts.js";
 import { paginationResponseSuccess } from "../../../core/config/paginationResponseSucces.js";
 import { NotificacionesUseCase } from "../notificaciones/notificaciones.use-case.js";
 import { detallesSockets } from "../../../types/global.js";
