@@ -6,6 +6,7 @@ import { estadoPaquete, salidaTransType } from "../../../types/global.js";
 import { getpaqueteId } from "./getByIDPaquete.use-case.js";
 import { UpdatePaqueteDto } from "../../dto/paquetes/updatePaquetesDto.js";
 import { UpdateParam } from "../../../consts.js";
+import { ConvertLetras } from "../../../services/convertLetras.js";
 
 interface salidaEstadoData {
   estadotransporte: salidaTransType;
@@ -143,7 +144,10 @@ export class CreatePaqueteUseCase {
     }
 
     const data = await getpaqueteId(idPaquete[0]);
-    return data;
+
+    const sala = ConvertLetras(idPaquete[0]);
+
+    return { data, sala };
   }
 
   async update(newPaquete: UpdatePaqueteDto, idpaquete: number) {

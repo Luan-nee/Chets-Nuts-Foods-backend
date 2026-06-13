@@ -7,7 +7,7 @@ export class SessionRoutes {
     const sessionInit = new AuthController();
 
     router.post("/login", sessionInit.sessionMain);
-
+    router.post("/clientlogin", sessionInit.sessionCliente);
     return router;
   }
 }

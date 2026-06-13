@@ -11,4 +11,14 @@ export const sessionMainUser = {
       error: "Contra no permitida ",
     }),
   tipos: z.enum(["ADMIN", "CHOFER", "CLIENTE", "COLABORADOR"]),
+  sala: z
+    .string()
+    .refine((caracter) => Validator.isValidLetrasMayusculas(caracter), {
+      error:
+        "La sala no puede contener numero ni caracteres especiales todo mayuscula",
+    }),
+  dni: z.string().refine((caracter) => Validator.isVlaisNumeros(caracter), {
+    error: "El campo de DNI solo puede contener numero",
+  }),
+  clave: z.string(),
 };

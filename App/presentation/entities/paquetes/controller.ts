@@ -2,10 +2,7 @@ import { Request, Response } from "express";
 import { CustomResponse } from "../../../core/res/custom.response.js";
 import { CreatePaqueteDto } from "../../../domain/dto/paquetes/createpaqueteDto.js";
 import { CreatePaqueteUseCase } from "../../../domain/use-cases/paquetes/createPaquete.use-case.js";
-import {
-  emitRoomSocket,
-  emitSocket,
-} from "../../../controllerSockets/globalSocket.js";
+import { emitSocket } from "../../../controllerSockets/globalSocket.js";
 import { NumericId } from "../../../domain/query-params/numericId-dto.js";
 import { GetAllPaqueteUseCase } from "../../../domain/use-cases/paquetes/getAllPaquete.js";
 import { getpaqueteId } from "../../../domain/use-cases/paquetes/getByIDPaquete.use-case.js";
@@ -33,9 +30,13 @@ export class PaquetesController {
     const paqueteUse = new CreatePaqueteUseCase();
     paqueteUse
       .execute(paqueteDto)
-      .then((data) => {
+      .then(({ data, sala }) => {
         emitSocket(req, "createpaquete", data);
-        CustomResponse.success({ res, data: "Paquete generado con exito" });
+        CustomResponse.success({
+          res,
+          data: { sala },
+          message: "Paquete generado con exito",
+        });
       })
       .catch((err) => {
         CustomResponse.badRequest({ res, error: err });

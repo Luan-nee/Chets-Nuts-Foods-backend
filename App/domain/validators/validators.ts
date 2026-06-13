@@ -1,6 +1,10 @@
 export class Validator {
   static isValidUsername = (val: string) => /^[a-zA-Z0-9\-_]+$/.test(val);
 
+  static isValidLetrasMayusculas = (val: string) => /^[A-Z]+$/.test(val);
+
+  static isVlaisNumeros = (val: string) => /^[0-9]+$/.test(val);
+
   static isValidPassword = (val: string) =>
     /^[a-zA-Z0-9$%&*_@#+\-_]+$/.test(val);
 
