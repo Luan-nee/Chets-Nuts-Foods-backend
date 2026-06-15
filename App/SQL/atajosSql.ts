@@ -14,19 +14,22 @@ interface insertarUser {
   apellidopaterno: string;
 }
 
-export async function InsertUser({
-  nombre,
-  apellidomaterno,
-  apellidopaterno,
-  edad,
-  dni,
-  ruc,
-  numero,
-  tipo,
-  numeroLicenciaConducir,
-  sexo,
-  correo,
-}: UsuarioDto) {
+export async function InsertUser(
+  {
+    nombre,
+    apellidomaterno,
+    apellidopaterno,
+    edad,
+    dni,
+    ruc,
+    numero,
+    tipo,
+    numeroLicenciaConducir,
+    sexo,
+    correo,
+  }: UsuarioDto,
+  cantEnvios?: number,
+) {
   const { usuarios } = generateTables();
 
   const fields: (string | number)[] = [
@@ -52,6 +55,11 @@ export async function InsertUser({
     fields.push(numero);
     valores.push(usuarios.numero);
     query.push(UP(usuarios.numero, numero));
+  }
+
+  if (cantEnvios !== undefined) {
+    fields.push(cantEnvios);
+    valores.push(usuarios.cantenvios);
   }
 
   if (ruc !== undefined) {

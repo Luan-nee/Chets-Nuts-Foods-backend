@@ -131,7 +131,7 @@ export class UsuariosController {
       });
   };
 
-  getClientesFrecuentes = (req: Request, res: Response) => {
+  getClientes = (req: Request, res: Response) => {
     if (req.authpayload === undefined) {
       CustomResponse.badRequest({ res, error: "No tienes permisos " });
       return;
@@ -140,6 +140,32 @@ export class UsuariosController {
     const userCase = new UsuariosUseCase();
     userCase
       .getClientes()
+      .then((data) => {
+        CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
+      });
+  };
+  createClientes = (req: Request, res: Response) => {
+    if (req.authpayload === undefined) {
+      CustomResponse.badRequest({
+        res,
+        error: "No tienes permisos de estar aqui",
+      });
+      return;
+    }
+
+    const [error, userDto] = UsuarioDto.createUserDto(req.body);
+    if (error !== undefined || userDto === undefined) {
+      CustomResponse.badRequest({ res, error });
+      return;
+    }
+
+    const userCase = new UsuariosUseCase();
+
+    userCase
+      .createCliente(userDto)
       .then((data) => {
         CustomResponse.success({ res, data });
       })

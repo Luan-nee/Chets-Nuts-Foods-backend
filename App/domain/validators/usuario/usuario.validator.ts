@@ -22,10 +22,10 @@ const updateUsuarioSchema = z.object({
   apellidomaterno: usuarioSchema.apellidomaterno.optional(),
   edad: usuarioSchema.edad.optional(),
   rucuser: usuarioSchema.rucuser.optional(),
-  numero: usuarioSchema.numero,
+  numero: usuarioSchema.numero.optional(),
   dni: usuarioSchema.dniuser.optional(),
   tipo: usuarioSchema.tipo.optional(),
-  correo: usuarioSchema.correo,
+  correo: usuarioSchema.correo.optional(),
 });
 
 const dniValidSchema = z.object({

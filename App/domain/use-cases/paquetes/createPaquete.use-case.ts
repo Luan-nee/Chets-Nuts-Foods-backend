@@ -70,6 +70,11 @@ export class CreatePaqueteUseCase {
     if (usuariosValidate.length !== 2) {
       throw CustomError.badRequest("El usuario Destino no existe");
     }
+
+    await DB.Update(usuarios())
+      .set([UP(usuarios.cantenvios, `${usuarios.cantenvios} + 1 `, true)])
+      .where(eq(usuarios.iduser, idusuario))
+      .execute();
   }
 
   async execute(paqueteDto: CreatePaqueteDto) {

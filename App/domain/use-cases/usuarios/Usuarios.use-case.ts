@@ -32,7 +32,7 @@ export class UsuariosUseCase {
     return user;
   }
 
-  async create(userDto: UsuarioDto) {
+  async create(userDto: UsuarioDto, cantEnvios?: number) {
     const { usuarios } = generateTables();
 
     if (userDto.dni === undefined && userDto.ruc === undefined) {
@@ -49,7 +49,7 @@ export class UsuariosUseCase {
           ? userDto.ruc
           : "",
     );
-
+    console.log(cantEnvios);
     const repeat = (await DB.Select([
       usuarios.iduser,
       usuarios.rucuser,
@@ -64,6 +64,10 @@ export class UsuariosUseCase {
       const queryExec: UpdateParam[] = [];
       if (repeat[0].dniuser == null && userDto.dni !== undefined) {
         queryExec.push(UP(usuarios.dniuser, userDto.dni));
+      }
+
+      if (cantEnvios !== undefined) {
+        queryExec.push(UP(usuarios.cantenvios, `${cantEnvios}`));
       }
 
       if (repeat[0].rucuser == null && userDto.ruc !== undefined) {
@@ -90,7 +94,7 @@ export class UsuariosUseCase {
       const user = this.getUserByID(repeat[0].iduser);
       return user;
     }
-    const valorInsert = await InsertUser(userDto);
+    const valorInsert = await InsertUser(userDto, cantEnvios);
     const user = this.getUserByID(valorInsert);
     return user;
   }
@@ -239,24 +243,22 @@ export class UsuariosUseCase {
   async getClientes() {
     const { usuarios } = generateTables();
 
-    const [response] = (await DB.Select([AVG(usuarios.cantenvios, "promedio")])
-      .from(usuarios())
-      .execute()) as [{ promedio: number }];
-    const promedio = Number(response.promedio);
-
-    if (promedio === 0) {
-      return [];
-    }
-
     const usuariosResponse = await DB.Select([
       usuarios.nombres,
       usuarios.apellidopaterno,
       usuarios.apellidomaterno,
       usuarios.dniuser,
+      usuarios.cantenvios,
     ])
       .from(usuarios())
-      .where(MAYOR(usuarios.cantenvios, `${promedio}`))
+      .where(MAYOR(usuarios.cantenvios, `0`))
+      .OrderBy({ cantenvios: "DESC" })
       .execute();
     return usuariosResponse;
+  }
+
+  async createCliente(usuario: UsuarioDto) {
+    const user = await this.create(usuario, 1);
+    return user;
   }
 }
