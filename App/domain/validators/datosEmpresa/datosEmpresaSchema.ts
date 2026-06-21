@@ -27,5 +27,9 @@ export const datosEmpresaSchema = {
   urlApi: z.string().trim(),
   claveAcceso: z.string().trim(),
   correo: z.string().trim(),
+  tipo: z.enum(["TEST", "PROD"], {
+    error:
+      "Solo esta permitido TEST(para pruebas) y PROD(Para emisiones legales)",
+  }),
   fechavigenciaregistro: z.coerce.date(),
 };

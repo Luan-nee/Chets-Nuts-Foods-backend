@@ -71,6 +71,11 @@ export class DatosEmpresaUseCase {
       querys.push(dataEmpresa.claveAcceso);
     }
 
+    if (dataEmpresa.tipo !== undefined) {
+      campos.push(datosempresa.tipo);
+      querys.push(dataEmpresa.tipo);
+    }
+
     const response = await DB.Insert(datosempresa(), campos)
       .Values(querys)
       .Returning(datosempresa.idDatosEmpresa)
@@ -87,7 +92,10 @@ export class DatosEmpresaUseCase {
       );
     }
 
-    return "ok";
+    return {
+      id: response,
+      tipo: `${dataEmpresa.tipo === undefined ? "TEST" : dataEmpresa.tipo}`,
+    };
   }
 
   async getAll() {

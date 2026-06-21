@@ -1,3 +1,4 @@
+import { DataEmpresaTipo } from "../../../types/global.js";
 import { createDatosEmpresaValidator } from "../../validators/datosEmpresa/datosEmpresaValidator.js";
 
 export class CreateDatosEmpresaDto {
@@ -9,6 +10,7 @@ export class CreateDatosEmpresaDto {
   public urlApi?: string;
   public claveAcceso?: string;
   public fechaVigenciaRegistroMtc: Date;
+  public tipo?: DataEmpresaTipo;
 
   private constructor({
     claveAcceso,
@@ -19,6 +21,7 @@ export class CreateDatosEmpresaDto {
     urlApi,
     correo,
     fechaVigenciaRegistroMtc,
+    tipo,
   }: CreateDatosEmpresaDto) {
     this.claveAcceso = claveAcceso;
     this.codigoMtc = codigoMtc;
@@ -28,6 +31,7 @@ export class CreateDatosEmpresaDto {
     this.urlApi = urlApi;
     this.correo = correo;
     this.fechaVigenciaRegistroMtc = fechaVigenciaRegistroMtc;
+    this.tipo = tipo;
   }
 
   static createDatosEmpresa(input: any): [string?, CreateDatosEmpresaDto?] {

@@ -214,3 +214,5 @@ export interface ResponseSunat {
   success: boolean;
   message: string;
 }
+
+export type DataEmpresaTipo = "TEST" | "PROD";
