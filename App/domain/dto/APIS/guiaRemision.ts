@@ -9,6 +9,9 @@ export class GuiaRemisionDTO {
   public numero: string;
   public fecha_de_emision: string;
   public hora_de_emision: string;
+  public fecha_entrega_transportista: string;
+  public fecha_entrega_a_transportista: string;
+
   public modalidad_de_transporte: "01" | "02";
   public motivo_de_traslado: "01" | "02" | "03" | "04" | "05" | "06" | "13";
   public fecha_inicio_de_traslado: string;
@@ -46,7 +49,7 @@ export class GuiaRemisionDTO {
   // VEHICULO
   public vehiculos?: {
     vehiculo: string;
-    numero_placa: string;
+    numero_de_placa: string;
   }[];
 
   public items: itemsTypes[];
@@ -76,6 +79,8 @@ export class GuiaRemisionDTO {
     vehiculos,
     items,
     observaciones,
+    fecha_entrega_transportista,
+    fecha_entrega_a_transportista,
   }: GuiaRemisionDTO) {
     this.documento = documento;
     this.serie = serie;
@@ -101,5 +106,7 @@ export class GuiaRemisionDTO {
     this.moneda = moneda;
     this.vehiculos = vehiculos;
     this.items = items;
+    this.fecha_entrega_transportista = fecha_entrega_transportista;
+    this.fecha_entrega_a_transportista = fecha_entrega_a_transportista;
   }
 }

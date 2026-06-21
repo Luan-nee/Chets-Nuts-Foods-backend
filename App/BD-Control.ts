@@ -25,8 +25,9 @@ export function generateTables() {
       numeroRegistroMtc: varchar(30).Required().$(),
       codigoMtc: varchar(30).Required().$(),
       correo: varchar(150).Required().$(),
-      urlApi: varchar(150).Default("none").$(),
-      claveAcceso: varchar(80).Default("none").$(),
+      urlApi: varchar(250).Default("none").$(),
+      claveAcceso: varchar(380).Default("none").$(),
+      tipo: varchar(30).Check(["TEST", "PROD"]).Default("TEST").$(),
       fechavigenciaregistro: timestamp().required().$(),
     }),
     establecimientos: defineTable("establecimientos", {

@@ -1,7 +1,6 @@
 import { DB, eq, ORQ } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
-import { GuiaRemisionDTO } from "../../dto/APIS/guiaRemision.js";
 import {
   choferType,
   conductoresTypeClass,
@@ -12,11 +11,18 @@ import {
   paqueteValidate,
   productosPackageVal,
   productosTypes,
+  setChoferesGui,
+  setEstablecimientoGUI,
+  setItems,
+  setSalidaTransporteGui,
+  setUsersGui,
   userValores,
   usuariosData,
-  vehiculoType,
+  vehiculoTypeGR,
 } from "./guiaTypes.js";
 import { CreateGuiaRemisionDto } from "../../dto/guiaRemision/createGuiaRemisionDto.js";
+import { ResponseSunat } from "../../../types/global.js";
+import ConnectionGR from "../../../connection/connectionGR.js";
 
 export class CreateGuiaUseCase {
   async validatePaquete(
@@ -71,7 +77,9 @@ export class CreateGuiaUseCase {
     return [undefined, responseValidate];
   }
 
-  private async getsalidaTransporte(idsalida: number) {
+  private async getsalidaTransporte(
+    idsalida: number,
+  ): Promise<setSalidaTransporteGui> {
     const { salidatransporte } = generateTables();
     const [datos] = (await DB.Select([
       salidatransporte.idchoferacceso,
@@ -84,7 +92,7 @@ export class CreateGuiaUseCase {
     ])
       .from(salidatransporte())
       .where(eq(salidatransporte.idsalidatransporte, idsalida))
-      .execute()) as usuariosData[];
+      .execute()) as setSalidaTransporteGui[];
 
     return datos;
   }
@@ -92,10 +100,7 @@ export class CreateGuiaUseCase {
   private async getchoferes(
     idchofer: number,
     idchofersecundario: number,
-  ): Promise<{
-    choferPrincipal: choferType;
-    choferSecundario?: choferType;
-  }> {
+  ): Promise<setChoferesGui> {
     const { accesos, usuarios } = generateTables();
 
     console.log(idchofer);
@@ -127,7 +132,7 @@ export class CreateGuiaUseCase {
   private async getUsuariosPackage(
     idUserOrigen: number,
     idUserDestino: number,
-  ): Promise<{ userOrigen: userValores; userDestino: userValores }> {
+  ): Promise<setUsersGui> {
     const { usuarios } = generateTables();
 
     const usuariosPackage = await DB.Select([
@@ -154,10 +159,7 @@ export class CreateGuiaUseCase {
   private async getEstablecimiento(
     idorigen: number,
     idDestino: number,
-  ): Promise<{
-    establecimientoOrigen: establecimientoType;
-    establecimientoDestino: establecimientoType;
-  }> {
+  ): Promise<setEstablecimientoGUI> {
     const { establecimientos } = generateTables();
 
     const datosEstablecimiento = (await DB.Select([
@@ -179,7 +181,7 @@ export class CreateGuiaUseCase {
     return establecimientosData;
   }
 
-  private async getDatosEmpresa() {
+  private async getDatosEmpresa(idDatoEmpresa = 1): Promise<datosEmpresaType> {
     const { datosempresa } = generateTables();
 
     const [datos] = (await DB.Select([
@@ -188,17 +190,20 @@ export class CreateGuiaUseCase {
       datosempresa.denominacion,
       datosempresa.numeroRegistroMtc,
       datosempresa.ruc,
+      datosempresa.claveAcceso,
+      datosempresa.urlApi,
     ])
       .from(datosempresa())
-      .where(eq(datosempresa.idDatosEmpresa, 1))
-      .execute(true)) as datosEmpresaType[];
+      .where(eq(datosempresa.idDatosEmpresa, idDatoEmpresa))
+      .execute()) as datosEmpresaType[];
     if (datos === undefined) {
       throw CustomError.badRequest("Por favor ingrese los datos de la empresa");
     }
+    console.log(datos);
     return datos;
   }
 
-  private async getProductos(idpaquete: number) {
+  private async getProductos(idpaquete: number): Promise<setItems> {
     const { productos } = generateTables();
 
     const responseProducts = (await DB.Select([
@@ -240,7 +245,7 @@ export class CreateGuiaUseCase {
     };
   }
 
-  private async getVehiculo(idVehiculo: number) {
+  private async getVehiculo(idVehiculo: number): Promise<vehiculoTypeGR> {
     const { vehiculosempresa } = generateTables();
 
     const [vehiculo] = (await DB.Select([
@@ -249,7 +254,7 @@ export class CreateGuiaUseCase {
     ])
       .from(vehiculosempresa())
       .where(eq(vehiculosempresa.idvehempresa, idVehiculo))
-      .execute()) as vehiculoType[];
+      .execute()) as vehiculoTypeGR[];
 
     return vehiculo;
   }
@@ -283,86 +288,21 @@ export class CreateGuiaUseCase {
     const dataEmpresa = await this.getDatosEmpresa();
 
     const vehiculo = await this.getVehiculo(salidatransporte.idvehiculo);
-
-    const conductores: conductoresTypeClass[] = [
-      {
-        nombres: chofer.choferPrincipal.nombres,
-        apellidos:
-          chofer.choferPrincipal.apellidopaterno +
-          " " +
-          chofer.choferPrincipal.apellidomaterno,
-        conductor: "principal",
-        numero_de_documento: chofer.choferPrincipal.dniuser,
-        tipo_de_documento: "1",
-        numero_licencia_conducir: chofer.choferPrincipal.numeroLicenciaConducir,
-      },
-    ];
-
-    if (chofer.choferSecundario !== undefined) {
-      conductores.push({
-        nombres: chofer.choferSecundario.nombres,
-        apellidos:
-          chofer.choferSecundario.apellidopaterno +
-          " " +
-          chofer.choferSecundario.apellidomaterno,
-        conductor: "secundario",
-        numero_de_documento: chofer.choferSecundario.dniuser,
-        tipo_de_documento: "1",
-        numero_licencia_conducir:
-          chofer.choferSecundario.numeroLicenciaConducir,
-      });
-    }
-
     //motivo de traslado tiene que ser opcional para editarlo en la input
     //destinatario tipo de documento, 01 dni 06  ruc
     //si destinatario documento es ruc , se le pedira los datos de la empresa como tambien el ruc
 
-    const datos: GuiaRemisionDTO = {
-      documento: "guia_remision_remitente",
-      motivo_de_traslado: dtoGuia.motivoTraslado || "01",
-      destinatario_tipo_de_documento:
-        dtoGuia.docDestinatario === "DNI" ||
-        dtoGuia.docDestinatario === undefined
-          ? "01"
-          : "06",
-      destinatario_denominacion: usuarios.userDestino.nombres,
-      destinatario_numero_de_documento: usuarios.userDestino.dniuser,
-      fecha_de_emision: salidatransporte.fechacreado
-        .toISOString()
-        .split("T")[0],
-      hora_de_emision: `${salidatransporte.fechacreado.getHours()}:${salidatransporte.fechacreado.getMinutes()}`,
-      fecha_inicio_de_traslado: salidatransporte.fechasalida
-        .toISOString()
-        .split("T")[0],
-      numero: "1",
-      modalidad_de_transporte: dtoGuia.modalidadTransporte || "02",
-      numero_de_bultos: items.cantidadTotal,
-      peso_bruto_unidad_de_medida: "KGM",
-      peso_bruto_total: items.pesoTotal,
-      punto_de_llegada_direccion:
-        establecimiento.establecimientoDestino.direccion,
-      punto_de_llegada_ubigeo: establecimiento.establecimientoDestino.ubigeo,
-      punto_de_partida_direccion:
-        establecimiento.establecimientoOrigen.direccion,
-      punto_de_partida_ubigeo: establecimiento.establecimientoOrigen.ubigeo,
-      serie: "T001",
-      observaciones: "Servicio de traslado de productos",
-      conductores,
-      items: items.productos,
-      transportista: {
-        ruc: dataEmpresa.ruc,
-        codigo_entidad_autorizada: dataEmpresa.codigoMtc,
-        denominacion: dataEmpresa.denominacion,
-        numero_registro_MTC: dataEmpresa.numeroRegistroMtc,
-      },
-      vehiculos: [
-        {
-          numero_placa: vehiculo.placa,
-          vehiculo: "principal",
-        },
-      ],
-    };
-    return datos;
+    const response = await ConnectionGR.fastConsulta({
+      usuarios,
+      choferes: chofer,
+      dataEmpresa,
+      dtoGuia,
+      establecimientos: establecimiento,
+      items,
+      salidaTransporte: salidatransporte,
+      vehiculo: vehiculo,
+    });
+    return response;
   }
 
   async execute(idpaquete: number, dtoGuia: CreateGuiaRemisionDto) {
@@ -373,5 +313,6 @@ export class CreateGuiaUseCase {
 
     const guia = await this.generateGuiaRemision(responseValidate, dtoGuia);
     console.log(guia);
+    return guia;
   }
 }

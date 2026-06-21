@@ -7,6 +7,7 @@ const createAccesoSchema = z.object({
   correo: accesoSchema.correo,
   password: accesoSchema.contra,
   estado: accesoSchema.estado,
+  numeroLicenciaConducir: accesoSchema.numeroLicenciaConducir,
 });
 
 const updateAccesoSchema = z.object({

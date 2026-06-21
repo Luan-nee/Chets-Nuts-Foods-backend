@@ -67,6 +67,8 @@ export interface datosEmpresaType {
   denominacion: string;
   numeroRegistroMtc: string;
   ruc: string;
+  claveAcceso: string;
+  urlApi: string;
 }
 
 export interface productosTypes {
@@ -85,7 +87,7 @@ export interface itemsTypes {
   cantidad: number;
 }
 
-export interface vehiculoType {
+export interface vehiculoTypeGR {
   idvehempresa: number;
   placa: string;
 }
@@ -97,4 +99,36 @@ export interface conductoresTypeClass {
   nombres: string;
   apellidos: string;
   numero_licencia_conducir: string;
+}
+
+export interface setUsersGui {
+  userOrigen: userValores;
+  userDestino: userValores;
+}
+
+export interface setSalidaTransporteGui {
+  idchoferacceso: number;
+  idchoferaccesosecundario: number;
+  idvehiculo: number;
+  idorigenestablecimiento: number;
+  iddestinoestablecimiento: number;
+  fechacreado: Date;
+  fechasalida: Date;
+}
+
+export interface setChoferesGui {
+  choferPrincipal: choferType;
+  choferSecundario?: choferType;
+}
+
+export interface setEstablecimientoGUI {
+  establecimientoOrigen: establecimientoType;
+  establecimientoDestino: establecimientoType;
+}
+
+export interface setItems {
+  productos: itemsTypes[];
+  cantidad: number;
+  cantidadTotal: number;
+  pesoTotal: number;
 }

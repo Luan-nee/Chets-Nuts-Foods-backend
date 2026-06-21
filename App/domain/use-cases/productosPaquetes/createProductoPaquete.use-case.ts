@@ -102,9 +102,8 @@ export class CreateProductoPaqueteUseCase {
         ),
       )
       .where(eq(paquetes.idenvio, idPaquete))
-      .execute(true)) as { idvehiculo: number }[];
+      .execute()) as { idvehiculo: number }[];
 
-    console.log(idVehiculo);
     if (idVehiculo.length > 1 || idVehiculo.length === 0) {
       throw CustomError.badRequest(
         "El vehiculo no existe o no esta registrado",
@@ -156,26 +155,27 @@ export class CreateProductoPaqueteUseCase {
       productoDto.nombreproducto,
     );
 
+    const pesoTotal = productoDto.cantidad * productoDto.pesounitario;
+    console.log(productoDto.cantidad);
+    console.log(productoDto.pesounitario);
+    console.log(pesoTotal);
+
+    await this.validatePesoAutomovil(idpaquete, pesoTotal);
+
+    query.push(productos.pesototal);
+    data.push(pesoTotal);
+
+    const idProductoNuevo = await DB.Insert(productos(), query)
+      .Values(data)
+      .Returning(productos.id)
+      .execute();
+    console.log(idProductoNuevo);
+    if (idProductoNuevo === undefined || idProductoNuevo.length === 0) {
+      throw CustomError.badRequest("No se pudo agregar al producto");
+    }
+    return idProductoNuevo[0];
+    /*
     if (productoVal === null) {
-      const pesoTotal = productoDto.cantidad * productoDto.pesounitario;
-      console.log(productoDto.cantidad);
-      console.log(productoDto.pesounitario);
-      console.log(pesoTotal);
-
-      await this.validatePesoAutomovil(idpaquete, pesoTotal);
-
-      query.push(productos.pesototal);
-      data.push(pesoTotal);
-
-      const idProductoNuevo = await DB.Insert(productos(), query)
-        .Values(data)
-        .Returning(productos.idenvio)
-        .execute();
-
-      if (idProductoNuevo === undefined || idProductoNuevo.length === 0) {
-        throw CustomError.badRequest("No se pudo agregar al producto");
-      }
-      return idProductoNuevo[0];
     } else {
       const cantidadTotal = productoVal.cantidad + productoDto.cantidad;
       const pesoTotal = productoVal.pesounitario * cantidadTotal;
@@ -190,6 +190,6 @@ export class CreateProductoPaqueteUseCase {
         .where(eq(productos.id, productoVal.id))
         .execute();
       return productoVal.id;
-    }
+    }*/
   }
 }

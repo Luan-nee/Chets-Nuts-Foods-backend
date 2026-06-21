@@ -27,4 +27,10 @@ export const accesoSchema = {
   estado: z
     .boolean({ error: "estado solo esta permitido true o false" })
     .default(true),
+  numeroLicenciaConducir: z
+    .string()
+    .refine((valor) => Validator.isValidGeneralName(valor), {
+      error: "No esta permitido caracteres especiales",
+    })
+    .optional(),
 };

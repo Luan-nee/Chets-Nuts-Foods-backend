@@ -6,12 +6,20 @@ export class CreateAccesDto {
   public password: string;
   public tipos: typeRol;
   public correo: string;
+  public numeroLicenciaConducir?: string;
 
-  private constructor({ idusuario, password, tipos, correo }: CreateAccesDto) {
+  private constructor({
+    idusuario,
+    password,
+    tipos,
+    correo,
+    numeroLicenciaConducir,
+  }: CreateAccesDto) {
     this.idusuario = idusuario;
     this.password = password;
     this.tipos = tipos;
     this.correo = correo;
+    this.numeroLicenciaConducir = numeroLicenciaConducir;
   }
 
   static createSessionUserMain(input: any): [string?, CreateAccesDto?] {

@@ -209,3 +209,8 @@ export interface detallesSockets {
   update: boolean;
   querys: updateCampos[];
 }
+
+export interface ResponseSunat {
+  success: boolean;
+  message: string;
+}

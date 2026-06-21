@@ -12,7 +12,7 @@ const createUsuarioSchema = z.object({
   tipo: usuarioSchema.tipo,
   numeroLicenciaConducir: usuarioSchema.numeroLicenciaConducir,
   sexo: usuarioSchema.sexo,
-  correo: usuarioSchema.correo,
+  correo: usuarioSchema.correo.optional(),
 });
 
 const updateUsuarioSchema = z.object({

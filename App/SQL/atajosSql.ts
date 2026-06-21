@@ -139,20 +139,24 @@ export async function CreateAccesos({
   password,
   tipos,
   idusuario,
+  numeroLicenciaConducir,
 }: CreateAccesDto) {
   const { accesos } = generateTables();
 
   if (idusuario === undefined) {
     throw CustomError.badRequest("El id User es obligatorio");
   }
-
-  const idAccedo = (await DB.Insert(accesos(), [
+  const query = [
     accesos.correo,
     accesos.contra,
     accesos.tipos,
     accesos.idusuario,
-  ])
-    .Values([correo, password, tipos, idusuario])
+  ];
+
+  const data = [correo, password, tipos, idusuario];
+
+  const idAccedo = (await DB.Insert(accesos(), query)
+    .Values(data)
     .Returning(accesos.idacceso)
     .execute()) as number[];
 

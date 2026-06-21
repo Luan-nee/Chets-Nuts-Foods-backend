@@ -26,6 +26,7 @@ async function generarTablas() {
     dni: "75276128",
     edad: 23,
     sexo: "MASCULINO",
+    numeroLicenciaConducir: "111-GR3",
   });
 
   const idAcceso1 = await CreateAccesos({
