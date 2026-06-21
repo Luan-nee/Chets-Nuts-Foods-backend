@@ -69,6 +69,7 @@ export interface datosEmpresaType {
   ruc: string;
   claveAcceso: string;
   urlApi: string;
+  tipo: string;
 }
 
 export interface productosTypes {

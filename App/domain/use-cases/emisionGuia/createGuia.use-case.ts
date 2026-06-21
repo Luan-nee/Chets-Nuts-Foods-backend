@@ -1,27 +1,22 @@
-import { DB, eq, ORQ } from "zormz";
+import { DB, eq, MIN, ORQ } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
 import {
   choferType,
-  conductoresTypeClass,
   datosEmpresaType,
   establecimientoType,
   guiaremisionValidate,
   itemsTypes,
   paqueteValidate,
-  productosPackageVal,
   productosTypes,
   setChoferesGui,
   setEstablecimientoGUI,
   setItems,
   setSalidaTransporteGui,
   setUsersGui,
-  userValores,
-  usuariosData,
   vehiculoTypeGR,
 } from "./guiaTypes.js";
 import { CreateGuiaRemisionDto } from "../../dto/guiaRemision/createGuiaRemisionDto.js";
-import { ResponseSunat } from "../../../types/global.js";
 import ConnectionGR from "../../../connection/connectionGR.js";
 
 export class CreateGuiaUseCase {
@@ -181,10 +176,12 @@ export class CreateGuiaUseCase {
     return establecimientosData;
   }
 
-  private async getDatosEmpresa(idDatoEmpresa = 1): Promise<datosEmpresaType> {
+  private async getDatosEmpresa(
+    idDatoEmpresa?: number,
+  ): Promise<datosEmpresaType> {
     const { datosempresa } = generateTables();
 
-    const [datos] = (await DB.Select([
+    const datosQuery = [
       datosempresa.codigoMtc,
       datosempresa.correo,
       datosempresa.denominacion,
@@ -192,15 +189,25 @@ export class CreateGuiaUseCase {
       datosempresa.ruc,
       datosempresa.claveAcceso,
       datosempresa.urlApi,
-    ])
-      .from(datosempresa())
-      .where(eq(datosempresa.idDatosEmpresa, idDatoEmpresa))
-      .execute()) as datosEmpresaType[];
-    if (datos === undefined) {
+      datosempresa.tipo,
+    ];
+
+    const datos = DB.Select(datosQuery).from(datosempresa());
+
+    if (idDatoEmpresa !== undefined) {
+      datos.where(eq(datosempresa.idDatosEmpresa, idDatoEmpresa));
+    }
+
+    const [response] = (await datos
+      .OrderBy({ idDatosEmpresa: "ASC" })
+      .LIMIT(1)
+      .execute(true)) as datosEmpresaType[];
+
+    if (response === undefined) {
       throw CustomError.badRequest("Por favor ingrese los datos de la empresa");
     }
-    console.log(datos);
-    return datos;
+
+    return response;
   }
 
   private async getProductos(idpaquete: number): Promise<setItems> {
@@ -262,6 +269,7 @@ export class CreateGuiaUseCase {
   private async generateGuiaRemision(
     paqueteData: paqueteValidate,
     dtoGuia: CreateGuiaRemisionDto,
+    idpaquete: number,
   ) {
     const { guiasremision } = generateTables();
 
@@ -285,7 +293,7 @@ export class CreateGuiaUseCase {
 
     const items = await this.getProductos(paqueteData.idenvio);
 
-    const dataEmpresa = await this.getDatosEmpresa();
+    const dataEmpresa = await this.getDatosEmpresa(dtoGuia.idDataEmpresa);
 
     const vehiculo = await this.getVehiculo(salidatransporte.idvehiculo);
     //motivo de traslado tiene que ser opcional para editarlo en la input
@@ -302,7 +310,40 @@ export class CreateGuiaUseCase {
       salidaTransporte: salidatransporte,
       vehiculo: vehiculo,
     });
-    return response;
+
+    if (!response.response.success || !response.response.payload) {
+      throw CustomError.badRequest(response.response.message);
+    }
+
+    const ultimo = response.response.payload.xml.split("/").pop();
+
+    if (ultimo === undefined) {
+      throw CustomError.badRequest(response.response.message);
+    }
+
+    const idGuia = await DB.Insert(guiasremision(), [
+      guiasremision.idpaquete,
+      guiasremision.tipogeneration,
+      guiasremision.numero,
+      guiasremision.qrUrl,
+      guiasremision.confirmado,
+      guiasremision.datagenerate,
+      guiasremision.hash,
+      guiasremision.estadoguia,
+    ]).Values([
+      idpaquete,
+      dataEmpresa.tipo,
+      ultimo,
+      response.response.payload.pdf.a4,
+      true,
+      JSON.stringify(response.datos),
+      response.response.payload.hash,
+      response.response.payload.estado,
+    ]);
+
+    console.log(idGuia);
+
+    return { idGuia, pdf: response.response.payload.pdf.a4 };
   }
 
   async execute(idpaquete: number, dtoGuia: CreateGuiaRemisionDto) {
@@ -311,8 +352,11 @@ export class CreateGuiaUseCase {
       throw CustomError.badRequest(`Error : ${error}`);
     }
 
-    const guia = await this.generateGuiaRemision(responseValidate, dtoGuia);
-    console.log(guia);
+    const guia = await this.generateGuiaRemision(
+      responseValidate,
+      dtoGuia,
+      idpaquete,
+    );
     return guia;
   }
 }

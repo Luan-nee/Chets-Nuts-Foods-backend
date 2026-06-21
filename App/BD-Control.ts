@@ -80,7 +80,13 @@ export function generateTables() {
     guiasremision: defineTable("guiasremision", {
       idguia: int().Pk().Required().$(),
       idpaquete: int().$(),
+      tipogeneration: varchar(20).$(),
+      estadoguia: varchar(20)
+        .Check(["ACEPTADO", "RECHAZADO", "OBSERVADO"])
+        .Default("ACEPTADO")
+        .$(),
       numero: varchar().$(),
+      hash: varchar(180).$(),
       qrUrl: varchar(200).$(),
       confirmado: bool().default(false).$(),
       datagenerate: varchar(700).$(),

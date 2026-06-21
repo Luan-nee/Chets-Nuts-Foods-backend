@@ -29,30 +29,17 @@ export default class ConnectionGR {
   private static async consulta(
     datoEmpresa: datosEmpresaType,
     datos: GuiaRemisionDTO,
-  ) {
-    await fetch(datoEmpresa.urlApi, {
+  ): Promise<ResponseSunat> {
+    const data = await fetch(datoEmpresa.urlApi, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${datoEmpresa.claveAcceso}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(datos),
-    })
-      .then(async (data) => {
-        const response = (await data.json()) as ResponseSunat;
-        console.log(response);
-        console.log("HEADERS:");
-        console.log([...data.headers.entries()]);
-
-        console.log("BODY:");
-        console.dir(response, { depth: null });
-
-        return datos;
-      })
-      .catch((error) => {
-        console.log(error);
-        return [];
-      });
+    });
+    const response = (await data.json()) as ResponseSunat;
+    return response;
   }
 
   static async fastConsulta({
@@ -158,8 +145,7 @@ export default class ConnectionGR {
         },
       ],
     };
-    console.log(datos);
     const response = await this.consulta(dataEmpresa, datos);
-    return response;
+    return { response, datos };
   }
 }

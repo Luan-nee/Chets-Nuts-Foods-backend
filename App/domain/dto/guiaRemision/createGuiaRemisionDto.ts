@@ -5,15 +5,18 @@ export class CreateGuiaRemisionDto {
   public motivoTraslado?: "01" | "02" | "03" | "06";
   public docDestinatario?: "DNI" | "RUC";
   public modalidadTransporte?: "01" | "02";
+  public idDataEmpresa?: number;
 
   private constructor({
     modalidadTransporte,
     motivoTraslado,
     docDestinatario,
+    idDataEmpresa,
   }: CreateGuiaRemisionDto) {
     this.docDestinatario = docDestinatario;
     this.modalidadTransporte = modalidadTransporte;
     this.motivoTraslado = motivoTraslado;
+    this.idDataEmpresa = idDataEmpresa;
   }
 
   static create(input: any): [string?, CreateGuiaRemisionDto?] {

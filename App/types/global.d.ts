@@ -213,6 +213,25 @@ export interface detallesSockets {
 export interface ResponseSunat {
   success: boolean;
   message: string;
+  payload?: {
+    estado: "ACEPTADO" | "RECHAZADO" | "OBSERVADO";
+    hash: string;
+    xml: string;
+    cdr: string;
+    pdf: {
+      a4: string;
+    };
+  };
 }
 
 export type DataEmpresaTipo = "TEST" | "PROD";
+/*
+payload: {
+    estado: "ACEPTADO";
+    hash: "saX0yIBoQPZSHjaXBu7n6MhnD6WqGCnsLWSzv7zHgMS1=";
+    xml: "https://sandbox.apisunat.pe/xml/527/5h4BwOEVRj/10752761278-09-T001-1";
+    cdr: "https://sandbox.apisunat.pe/xml/527/5h4BwOEVRj/R-10752761278-09-T001-1";
+    pdf: {
+      a4: "https://sandbox.apisunat.pe/dispatch/pdf/a4/527/5h4BwOEVRj/10752761278-09-T001-1";
+    };
+  };*/

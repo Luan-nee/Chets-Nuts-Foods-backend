@@ -10,4 +10,5 @@ export const guiaRemisionSchema = {
   modalidadTransporte: z.enum(["01", "02"], {
     error: "modalidadTransporte solo puede ser 01 o 02",
   }),
+  idDataEmpresa: z.coerce.number().optional(),
 };

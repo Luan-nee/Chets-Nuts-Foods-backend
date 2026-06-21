@@ -32,8 +32,8 @@ export class controllerGuiaRemision {
 
     generateGuia
       .execute(id.id, guia)
-      .then(() => {
-        CustomResponse.success({ res, data: "Creado con exito" });
+      .then((data) => {
+        CustomResponse.success({ res, message: "Creado con exito", data });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });
