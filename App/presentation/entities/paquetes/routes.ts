@@ -11,6 +11,7 @@ export class RoutesPaquetes {
     const controllerProductos = new ControllerProductosPaquetes();
     const controllerGuia = new controllerGuiaRemision();
 
+    routes.get("/guias", controllerGuia.getAll);
     routes.get("/:id", controller.getAll);
     routes.get("/:id/productos", controllerProductos.getAllProductos);
     routes.get("/data/:id", controller.getByID);
