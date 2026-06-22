@@ -8,11 +8,9 @@ import {
   setUsersGui,
   vehiculoTypeGR,
 } from "../domain/use-cases/emisionGuia/guiaTypes.js";
-import { CustomError } from "../core/res/Custom.error.js";
 import { ResponseSunat } from "../types/global.js";
 import { GuiaRemisionDTO } from "../domain/dto/APIS/guiaRemision.js";
 import { CreateGuiaRemisionDto } from "../domain/dto/guiaRemision/createGuiaRemisionDto.js";
-import { $ZodCheckSizeEquals } from "zod/v4/core";
 
 interface getDatosGR {
   usuarios: setUsersGui;
@@ -82,6 +80,9 @@ export default class ConnectionGR {
       });
     }
 
+    const fechaHpy = new Date();
+    fechaHpy.setHours(fechaHpy.getHours() - 5);
+
     const horaEmision = String(
       salidaTransporte.fechacreado.getHours(),
     ).padStart(2, "0");
@@ -104,9 +105,7 @@ export default class ConnectionGR {
           : "06",
       destinatario_denominacion: usuarios.userDestino.nombres,
       destinatario_numero_de_documento: usuarios.userDestino.dniuser,
-      fecha_de_emision: salidaTransporte.fechacreado
-        .toISOString()
-        .split("T")[0],
+      fecha_de_emision: fechaHpy.toISOString().split("T")[0],
       hora_de_emision: `${horaEmision}:${minutosEmision}:${segundosEmision}`,
       fecha_inicio_de_traslado: salidaTransporte.fechasalida
         .toISOString()
@@ -128,7 +127,7 @@ export default class ConnectionGR {
       punto_de_partida_direccion:
         establecimientos.establecimientoOrigen.direccion,
       punto_de_partida_ubigeo: establecimientos.establecimientoOrigen.ubigeo,
-      serie: "T001",
+      serie: "T003",
       observaciones: "Servicio de traslado de productos",
       conductores,
       items: items.productos,
@@ -145,6 +144,7 @@ export default class ConnectionGR {
         },
       ],
     };
+    console.log(datos);
     const response = await this.consulta(dataEmpresa, datos);
     return { response, datos };
   }

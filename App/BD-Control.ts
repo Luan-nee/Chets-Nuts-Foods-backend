@@ -27,7 +27,10 @@ export function generateTables() {
       correo: varchar(150).Required().$(),
       urlApi: varchar(250).Default("none").$(),
       claveAcceso: varchar(380).Default("none").$(),
-      tipo: varchar(30).Check(["TEST", "PROD"]).Default("TEST").$(),
+      tipoestadoempresa: varchar(30)
+        .Check(["TEST", "PROD"])
+        .Default("TEST")
+        .$(),
       fechavigenciaregistro: timestamp().required().$(),
     }),
     establecimientos: defineTable("establecimientos", {
@@ -89,7 +92,7 @@ export function generateTables() {
       hash: varchar(180).$(),
       qrUrl: varchar(200).$(),
       confirmado: bool().default(false).$(),
-      datagenerate: varchar(700).$(),
+      datagenerate: varchar(2000).$(),
       fechaupdate: timestamp().onUpdate().$(),
       fechaConfirmacion: timestamp().$(),
     }),

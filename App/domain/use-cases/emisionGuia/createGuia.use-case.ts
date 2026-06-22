@@ -189,7 +189,7 @@ export class CreateGuiaUseCase {
       datosempresa.ruc,
       datosempresa.claveAcceso,
       datosempresa.urlApi,
-      datosempresa.tipo,
+      datosempresa.tipoestadoempresa,
     ];
 
     const datos = DB.Select(datosQuery).from(datosempresa());
@@ -299,7 +299,6 @@ export class CreateGuiaUseCase {
     //motivo de traslado tiene que ser opcional para editarlo en la input
     //destinatario tipo de documento, 01 dni 06  ruc
     //si destinatario documento es ruc , se le pedira los datos de la empresa como tambien el ruc
-
     const response = await ConnectionGR.fastConsulta({
       usuarios,
       choferes: chofer,
@@ -320,7 +319,6 @@ export class CreateGuiaUseCase {
     if (ultimo === undefined) {
       throw CustomError.badRequest(response.response.message);
     }
-
     const idGuia = await DB.Insert(guiasremision(), [
       guiasremision.idpaquete,
       guiasremision.tipogeneration,
@@ -330,20 +328,26 @@ export class CreateGuiaUseCase {
       guiasremision.datagenerate,
       guiasremision.hash,
       guiasremision.estadoguia,
-    ]).Values([
-      idpaquete,
-      dataEmpresa.tipo,
-      ultimo,
-      response.response.payload.pdf.a4,
-      true,
-      JSON.stringify(response.datos),
-      response.response.payload.hash,
-      response.response.payload.estado,
-    ]);
+    ])
+      .Values([
+        idpaquete,
+        dataEmpresa.tipo,
+        ultimo,
+        response.response.payload.pdf.a4,
+        true,
+        JSON.stringify(response.datos),
+        response.response.payload.hash,
+        response.response.payload.estado,
+      ])
+      .Returning(guiasremision.idguia)
+      .execute();
 
     console.log(idGuia);
 
-    return { idGuia, pdf: response.response.payload.pdf.a4 };
+    return {
+      idGuia,
+      pdf: "https://sandbox.apisunat.pe/dispatch/pdf/a4/537/MHBjPXqK7Q/10752761278-09-T002-1",
+    }; //response.response.payload.pdf.a4
   }
 
   async execute(idpaquete: number, dtoGuia: CreateGuiaRemisionDto) {
