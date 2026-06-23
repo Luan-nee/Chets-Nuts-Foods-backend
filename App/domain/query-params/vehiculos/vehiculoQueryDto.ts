@@ -6,19 +6,19 @@ export class VehiculoQueryDto {
   public estado?: estadoVehiculo | "ALL";
   public tipo?: "PUBLICO" | "PRIVADO" | "ALL";
   public page: number = 0;
+  public placa?: string;
 
-  private constructor({ estado, page, tipo }: VehiculoQueryDto) {
+  private constructor({ estado, page, tipo, placa }: VehiculoQueryDto) {
     this.estado = estado;
     this.page = page;
     this.tipo = tipo;
+    this.placa = placa;
   }
 
   static create(input: any): [VehiculoQueryDto, string?] {
     const response = queryValidatorVehiculo(input);
-
     if (!response.success) {
       const error = responseZodError(response);
-
       return [
         new VehiculoQueryDto({ estado: "ALL", page: 0, tipo: "ALL" }),
         error,

@@ -80,7 +80,6 @@ export class CreateVehiculoUseCase {
 
   async getAllVehiculo(query: VehiculoQueryDto) {
     const { vehiculosempresa } = generateTables();
-
     const condicional = AND(
       query.estado !== "ALL" && query.estado !== undefined
         ? eq(vehiculosempresa.estadovehiculo, query.estado)
@@ -88,8 +87,9 @@ export class CreateVehiculoUseCase {
       query.tipo !== "ALL" && query.tipo !== undefined
         ? eq(vehiculosempresa.tiposervicio, query.tipo)
         : "",
+      query.placa !== undefined ? eq(vehiculosempresa.placa, query.placa) : "",
     );
-    console.log(condicional.length);
+
     const vehiculos = await DB.Select([
       vehiculosempresa.idvehempresa,
       vehiculosempresa.placa,
@@ -102,10 +102,10 @@ export class CreateVehiculoUseCase {
       vehiculosempresa.estadovehiculo,
     ])
       .from(vehiculosempresa())
-      .where(condicional.length <= 4 ? undefined : condicional)
+      .where(condicional.trim().length <= 2 ? undefined : condicional)
       .OFFSET((query.page - 1) * 10)
       .LIMIT(10)
-      .execute();
+      .execute(true);
 
     const [cantidadVehiculo] = (await DB.Select([
       COUNT(vehiculosempresa.idvehempresa, "cantidad"),
