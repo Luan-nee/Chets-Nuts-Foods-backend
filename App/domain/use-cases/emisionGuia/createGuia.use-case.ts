@@ -270,6 +270,7 @@ export class CreateGuiaUseCase {
     paqueteData: paqueteValidate,
     dtoGuia: CreateGuiaRemisionDto,
     idpaquete: number,
+    numeroTransporte?: number,
   ) {
     const { guiasremision } = generateTables();
 
@@ -308,6 +309,7 @@ export class CreateGuiaUseCase {
       items,
       salidaTransporte: salidatransporte,
       vehiculo: vehiculo,
+      numeroGuia: numeroTransporte,
     });
 
     if (!response.response.success || !response.response.payload) {
@@ -360,6 +362,7 @@ export class CreateGuiaUseCase {
       responseValidate,
       dtoGuia,
       idpaquete,
+      dtoGuia.codigoTransporte,
     );
     return guia;
   }

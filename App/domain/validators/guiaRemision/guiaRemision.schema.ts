@@ -13,5 +13,6 @@ export const guiaRemisionSchema = {
   idDataEmpresa: z.coerce.number().optional(),
   codigoTransporte: z.coerce
     .number({ error: "El codigo Transporte solo puede ser un numero" })
+    .max(11, { error: "Solo esta permitido hasta el codigo 10" })
     .optional(),
 };
