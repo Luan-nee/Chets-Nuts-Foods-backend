@@ -21,6 +21,7 @@ interface getDatosGR {
   dataEmpresa: datosEmpresaType;
   vehiculo: vehiculoTypeGR;
   dtoGuia: CreateGuiaRemisionDto;
+  numeroGuia?: number;
 }
 
 export default class ConnectionGR {
@@ -49,6 +50,7 @@ export default class ConnectionGR {
     salidaTransporte,
     vehiculo,
     dtoGuia,
+    numeroGuia,
   }: getDatosGR) {
     const conductores: conductoresTypeClass[] = [
       {
@@ -95,6 +97,8 @@ export default class ConnectionGR {
       salidaTransporte.fechacreado.getSeconds(),
     ).padStart(2, "0");
 
+    const numeroGuiaD = numeroGuia === undefined ? "T001" : `T00${numeroGuia}`;
+
     const datos: GuiaRemisionDTO = {
       documento: "guia_remision_remitente",
       motivo_de_traslado: dtoGuia.motivoTraslado || "01",
@@ -127,7 +131,7 @@ export default class ConnectionGR {
       punto_de_partida_direccion:
         establecimientos.establecimientoOrigen.direccion,
       punto_de_partida_ubigeo: establecimientos.establecimientoOrigen.ubigeo,
-      serie: "T003",
+      serie: numeroGuiaD,
       observaciones: "Servicio de traslado de productos",
       conductores,
       items: items.productos,

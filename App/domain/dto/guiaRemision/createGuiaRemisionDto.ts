@@ -6,17 +6,20 @@ export class CreateGuiaRemisionDto {
   public docDestinatario?: "DNI" | "RUC";
   public modalidadTransporte?: "01" | "02";
   public idDataEmpresa?: number;
+  public codigoTransporte?: number;
 
   private constructor({
     modalidadTransporte,
     motivoTraslado,
     docDestinatario,
     idDataEmpresa,
+    codigoTransporte,
   }: CreateGuiaRemisionDto) {
     this.docDestinatario = docDestinatario;
     this.modalidadTransporte = modalidadTransporte;
     this.motivoTraslado = motivoTraslado;
     this.idDataEmpresa = idDataEmpresa;
+    this.codigoTransporte = codigoTransporte;
   }
 
   static create(input: any): [string?, CreateGuiaRemisionDto?] {

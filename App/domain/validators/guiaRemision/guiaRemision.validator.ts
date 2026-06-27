@@ -6,6 +6,7 @@ const createGuiaRemision = z.object({
   docDestinatario: guiaRemisionSchema.docDestinatario.optional(),
   modalidadTransporte: guiaRemisionSchema.modalidadTransporte.optional(),
   idDataEmpresa: guiaRemisionSchema.idDataEmpresa,
+  codigoTransporte: guiaRemisionSchema.codigoTransporte,
 });
 
 const updateGuiaRemision = z.object({

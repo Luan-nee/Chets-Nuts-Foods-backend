@@ -11,4 +11,7 @@ export const guiaRemisionSchema = {
     error: "modalidadTransporte solo puede ser 01 o 02",
   }),
   idDataEmpresa: z.coerce.number().optional(),
+  codigoTransporte: z.coerce
+    .number({ error: "El codigo Transporte solo puede ser un numero" })
+    .optional(),
 };
