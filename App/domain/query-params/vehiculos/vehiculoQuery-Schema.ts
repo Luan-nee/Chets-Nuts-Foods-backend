@@ -3,7 +3,11 @@ import { queryBaseSchema } from "../query-Schema.js";
 import { Validator } from "../../validators/validators.js";
 
 const vehiculoQuerySchema = {
-  estado: z.enum(["OPERATIVO", "INACTIVO", "RESERVADO", "OCUPADO"]).optional(),
+  estado: z
+    .enum(["OPERATIVO", "INACTIVO", "RESERVADO"], {
+      error: "Solo esta permitido OPERATIVO INACTIVO Y RESERVADO",
+    })
+    .optional(),
   tipo: z.enum(["PUBLICO", "PRIVADO"]).optional(),
   placa: z
     .string()
