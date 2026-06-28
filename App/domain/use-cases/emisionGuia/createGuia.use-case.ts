@@ -348,8 +348,8 @@ export class CreateGuiaUseCase {
 
     return {
       idGuia,
-      pdf: "https://sandbox.apisunat.pe/dispatch/pdf/a4/537/MHBjPXqK7Q/10752761278-09-T002-1",
-    }; //response.response.payload.pdf.a4
+      pdf: response.response.payload?.pdf.a4, //"https://sandbox.apisunat.pe/dispatch/pdf/a4/537/MHBjPXqK7Q/10752761278-09-T002-1",
+    };
   }
 
   async execute(idpaquete: number, dtoGuia: CreateGuiaRemisionDto) {
