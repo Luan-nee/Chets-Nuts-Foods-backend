@@ -72,7 +72,7 @@ export class DatosEmpresaUseCase {
     }
 
     if (dataEmpresa.tipo !== undefined) {
-      campos.push(datosempresa.tipo);
+      campos.push(datosempresa.tipoestadoempresa);
       querys.push(dataEmpresa.tipo);
     }
 
