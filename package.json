@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "tsx watch ./App/index.ts",
         "build": "tsc",
-        "start": "node dist/index.js",
+        "start": "node ./dist/App/index.js",
         "BD:create": "node --loader ts-node/esm App/commands/createTableSql.ts",
         "BD:delete": "node --loader ts-node/esm App/commands/deleteTables.ts",
         "BD:defect": "node --loader ts-node/esm App/commands/defectDataSql.ts",
