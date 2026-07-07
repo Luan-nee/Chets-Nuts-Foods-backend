@@ -66,7 +66,7 @@ export class CreatePaqueteUseCase {
       .where(ORQ(usuarios.iduser, idusuario, idusuarioDestino))
       .execute();
 
-    if (usuariosValidate.length !== 2) {
+    if (usuariosValidate.length > 2) {
       throw CustomError.badRequest("El usuario Destino no existe");
     }
 
