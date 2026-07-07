@@ -130,7 +130,7 @@ export class CreateGuiaUseCase {
   ): Promise<setUsersGui> {
     const { usuarios } = generateTables();
 
-    const usuariosPackage = await DB.Select([
+    const campos = [
       usuarios.nombres,
       usuarios.apellidomaterno,
       usuarios.apellidopaterno,
@@ -138,14 +138,21 @@ export class CreateGuiaUseCase {
       usuarios.rucuser,
       usuarios.numero,
       usuarios.correo,
-    ])
+    ];
+
+    const [user1] = await DB.Select(campos)
       .from(usuarios())
-      .where(ORQ(usuarios.iduser, idUserOrigen, idUserDestino))
+      .where(eq(usuarios.iduser, idUserOrigen))
+      .execute();
+
+    const [user2] = await DB.Select(campos)
+      .from(usuarios())
+      .where(eq(usuarios.iduser, idUserDestino))
       .execute();
 
     const valores = {
-      userOrigen: { ...usuariosPackage[0] },
-      userDestino: { ...usuariosPackage[1] },
+      userOrigen: { ...user1 },
+      userDestino: { ...user2 },
     };
 
     return valores;
