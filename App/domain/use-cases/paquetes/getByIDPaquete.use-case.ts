@@ -79,7 +79,7 @@ export async function getpaqueteId(idPaquete: number) {
     )
     .execute()) as usuariosResponse[];
 
-  if (usuariosResponse.length !== 2) {
+  if (usuariosResponse.length > 2) {
     throw CustomError.badRequest("Este usuario no existe");
   }
   let establecimientoData: establecimientoResponse | undefined = undefined;
