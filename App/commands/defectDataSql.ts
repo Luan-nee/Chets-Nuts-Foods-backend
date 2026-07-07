@@ -19,67 +19,11 @@ async function generarTablas() {
     sexo: "MASCULINO",
   });
 
-  const id3 = await InsertUser({
-    nombre: "LUAN DEL SOL",
-    apellidomaterno: "HUILLCA",
-    apellidopaterno: "SANCHEZ",
-    dni: "75276128",
-    edad: 23,
-    sexo: "MASCULINO",
-    numeroLicenciaConducir: "111-GR3",
-  });
-
   const idAcceso1 = await CreateAccesos({
     correo: "correoprueba@gmail.com",
     password: "ybanacceso",
     tipos: "ADMIN",
     idusuario: idR,
-  });
-
-  const idAcceso2 = await CreateAccesos({
-    correo: "luandelsol@gmail.com",
-    password: "luan123",
-    tipos: "COLABORADOR",
-    idusuario: id3,
-  });
-
-  const idAcceso3 = await CreateAccesos({
-    correo: "luandelsol2@gmail.com",
-    password: "chofer123",
-    tipos: "CHOFER",
-    idusuario: id3,
-  });
-
-  const carro1 = await createVehiculoEmpresa({
-    anio: "2012",
-    capacidadCarga: 20,
-    marca: "TOYOTA",
-    modelo: "EX1",
-    placa: "BBC-1TO",
-    tipoVehiculo: "4*4",
-  });
-
-  const carro2 = await createVehiculoEmpresa({
-    anio: "2017",
-    capacidadCarga: 980,
-    marca: "KOSS",
-    modelo: "EX1",
-    placa: "BBC-1TU",
-    tipoVehiculo: "ban",
-  });
-
-  const establecimiento1 = await CreateEstablecimiento({
-    departamento: "MADRE DE DIOS",
-    descripcion: "Establecimiento de prueba",
-    direccion: "av. madre de dios con fiscarrald",
-    distrito: "TAMBOPATA",
-    provincia: "TAMBOPATA",
-    idResponsable: idR,
-    latitud: "111500",
-    longitud: "1200",
-    nombreEstablecimiento: "Prueba 1",
-    tipoEstado: "oficina",
-    ubigeo: "170101",
   });
 }
 

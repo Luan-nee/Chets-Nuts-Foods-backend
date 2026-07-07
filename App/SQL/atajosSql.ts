@@ -7,6 +7,8 @@ import { CreateCarroDto } from "../domain/dto/autosEmpresa/createCarro.dto.js";
 import { CreateEstablecimientoDto } from "../domain/dto/establecimientos/createEstablecimiento.dto.js";
 import { ZynovaConnect } from "../connection/zynovaConnect.js";
 import { UpdateParam } from "../consts.js";
+import { datosEmpresaType } from "../domain/use-cases/emisionGuia/guiaTypes.js";
+import { CreateDatosEmpresaDto } from "../domain/dto/datosEmpresa/createDatosEmpresaDto.js";
 
 interface insertarUser {
   iduser: number;
@@ -309,5 +311,54 @@ export async function CreateEstablecimiento({
       "Ocurrio un Error al momento de registrar el Establecimiento",
     );
   }
+  return id;
+}
+
+export async function CreateDatosEmpresa({
+  codigoMtc,
+  claveAcceso,
+  correo,
+  denominacion,
+  numeroRegistroMtc,
+  ruc,
+  tipo,
+  urlApi,
+  fechaVigenciaRegistroMtc,
+}: CreateDatosEmpresaDto) {
+  const { datosempresa } = generateTables();
+
+  if (
+    claveAcceso === undefined ||
+    !tipo ||
+    !fechaVigenciaRegistroMtc ||
+    !urlApi
+  ) {
+    return;
+  }
+
+  const id = await DB.Insert(datosempresa(), [
+    datosempresa.codigoMtc,
+    datosempresa.claveAcceso,
+    datosempresa.correo,
+    datosempresa.denominacion,
+    datosempresa.numeroRegistroMtc,
+    datosempresa.ruc,
+    datosempresa.tipoestadoempresa,
+    datosempresa.urlApi,
+    datosempresa.fechavigenciaregistro,
+  ])
+    .Values([
+      codigoMtc,
+      claveAcceso,
+      correo,
+      denominacion,
+      numeroRegistroMtc,
+      ruc,
+      tipo,
+      urlApi,
+      fechaVigenciaRegistroMtc.toISOString(),
+    ])
+    .Returning(datosempresa.idDatosEmpresa)
+    .execute();
   return id;
 }
