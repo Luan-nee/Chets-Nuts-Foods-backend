@@ -148,8 +148,16 @@ export default class ConnectionGR {
         },
       ],
     };
-    console.log(datos);
+    //console.log(datos);
     const response = await this.consulta(dataEmpresa, datos);
+    /*
+    const response = {
+      response: {
+        success: true,
+        payload: { xml: "", pdf: { a4: "" } },
+        message: "",
+      },
+    };*/
     return { response, datos };
   }
 }

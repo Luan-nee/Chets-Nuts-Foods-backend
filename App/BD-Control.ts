@@ -171,6 +171,7 @@ export function generateTables() {
         .Check(["OPERATIVO", "INACTIVO", "RESERVADO"])
         .Default("OPERATIVO")
         .$(),
+      fechavencimiento: timestamp().$(),
       fechacreado: timestamp().now().$(),
     }),
     productsdefect: defineTable("productsdefect", {

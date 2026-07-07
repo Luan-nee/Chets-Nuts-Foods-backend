@@ -307,6 +307,7 @@ export class CreateGuiaUseCase {
     //motivo de traslado tiene que ser opcional para editarlo en la input
     //destinatario tipo de documento, 01 dni 06  ruc
     //si destinatario documento es ruc , se le pedira los datos de la empresa como tambien el ruc
+
     const response = await ConnectionGR.fastConsulta({
       usuarios,
       choferes: chofer,
@@ -328,6 +329,7 @@ export class CreateGuiaUseCase {
     if (ultimo === undefined) {
       throw CustomError.badRequest(response.response.message);
     }
+
     const idGuia = await DB.Insert(guiasremision(), [
       guiasremision.idpaquete,
       guiasremision.tipogeneration,
