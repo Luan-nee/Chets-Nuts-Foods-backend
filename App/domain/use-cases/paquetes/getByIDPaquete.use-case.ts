@@ -61,27 +61,33 @@ export async function getpaqueteId(idPaquete: number) {
     .where(eq(productos.idenvio, idPaquete))
     .execute()) as { pesoTotal: number; cantidad: number }[];
 
-  const usuariosResponse = (await DB.Select([
+  const camposUsers = [
     usuarios.nombres,
     usuarios.apellidomaterno,
     usuarios.apellidopaterno,
     usuarios.dniuser,
     usuarios.numero,
     usuarios.correo,
-  ])
+  ];
+
+  const [user1] = (await DB.Select(camposUsers)
     .from(usuarios())
-    .where(
-      ORQ(
-        usuarios.iduser,
-        datosPaquete.idusuario,
-        datosPaquete.idusuarioDestino,
-      ),
-    )
+    .where(eq(usuarios.iduser, datosPaquete.idusuario))
     .execute()) as usuariosResponse[];
 
-  if (usuariosResponse.length > 2) {
-    throw CustomError.badRequest("Este usuario no existe");
+  const [user2] = (await DB.Select(camposUsers)
+    .from(usuarios())
+    .where(eq(usuarios.iduser, datosPaquete.idusuarioDestino))
+    .execute()) as usuariosResponse[];
+
+  if (!user1) {
+    throw CustomError.badRequest("El usuario emisor no existe");
   }
+
+  if (!user2) {
+    throw CustomError.badRequest("El usuario receptor no existe");
+  }
+
   let establecimientoData: establecimientoResponse | undefined = undefined;
   if (
     datosPaquete.idDestinoEstablecimiento !== undefined &&
@@ -97,8 +103,6 @@ export async function getpaqueteId(idPaquete: number) {
       .where(eq(establecimientos.idEst, datosPaquete.idDestinoEstablecimiento))
       .execute()) as establecimientoResponse[];
   }
-
-  const [user1, user2] = usuariosResponse;
 
   return {
     pesoTotalProductos: Number(logist.pesoTotal),
