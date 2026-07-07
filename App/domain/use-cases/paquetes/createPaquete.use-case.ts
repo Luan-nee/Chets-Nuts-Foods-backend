@@ -61,7 +61,6 @@ export class CreatePaqueteUseCase {
 
   async validateUsuarios(idusuario: number, idusuarioDestino: number) {
     const { usuarios } = generateTables();
-
     const usuariosValidate = await DB.Select([usuarios.iduser])
       .from(usuarios())
       .where(ORQ(usuarios.iduser, idusuario, idusuarioDestino))
@@ -78,8 +77,11 @@ export class CreatePaqueteUseCase {
   }
 
   async execute(paqueteDto: CreatePaqueteDto) {
-    this.validateSalidaTransporte(paqueteDto.idSalidaTransporte);
-    this.validateUsuarios(paqueteDto.idUsuario, paqueteDto.idUsuarioDestino);
+    await this.validateSalidaTransporte(paqueteDto.idSalidaTransporte);
+    await this.validateUsuarios(
+      paqueteDto.idUsuario,
+      paqueteDto.idUsuarioDestino,
+    );
     const { paquetes } = generateTables();
 
     const condicional =
