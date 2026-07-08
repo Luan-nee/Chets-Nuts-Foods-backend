@@ -5,6 +5,8 @@ import { CustomError } from "../../../core/res/Custom.error.js";
 import { InsertUser } from "../../../SQL/atajosSql.js";
 import { UpdateUsuarioDto } from "../../dto/usuarios/UpdateUsuario.dto.js";
 import { UpdateParam } from "../../../consts.js";
+import ConnectionGR from "../../../connection/connectionGR.js";
+import { datosEmpresaType } from "../emisionGuia/guiaTypes.js";
 
 interface validateUserDuplicate {
   iduser: number;
@@ -244,6 +246,7 @@ export class UsuariosUseCase {
     const { usuarios } = generateTables();
 
     const usuariosResponse = await DB.Select([
+      usuarios.iduser,
       usuarios.nombres,
       usuarios.apellidopaterno,
       usuarios.apellidomaterno,

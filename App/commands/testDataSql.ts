@@ -1,4 +1,5 @@
 import { initBD } from "../../database/conexion.js";
+import { envs } from "../core/config/envs.js";
 import {
   CreateAccesos,
   CreateDatosEmpresa,
@@ -10,14 +11,15 @@ import {
 initBD();
 
 async function generateDataDefect() {
+  const { APIPASS } = envs;
   const dataEmpresa = await CreateDatosEmpresa({
     ruc: "10752761278",
     denominacion: "SAA de transporte Z",
     numeroRegistroMtc: "123456789",
     correo: "zviamontevilca@gmail.com",
     codigoMtc: "12345678",
-    urlApi: "apiSunat", //campo no obligatorios
-    claveAcceso: "", //campo no obligatorio , solo cuando quieres emitir factura
+    urlApi: "https://sandbox.apisunat.pe/api/v3/dispatches", //campo no obligatorios
+    claveAcceso: APIPASS, //campo no obligatorio , solo cuando quieres emitir factura
     tipo: "TEST",
     fechaVigenciaRegistroMtc: new Date("2027-12-12"),
   });

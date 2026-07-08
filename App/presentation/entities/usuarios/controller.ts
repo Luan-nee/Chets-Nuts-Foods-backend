@@ -4,6 +4,7 @@ import { UsuarioDto } from "../../../domain/dto/usuarios/usuario.dto.js";
 import { UsuariosUseCase } from "../../../domain/use-cases/usuarios/Usuarios.use-case.js";
 import { emitSocket } from "../../../controllerSockets/globalSocket.js";
 import { UpdateUsuarioDto } from "../../../domain/dto/usuarios/UpdateUsuario.dto.js";
+import { UsuariosDefectUseCase } from "../../../domain/use-cases/usuarios/usuariosDefect.use-case.js";
 
 export class UsuariosController {
   create = (req: Request, res: Response) => {
@@ -107,6 +108,52 @@ export class UsuariosController {
         CustomResponse.badRequest({ res, error });
       });
   };
+
+  getByDniDefect = (req: Request, res: Response) => {
+    if (req.authpayload === undefined) {
+      CustomResponse.badRequest({ res, error: "NO TIENES PERMISOS" });
+      return;
+    }
+    const [error, dni] = UsuarioDto.validDniUserDto(req.body);
+    if (error !== undefined || dni === undefined) {
+      CustomResponse.badRequest({ res, error });
+      return;
+    }
+    const usercase = new UsuariosDefectUseCase();
+
+    usercase
+      .getusuarioDNI(dni)
+      .then((data) => {
+        CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
+      });
+  };
+
+  getByRucDefect = (req: Request, res: Response) => {
+    if (req.authpayload === undefined) {
+      CustomResponse.badRequest({ res, error: "NO TIENES PERMISOS" });
+      return;
+    }
+
+    const [error, ruc] = UsuarioDto.validRucUserDto(req.body);
+    if (error !== undefined || ruc === undefined) {
+      CustomResponse.badRequest({ res, error });
+      return;
+    }
+    const usercase = new UsuariosDefectUseCase();
+
+    usercase
+      .getusuarioRUC(ruc)
+      .then((data) => {
+        CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
+      });
+  };
+
   getByRuc = (req: Request, res: Response) => {
     if (req.authpayload === undefined) {
       CustomResponse.badRequest({ res, error: "NO TIENES PERMISOS" });

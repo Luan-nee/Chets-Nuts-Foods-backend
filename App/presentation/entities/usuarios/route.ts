@@ -15,7 +15,9 @@ export class UsuariosRouter {
 
     router.patch("/", adminAccess, usuarios.update);
     router.post("/dni", usuarios.getByDni);
+    router.post("/dni/dev", usuarios.getByDniDefect);
     router.post("/ruc", usuarios.getByRuc);
+    router.post("/ruc/dev", usuarios.getByRucDefect);
     return router;
   }
 }

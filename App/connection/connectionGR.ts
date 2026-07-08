@@ -8,9 +8,10 @@ import {
   setUsersGui,
   vehiculoTypeGR,
 } from "../domain/use-cases/emisionGuia/guiaTypes.js";
-import { ResponseSunat } from "../types/global.js";
+import { ResponseSunat, ResponseSunatDni } from "../types/global.js";
 import { GuiaRemisionDTO } from "../domain/dto/APIS/guiaRemision.js";
 import { CreateGuiaRemisionDto } from "../domain/dto/guiaRemision/createGuiaRemisionDto.js";
+import { envs } from "../core/config/envs.js";
 
 interface getDatosGR {
   usuarios: setUsersGui;
@@ -40,6 +41,51 @@ export default class ConnectionGR {
     const response = (await data.json()) as ResponseSunat;
     return response;
   }
+  /*
+
+{
+  success: true,
+  message: 'Datos procesados correctamente',
+  payload: {
+    dni: '75276126',
+    nombres: 'JHOMAR NOE',
+    apellido_paterno: 'PAMPA',
+    apellido_materno: 'CAPQUEQUI'
+  }
+}
+ */
+  static async getRuc(ruc: string, datoEmpresa: datosEmpresaType) {
+    const { APISUNAT } = envs;
+    const data = await fetch(`${APISUNAT}/api/v1/business/ruc/${ruc}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${datoEmpresa.claveAcceso}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const response = (await data.json()) as ResponseSunatDni;
+    return response;
+  }
+
+  static async getdni(dni: string, datoEmpresa: datosEmpresaType) {
+    const { APISUNAT } = envs;
+    const ruta = `${APISUNAT}/api/v1/person/dni/${dni}`;
+    console.log(ruta);
+    const data = await fetch(ruta, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${datoEmpresa.claveAcceso}`,
+        "Content-Type": "application/json",
+      },
+    });
+    const response = (await data.json()) as ResponseSunatDni;
+    return response;
+  }
+
+  /*
+ (GET) /api/v1/person/dni/{DNI}
+ (GET) /api/v1/business/ruc/{RUC}
+*/
 
   static async fastConsulta({
     usuarios,
