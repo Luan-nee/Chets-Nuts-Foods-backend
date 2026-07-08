@@ -356,7 +356,7 @@ export async function CreateDatosEmpresa({
       ruc,
       tipo,
       urlApi,
-      fechaVigenciaRegistroMtc.toISOString(),
+      fechaVigenciaRegistroMtc.toISOString().split("T")[0],
     ])
     .Returning(datosempresa.idDatosEmpresa)
     .execute();
