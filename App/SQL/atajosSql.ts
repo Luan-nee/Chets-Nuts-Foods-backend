@@ -362,3 +362,18 @@ export async function CreateDatosEmpresa({
     .execute();
   return id;
 }
+
+export async function CreateProductosDefecto(
+  nombre: string,
+  descripcion: string,
+) {
+  const { productsdefect } = generateTables();
+
+  await DB.Insert(productsdefect(), [
+    productsdefect.creatoracceso,
+    productsdefect.nombre,
+    productsdefect.descripcion,
+  ])
+    .Values([1, nombre, descripcion])
+    .execute();
+}

@@ -4,6 +4,7 @@ import {
   CreateAccesos,
   CreateDatosEmpresa,
   CreateEstablecimiento,
+  CreateProductosDefecto,
   createVehiculoEmpresa,
   InsertUser,
 } from "../SQL/atajosSql.js";
@@ -174,6 +175,81 @@ async function generateDataDefect() {
     tipoEstado: "oficina",
     ubigeo: "170101",
   });
+
+  await CreateProductosDefecto("castaña", "Producto de castaña");
+  await CreateProductosDefecto("nuez", "Producto de nuez");
+  await CreateProductosDefecto("almendra", "Producto de almendra");
+  await CreateProductosDefecto("maní", "Producto de maní");
+  await CreateProductosDefecto("pistacho", "Producto de pistacho");
+  await CreateProductosDefecto("avellana", "Producto de avellana");
+  await CreateProductosDefecto("pecana", "Producto de pecana");
+  await CreateProductosDefecto("macadamia", "Producto de macadamia");
+  await CreateProductosDefecto("pasa", "Producto de pasa");
+  await CreateProductosDefecto(
+    "arándano deshidratado",
+    "Producto de arándano deshidratado",
+  );
+  await CreateProductosDefecto("uva pasa", "Producto de uva pasa");
+  await CreateProductosDefecto("higo seco", "Producto de higo seco");
+  await CreateProductosDefecto("ciruela seca", "Producto de ciruela seca");
+  await CreateProductosDefecto(
+    "orejón de durazno",
+    "Producto de orejón de durazno",
+  );
+  await CreateProductosDefecto(
+    "orejón de manzana",
+    "Producto de orejón de manzana",
+  );
+  await CreateProductosDefecto("coco rallado", "Producto de coco rallado");
+  await CreateProductosDefecto("quinua", "Producto de quinua");
+  await CreateProductosDefecto("kiwicha", "Producto de kiwicha");
+  await CreateProductosDefecto("cañihua", "Producto de cañihua");
+  await CreateProductosDefecto("chía", "Producto de chía");
+  await CreateProductosDefecto("linaza", "Producto de linaza");
+  await CreateProductosDefecto("ajonjolí", "Producto de ajonjolí");
+  await CreateProductosDefecto("cacao en grano", "Producto de cacao en grano");
+  await CreateProductosDefecto("cacao en polvo", "Producto de cacao en polvo");
+  await CreateProductosDefecto(
+    "chocolate bitter",
+    "Producto de chocolate bitter",
+  );
+  await CreateProductosDefecto(
+    "chocolate con leche",
+    "Producto de chocolate con leche",
+  );
+  await CreateProductosDefecto("miel de abeja", "Producto de miel de abeja");
+  await CreateProductosDefecto("panela", "Producto de panela");
+  await CreateProductosDefecto("azúcar rubia", "Producto de azúcar rubia");
+  await CreateProductosDefecto("café tostado", "Producto de café tostado");
+  await CreateProductosDefecto("café molido", "Producto de café molido");
+  await CreateProductosDefecto("té verde", "Producto de té verde");
+  await CreateProductosDefecto("té negro", "Producto de té negro");
+  await CreateProductosDefecto(
+    "infusión de manzanilla",
+    "Producto de infusión de manzanilla",
+  );
+  await CreateProductosDefecto("orégano seco", "Producto de orégano seco");
+  await CreateProductosDefecto("romero seco", "Producto de romero seco");
+  await CreateProductosDefecto("tomillo seco", "Producto de tomillo seco");
+  await CreateProductosDefecto("pimienta negra", "Producto de pimienta negra");
+  await CreateProductosDefecto("canela en rama", "Producto de canela en rama");
+  await CreateProductosDefecto("clavo de olor", "Producto de clavo de olor");
+  await CreateProductosDefecto("comino", "Producto de comino");
+  await CreateProductosDefecto(
+    "palomitas de maíz",
+    "Producto de palomitas de maíz",
+  );
+  await CreateProductosDefecto("maíz morado", "Producto de maíz morado");
+  await CreateProductosDefecto("maíz chulpe", "Producto de maíz chulpe");
+  await CreateProductosDefecto("garbanzo", "Producto de garbanzo");
+  await CreateProductosDefecto("lenteja", "Producto de lenteja");
+  await CreateProductosDefecto("frejol canario", "Producto de frejol canario");
+  await CreateProductosDefecto("frejol negro", "Producto de frejol negro");
+  await CreateProductosDefecto("arroz integral", "Producto de arroz integral");
+  await CreateProductosDefecto(
+    "avena en hojuelas",
+    "Producto de avena en hojuelas",
+  );
 }
 
 await generateDataDefect()
