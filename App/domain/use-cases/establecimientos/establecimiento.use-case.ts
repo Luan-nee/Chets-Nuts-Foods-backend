@@ -39,8 +39,9 @@ export class EstablecimientosUseCase {
       .LIMIT(1)
       .execute(true);
 
+    console.log(response);
     if (response.length === 0) {
-      throw CustomError.badRequest("Error al crear el establecimiento");
+      throw CustomError.badRequest("Error al obtener el establecimiento");
     }
 
     return response;

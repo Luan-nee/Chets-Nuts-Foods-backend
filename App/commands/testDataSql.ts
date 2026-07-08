@@ -88,6 +88,19 @@ async function generateDataDefect() {
     idusuario: id3,
   });
 
+  const idAcceso5 = await CreateAccesos({
+    correo: "luisvalga1973@gmail.com",
+    password: "user123",
+    tipos: "COLABORADOR",
+    idusuario: id7,
+  });
+
+  const idAcceso6 = await CreateAccesos({
+    correo: "mullunicruziyumi@gmail.com",
+    password: "user123",
+    tipos: "COLABORADOR",
+    idusuario: id6,
+  });
   const idAcceso3 = await CreateAccesos({
     correo: "23121018@unamad.edu.pe",
     password: "chofer123",
@@ -126,7 +139,7 @@ async function generateDataDefect() {
     direccion: "av. madre de dios con fiscarrald",
     distrito: "TAMBOPATA",
     provincia: "TAMBOPATA",
-    idResponsable: id4,
+    idResponsable: id3,
     latitud: "111500",
     longitud: "1200",
     nombreEstablecimiento: "Prueba 1",
@@ -154,7 +167,7 @@ async function generateDataDefect() {
     direccion: "av. Ernesto rivero",
     distrito: "TAMBOPATA",
     provincia: "TAMBOPATA",
-    idResponsable: id4,
+    idResponsable: id5,
     latitud: "111500",
     longitud: "1200",
     nombreEstablecimiento: "Prueba 3",
