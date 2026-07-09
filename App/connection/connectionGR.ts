@@ -200,7 +200,12 @@ export default class ConnectionGR {
     const response = {
       response: {
         success: true,
-        payload: { xml: "", pdf: { a4: "" } },
+        payload: {
+          xml: "",
+          pdf: { a4: "" },
+          hash: "ssssss",
+          estado: "ACEPTADO",
+        },
         message: "",
       },
     };*/

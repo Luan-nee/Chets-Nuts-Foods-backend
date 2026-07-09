@@ -5,7 +5,6 @@ import SocketControl from "./socketsControl.js";
 import { initBD } from "../database/conexion.js";
 import cron from "node-cron";
 import { startTasks, tareasPendientes } from "./tasks/taskAlertas.js";
-import { schedulerTask } from "./consts.js";
 
 initBD();
 const server = http.createServer(APP);
