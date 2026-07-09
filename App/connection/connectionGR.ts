@@ -22,6 +22,7 @@ interface getDatosGR {
   dataEmpresa: datosEmpresaType;
   vehiculo: vehiculoTypeGR;
   dtoGuia: CreateGuiaRemisionDto;
+  idpaquete: number;
   numeroGuia?: number;
 }
 
@@ -97,6 +98,7 @@ export default class ConnectionGR {
     vehiculo,
     dtoGuia,
     numeroGuia,
+    idpaquete,
   }: getDatosGR) {
     const conductores: conductoresTypeClass[] = [
       {
@@ -160,7 +162,7 @@ export default class ConnectionGR {
       fecha_inicio_de_traslado: salidaTransporte.fechasalida
         .toISOString()
         .split("T")[0],
-      numero: "1",
+      numero: idpaquete.toString(),
       fecha_entrega_transportista: salidaTransporte.fechacreado
         .toISOString()
         .split("T")[0],

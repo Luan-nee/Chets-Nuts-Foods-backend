@@ -38,6 +38,7 @@ export class UsuariosDefectUseCase {
 
     return response;
   }
+
   async getusuarioDNI(dni: string) {
     const datosEmpresa = await this.getDatosEmpresa();
     const user = await ConnectionGR.getdni(dni, datosEmpresa);
@@ -52,6 +53,7 @@ export class UsuariosDefectUseCase {
 
   async getusuarioRUC(ruc: string) {
     const datosEmpresa = await this.getDatosEmpresa();
+
     const user = await ConnectionGR.getRuc(ruc, datosEmpresa);
     if (!user.success) {
       throw CustomError.badRequest(
