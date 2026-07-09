@@ -32,9 +32,10 @@ export class PaquetesController {
       .execute(paqueteDto)
       .then(({ data, sala }) => {
         emitSocket(req, "createpaquete", data);
+
         CustomResponse.success({
           res,
-          data: { sala },
+          data: { sala, idPaquete: data.paquete.idpaquete },
           message: "Paquete generado con exito",
         });
       })

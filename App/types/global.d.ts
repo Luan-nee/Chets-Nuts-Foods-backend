@@ -224,15 +224,19 @@ export interface ResponseSunat {
   };
 }
 
+export interface ResponserUserSunat {
+  dni: string;
+  nombres: string;
+  apellido_paterno: string;
+  apellido_materno: string;
+  edad?: number;
+  telefono?: string;
+}
+
 export interface ResponseSunatDni {
   success: boolean;
   message: string;
-  payload: {
-    dni: string;
-    nombres: string;
-    apellido_paterno: string;
-    apellido_materno: string;
-  };
+  payload: ResponserUserSunat;
 }
 
 export type DataEmpresaTipo = "TEST" | "PROD";

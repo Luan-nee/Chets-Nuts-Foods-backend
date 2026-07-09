@@ -3,6 +3,16 @@ import ConnectionGR from "../../../connection/connectionGR.js";
 import { datosEmpresaType } from "../emisionGuia/guiaTypes.js";
 import { generateTables } from "../../../BD-Control.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
+import { ResponserUserSunat, ResponseSunatDni } from "../../../types/global.js";
+
+interface userReturn {
+  nombres: string;
+  apellidomaterno: string;
+  apellidopaterno: string;
+  edad: number;
+  dniuser: string;
+  numero: string;
+}
 
 export class UsuariosDefectUseCase {
   private async getDatosEmpresa(
@@ -39,8 +49,44 @@ export class UsuariosDefectUseCase {
     return response;
   }
 
-  async getusuarioDNI(dni: string) {
+  private async getUserLocal(dni: string) {
+    const { usuarios } = generateTables();
+
+    const [user] = (await DB.Select([
+      usuarios.nombres,
+      usuarios.apellidomaterno,
+      usuarios.apellidopaterno,
+      usuarios.edad,
+      usuarios.dniuser,
+      usuarios.numero,
+    ])
+      .from(usuarios())
+      .where(eq(usuarios.dniuser, dni))
+      .execute()) as userReturn[];
+
+    if (!user) {
+      return null;
+    }
+
+    return {
+      apellido_materno: user.apellidomaterno,
+      apellido_paterno: user.apellidopaterno,
+      dni: user.dniuser,
+      nombres: user.nombres,
+      edad: user.edad,
+      telefono: user.numero,
+    } as ResponserUserSunat;
+  }
+
+  async getusuarioDNI(dni: string): Promise<ResponserUserSunat> {
     const datosEmpresa = await this.getDatosEmpresa();
+
+    const user0 = await this.getUserLocal(dni);
+
+    if (user0 !== null) {
+      return user0;
+    }
+
     const user = await ConnectionGR.getdni(dni, datosEmpresa);
     if (!user.success) {
       throw CustomError.badRequest(
@@ -53,7 +99,6 @@ export class UsuariosDefectUseCase {
 
   async getusuarioRUC(ruc: string) {
     const datosEmpresa = await this.getDatosEmpresa();
-
     const user = await ConnectionGR.getRuc(ruc, datosEmpresa);
     if (!user.success) {
       throw CustomError.badRequest(

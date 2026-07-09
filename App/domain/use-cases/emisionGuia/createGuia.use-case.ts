@@ -354,10 +354,12 @@ export class CreateGuiaUseCase {
       .Returning(guiasremision.idguia)
       .execute();
 
-    console.log(idGuia);
+    if (idGuia === undefined) {
+      throw CustomError.badRequest("Ocurrio un error al generar la guia");
+    }
 
     return {
-      idGuia,
+      ...idGuia,
       pdf: response.response.payload?.pdf.a4, //"https://sandbox.apisunat.pe/dispatch/pdf/a4/537/MHBjPXqK7Q/10752761278-09-T002-1",
     };
   }
