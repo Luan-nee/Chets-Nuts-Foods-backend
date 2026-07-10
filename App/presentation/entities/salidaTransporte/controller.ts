@@ -33,7 +33,10 @@ export class SalidaTransporteController {
         await emitSocket(req, "newSalidaTransporte", data);
         CustomResponse.success({
           res,
-          data: `salida transporte ${data.salidaTransporte.idsalidatransporte} creado con exito.`,
+          data: {
+            idSalidaTransporte: data.salidaTransporte.idsalidatransporte,
+          },
+          message: `salida transporte ${data.salidaTransporte.idsalidatransporte} creado con exito.`,
         });
       })
       .catch((error) => {
