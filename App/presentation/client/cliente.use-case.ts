@@ -18,6 +18,7 @@ export class ClientUseCase {
       usuarios.apellidomaterno,
       usuarios.dniuser,
       usuarios.rucuser,
+      usuarios.numero,
     ])
       .from(usuarios())
       .where(ORQD(usuarios.iduser, ids))
@@ -166,17 +167,10 @@ export class ClientUseCase {
       seguimientopaquetes.direccion,
       seguimientopaquetes.titulo,
       seguimientopaquetes.comentario,
-      paquetes.cantidadproduct,
+      seguimientopaquetes.fecharegistro,
+      seguimientopaquetes.idseg,
     ])
       .from(paquetes())
-      .innerJOIN(
-        seguimientopaquetes(),
-        eq(
-          paquetes.idsalidatransporte,
-          seguimientopaquetes.idsalidatransporte,
-          false,
-        ),
-      )
       .where(eq(paquetes.idenvio, idpaquete))
       .execute();
 
