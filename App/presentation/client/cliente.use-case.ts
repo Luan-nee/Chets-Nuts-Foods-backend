@@ -169,8 +169,17 @@ export class ClientUseCase {
       seguimientopaquetes.comentario,
       seguimientopaquetes.fecharegistro,
       seguimientopaquetes.idseg,
+      paquetes.cantidadproduct,
     ])
       .from(paquetes())
+      .innerJOIN(
+        seguimientopaquetes(),
+        eq(
+          paquetes.idsalidatransporte,
+          seguimientopaquetes.idsalidatransporte,
+          false,
+        ),
+      )
       .where(eq(paquetes.idenvio, idpaquete))
       .execute();
 
