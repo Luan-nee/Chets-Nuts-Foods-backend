@@ -127,7 +127,7 @@ export class CreateProductoPaqueteUseCase {
   }
 
   async execute(productoDto: CreateProductoPaqueteDto, idpaquete: number) {
-    const { productos } = generateTables();
+    const { productos, paquetes } = generateTables();
 
     await this.validatePaquete(idpaquete);
 
@@ -156,9 +156,6 @@ export class CreateProductoPaqueteUseCase {
     );
 
     const pesoTotal = productoDto.cantidad * productoDto.pesounitario;
-    console.log(productoDto.cantidad);
-    console.log(productoDto.pesounitario);
-    console.log(pesoTotal);
 
     await this.validatePesoAutomovil(idpaquete, pesoTotal);
 
@@ -169,10 +166,15 @@ export class CreateProductoPaqueteUseCase {
       .Values(data)
       .Returning(productos.id)
       .execute();
-    console.log(idProductoNuevo);
     if (idProductoNuevo === undefined || idProductoNuevo.length === 0) {
       throw CustomError.badRequest("No se pudo agregar al producto");
     }
+
+    await DB.Update(paquetes())
+      .set([UP(paquetes.cantidadproduct, "1", true)])
+      .where(eq(paquetes.idenvio, idpaquete))
+      .execute();
+
     return idProductoNuevo[0];
     /*
     if (productoVal === null) {
@@ -182,13 +184,6 @@ export class CreateProductoPaqueteUseCase {
 
       await this.validatePesoAutomovil(idpaquete, pesoTotal);
 
-      await DB.Update(productos())
-        .set([
-          UP(productos.cantidad, `${cantidadTotal}`),
-          UP(productos.pesototal, `${pesoTotal}`),
-        ])
-        .where(eq(productos.id, productoVal.id))
-        .execute();
       return productoVal.id;
     }*/
   }
