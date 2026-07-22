@@ -99,6 +99,7 @@ export type departamentosPeruType = (typeof departamentosPeru)[number];
 export const pagePermises: string[] = [
   "http://localhost:5173",
   "https://chets-nuts-foods-frontend.vercel.app",
+  "https://chets-nuts-foods-frontend.vercel.app/",
 ];
 
 export const cacheEnvioUsuario = new Map<number, number[]>();

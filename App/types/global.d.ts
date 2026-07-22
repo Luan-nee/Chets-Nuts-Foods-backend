@@ -8,7 +8,8 @@ export type roomsSocket =
   | "ESTABLECIMIENTO"
   | "CLIENTES"
   | "PAQUETES"
-  | "SALIDATRANSPORTE";
+  | "SALIDATRANSPORTE"
+  | "SALA_";
 
 export type estadoPaquete =
   | "ENTREGADO"
@@ -34,7 +35,8 @@ export type socketsResponses =
   | "deleteSalidaTransporte"
   | "createpaquete"
   | "updatePaquete"
-  | "notificacion";
+  | "notificacion"
+  | "newseguimientoPaquete";
 
 export type typeRol = "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
 
@@ -237,6 +239,16 @@ export interface ResponseSunatDni {
   success: boolean;
   message: string;
   payload: ResponserUserSunat;
+}
+
+export interface ResponseSeguimiento {
+  idseg: number;
+  idcontrolestablecimiento: string;
+  titulo: string;
+  direccion: string;
+  latitud: string;
+  longitud: string;
+  comentario: string;
 }
 
 export type DataEmpresaTipo = "TEST" | "PROD";

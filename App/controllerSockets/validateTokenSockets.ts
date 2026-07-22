@@ -1,3 +1,4 @@
+import { slugify } from "zod";
 import { JWTadapter } from "../core/config/AccessToken.js";
 import { roomsSocket } from "../types/global.js";
 import { Authpayload } from "../types/index.js";
@@ -58,13 +59,12 @@ export async function validatorTokenSocket(
 
     return {
       message: "CLIENTES",
-      estado: false,
+      estado: true,
       tiempo,
       codigo: 3,
       id: decodeAuthpayload.id,
     };
   } catch (error) {
-    console.log(error);
     return {
       estado: false,
       message: "CLIENTES",

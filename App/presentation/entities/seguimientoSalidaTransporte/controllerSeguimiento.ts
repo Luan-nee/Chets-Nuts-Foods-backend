@@ -4,7 +4,10 @@ import { CreateSeguimientoDto } from "../../../domain/dto/seguimiento/createSegu
 import { NumericId } from "../../../domain/query-params/numericId-dto.js";
 import { CreateSeguimientoUseCase } from "../../../domain/use-cases/seguimiento/createSeguimiento.use-case.js";
 import { GetSeguimientoUseCase } from "../../../domain/use-cases/seguimiento/getSeguimientos.use-case.js";
-import { emitSocket } from "../../../controllerSockets/globalSocket.js";
+import {
+  emitRoomSocket,
+  emitSocket,
+} from "../../../controllerSockets/globalSocket.js";
 
 export class controllerSeguimientoPaquete {
   create = (req: Request, res: Response) => {
@@ -34,8 +37,21 @@ export class controllerSeguimientoPaquete {
 
     useCase
       .create(id.id, seguimientoDto)
-      .then((data) => {
-        CustomResponse.success({ res, data });
+      .then(({ data, ids }) => {
+        ids.forEach((id) => {
+          emitRoomSocket({
+            data,
+            req,
+            response: "SALA_",
+            valore: "newseguimientoPaquete",
+            codigo: id.idenvio,
+          });
+        });
+
+        CustomResponse.success({
+          res,
+          message: "Ubicacion registrado con exito",
+        });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });

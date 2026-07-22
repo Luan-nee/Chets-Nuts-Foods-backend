@@ -51,6 +51,11 @@ export default class SocketControl {
           user.codigo,
         );
 
+      if (user.message == "CLIENTES") {
+        usuario.join(`SALA_${user.id}`);
+        console.log(`usuario conectado a la SALA_${user.id}`);
+      }
+
       if (paquetes !== undefined) {
         usuario.join(paquetes);
       }
@@ -58,6 +63,8 @@ export default class SocketControl {
       if (salidatransporte !== undefined) {
         usuario.join(salidatransporte);
       }
+
+      console.log(usuario.rooms);
 
       usuario.on("disconnet", () => {
         const sockets = usuariosConectados.get(user.codigo);

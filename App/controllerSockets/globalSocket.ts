@@ -35,6 +35,7 @@ export const emitRoomSocket = ({
 }: roomSockets) => {
   const io = req.app.locals.io;
   let room = codigo === undefined ? response : response + codigo;
+  console.log(`Emitiendo : ${room} - ${valore}`);
   io.to(room).emit(`server::${valore}`, data);
 };
 

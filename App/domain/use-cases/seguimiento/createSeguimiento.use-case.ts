@@ -1,8 +1,8 @@
-import { DB, eq, UP } from "zormz";
+import { AND, DB, eq, neq, UP } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import { CreateSeguimientoDto } from "../../dto/seguimiento/createSeguimiento.dto.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
-import { estadoPaquete } from "../../../types/global.js";
+import { estadoPaquete, ResponseSeguimiento } from "../../../types/global.js";
 import { UpdateParam } from "../../../consts.js";
 import { getpaqueteId } from "../paquetes/getByIDPaquete.use-case.js";
 
@@ -44,6 +44,34 @@ export class CreateSeguimientoUseCase {
         "No existe este Establecimiento o esta INABILITADO",
       );
     }
+  }
+
+  private async getpaquetesIdSeg(idsalidatransporte: number) {
+    const { salidatransporte, paquetes } = generateTables();
+
+    const ids = (await DB.Select([paquetes.idenvio])
+      .from(paquetes())
+      .innerJOIN(
+        salidatransporte(),
+        eq(
+          salidatransporte.idsalidatransporte,
+          paquetes.idsalidatransporte,
+          false,
+        ),
+      )
+      .where(
+        AND(
+          neq(paquetes.estadopaquete, "CANCELADO"),
+          neq(paquetes.estadopaquete, "ENTREGADO"),
+          eq(paquetes.idsalidatransporte, idsalidatransporte),
+        ),
+      )
+      .execute(true)) as { idenvio: number }[];
+    if (ids === undefined) {
+      return [];
+    }
+    console.log(ids);
+    return ids;
   }
 
   async create(id: number, seguimiento: CreateSeguimientoDto) {
@@ -92,7 +120,24 @@ export class CreateSeguimientoUseCase {
         "Ocurrio un error al momento de agregar el producto",
       );
     }
-    return idRetorno[0];
+
+    const seguimientoResponse = await this.getpaquetesIdSeg(id);
+
+    const [dataResponse] = (await DB.Select([
+      seguimientopaquetes.idseg,
+      seguimientopaquetes.idcontrolestablecimiento,
+      seguimientopaquetes.titulo,
+      seguimientopaquetes.direccion,
+      seguimientopaquetes.latitud,
+      seguimientopaquetes.longitud,
+      seguimientopaquetes.comentario,
+      seguimientopaquetes.fecharegistro,
+    ])
+      .from(seguimientopaquetes())
+      .where(eq(seguimientopaquetes.idseg, idRetorno[0]))
+      .execute()) as ResponseSeguimiento[];
+
+    return { data: dataResponse, ids: seguimientoResponse };
   }
 
   async entregaPaquete(idpaquete: number, seguimiento: CreateSeguimientoDto) {
