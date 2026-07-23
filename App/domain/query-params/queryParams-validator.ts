@@ -30,6 +30,7 @@ const ParamsNumericIDSchema = z.object({
 
 const ParamsPageSchema = z.object({
   page: queryBaseSchema.page,
+  salida: queryBaseSchema.salida,
 });
 
 export const ParamPageValidator = (object: unknown) =>

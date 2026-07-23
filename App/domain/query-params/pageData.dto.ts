@@ -1,11 +1,14 @@
 import { responseZodError } from "../../core/config/responseZodError.js";
+import { salidaTransType } from "../../types/global.js";
 import { ParamPageValidator } from "./queryParams-validator.js";
 
 export class PageDataDto {
   public page: number = 1;
+  public salida?: salidaTransType = "INICIO";
 
-  constructor({ page }: PageDataDto) {
+  constructor({ page, salida }: PageDataDto) {
     this.page = page;
+    this.salida = salida;
   }
 
   static create(input: any): [PageDataDto, string?] {

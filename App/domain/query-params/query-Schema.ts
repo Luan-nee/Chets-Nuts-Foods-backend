@@ -22,4 +22,9 @@ export const queryBaseSchema = {
       error: "No puede ser negativo el parametro page",
     })
     .default(defaultQueries.page),
+  salida: z
+    .enum(["INICIO", "EN CAMINO", "FINALIZADO", "CANCELADO"], {
+      error: "Solo esta permitidos INICIO,EN CAMINO,FINALIZADO,CANCELADO ",
+    })
+    .optional(),
 };

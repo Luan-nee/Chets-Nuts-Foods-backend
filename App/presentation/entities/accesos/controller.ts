@@ -28,6 +28,14 @@ export class AccesosController {
       return;
     }
 
+    if (accesoDto.tipos == "CLIENTE") {
+      CustomResponse.badRequest({
+        res,
+        error: "CLIENTE COMO TAL NO ES UN ACCESO",
+      });
+      return;
+    }
+
     const accesoUseCase = new CreateAccesoUseCase();
     accesoUseCase
       .createExec(userDto, accesoDto)

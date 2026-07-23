@@ -55,8 +55,6 @@ export class SalidaTransporteController {
 
     const [page, errorResponse] = PageDataDto.create(req.query);
 
-    console.log(page);
-
     const idEstablecimiento = req.authpayload.establecimiento;
     let idValor = 0;
     if (idEstablecimiento !== undefined) {
@@ -66,9 +64,17 @@ export class SalidaTransporteController {
     const salTransUse = new SalidaTransporteUseCase();
 
     salTransUse
-      .getSalidas(idValor, page.page)
+      .getSalidas(idValor, page)
       .then(({ data, pagination }) => {
-        CustomResponse.success({ res, data, pagination });
+        CustomResponse.success({
+          res,
+          data,
+          pagination,
+          message:
+            errorResponse !== undefined
+              ? `Ocurrio algunos errores : ${errorResponse}`
+              : "",
+        });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });

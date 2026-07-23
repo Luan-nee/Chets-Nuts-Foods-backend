@@ -1,4 +1,4 @@
-import { AND, COUNT, DB, eq, OR, ORD, UP } from "zormz";
+import { AND, COUNT, DB, eq, neq, OR, ORD, UP } from "zormz";
 import { CreateAccesDto } from "../../dto/auth/createAcces.dto.js";
 import { generateTables } from "../../../BD-Control.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
@@ -111,7 +111,7 @@ export class CreateAccesoUseCase {
     ])
       .from(accesos())
       .innerJOIN(usuarios(), eq(accesos.idusuario, usuarios.iduser, false))
-      .where()
+      .where(neq(accesos.tipos, "CLIENTE"))
       .LIMIT(10)
       .OFFSET((page.page - 1) * 10)
       .execute();
@@ -190,11 +190,13 @@ export class CreateAccesoUseCase {
       accesos.idusuario,
       usuarios.dniuser,
       usuarios.nombres,
+      usuarios.apellidomaterno,
       usuarios.rucuser,
       usuarios.numero,
       usuarios.correo,
       usuarios.edad,
       accesos.contra,
+      usuarios.numeroLicenciaConducir,
       accesos.fechaCreacion,
     ])
       .from(accesos())

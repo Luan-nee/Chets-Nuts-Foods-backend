@@ -8,8 +8,10 @@ import {
   MENOR,
   OR,
   ORQ,
+  ORQD,
   SUM,
   UP,
+  valor,
 } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import { CreateSalidaTransporteDto } from "../../dto/salidaTransporte/createSalidaTransporte.dto.js";
@@ -19,6 +21,7 @@ import { paramsDate } from "../../../types/params.js";
 import { paginationResponseSuccess } from "../../../core/config/paginationResponseSucces.js";
 import { NotificacionesUseCase } from "../notificaciones/notificaciones.use-case.js";
 import { detallesSockets } from "../../../types/global.js";
+import { PageDataDto } from "../../query-params/pageData.dto.js";
 
 interface validateResponse {
   response: boolean;
@@ -234,22 +237,22 @@ export class SalidaTransporteUseCase {
     return getsalidaTransporte;
   }
 
-  async getSalidas(idEstablecimiento: number, page: number) {
+  async getSalidas(idEstablecimiento: number, page: PageDataDto) {
     const { salidatransporte } = generateTables();
 
     let condicion = "";
 
-    if (idEstablecimiento === 0) {
-      condicion = ORQ(salidatransporte.estadotransporte, "INICIO", "EN CAMINO");
-    } else {
+    if (idEstablecimiento === 0 && page.salida) {
+      condicion = eq(salidatransporte.estadotransporte, page.salida);
+    }
+
+    if (idEstablecimiento !== 0) {
       condicion = AND(
-        ORQ(salidatransporte.estadotransporte, "INICIO", "EN CAMINO"),
-        OR(
-          eq(salidatransporte.iddestinoestablecimiento, idEstablecimiento),
-          eq(salidatransporte.iddestinoestablecimiento, idEstablecimiento),
-        ),
+        eq(salidatransporte.iddestinoestablecimiento, idEstablecimiento),
+        page.salida ? eq(salidatransporte.estadotransporte, page.salida) : null,
       );
     }
+    console.log(page);
 
     const idsValores = await DB.Select([
       salidatransporte.idsalidatransporte,
@@ -258,8 +261,9 @@ export class SalidaTransporteUseCase {
     ])
       .from(salidatransporte())
       .where(condicion)
-      .OFFSET((page - 1) * 10)
+      .OFFSET((page.page - 1) * 10)
       .LIMIT(10)
+      .OrderBy({ idsalidatransporte: "DESC" })
       .execute();
 
     const [cantidadSalidaTransporte] = (await DB.Select([
@@ -271,7 +275,7 @@ export class SalidaTransporteUseCase {
 
     const pageResponse = paginationResponseSuccess(
       cantidadSalidaTransporte.cantidad,
-      page,
+      page.page,
     );
 
     return { data: idsValores, pagination: pageResponse };

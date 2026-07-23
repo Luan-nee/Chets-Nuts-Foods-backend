@@ -7,5 +7,7 @@ export function responseZodError<T>(
     return undefined;
   }
   const error = validator.error.issues.map((err) => err.message);
-  return JSON.stringify(error);
+
+  const parseado = error.join(" - ");
+  return parseado;
 }

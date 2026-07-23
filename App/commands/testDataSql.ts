@@ -34,7 +34,7 @@ async function generateDataDefect() {
     sexo: "MASCULINO",
     ruc: "10746899940",
     correo: "dmamanic@unamad.edu.pe",
-    numeroLicenciaConducir: "111-GR3",
+    numeroLicenciaConducir: "Q174689994",
   });
 
   const id4 = await InsertUser({
@@ -112,7 +112,7 @@ async function generateDataDefect() {
   const idAcceso4 = await CreateAccesos({
     correo: "23121018@unamad.edu.pe",
     password: "chofer123",
-    tipos: "CLIENTE",
+    tipos: "CHOFER",
     idusuario: id3,
   });
 
