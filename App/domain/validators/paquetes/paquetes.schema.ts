@@ -10,7 +10,7 @@ export const paquetesSchema = {
   clave: z.string().max(10),
   montoCobrado: z.coerce.number().positive(),
   estadoPaquete: z.enum(
-    ["ENTREGADO", "CAMINO", "DETENIDO", "CANCELADO", "REVISION"],
+    ["ENTREGADO", "CAMINO", "DETENIDO", "CANCELADO", "REVISION", "HOME"],
     {
       error:
         "El estado debe ser: ENTREGADO, CAMINO, DETENIDO, CANCELADO o REVISION",

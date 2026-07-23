@@ -23,8 +23,15 @@ const updatePaquetesSchema = z.object({
   observacion: paquetesSchema.observacion.optional(),
 });
 
+const updatePaqueteEstado = z.object({
+  estado: paquetesSchema.estadoPaquete,
+});
+
 export const createPaquetesValidator = (object: unknown) =>
   createPaquetesSchema.safeParse(object);
 
 export const updatePaquetesValidator = (object: unknown) =>
   updatePaquetesSchema.safeParse(object);
+
+export const updateEstadoPaqueteValidator = (object: unknown) =>
+  updatePaqueteEstado.safeParse(object);

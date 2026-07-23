@@ -157,6 +157,29 @@ export class CreatePaqueteUseCase {
     return { data, sala };
   }
 
+  async updateEstado(estadoPaquete: estadoPaquete, idpaquete: number) {
+    const { paquetes } = generateTables();
+
+    const [oldPaquete] = (await DB.Select([paquetes.estadopaquete])
+      .from(paquetes())
+      .where(eq(paquetes.idenvio, idpaquete))
+      .execute()) as paquetesType[];
+
+    if (
+      oldPaquete.estadopaquete !== "HOME" &&
+      oldPaquete.estadopaquete !== "CANCELADO"
+    ) {
+      throw CustomError.badRequest(
+        `Este paquete ya no se puede actualizar debido a que se encuentra en estado ${oldPaquete.estadopaquete}`,
+      );
+    }
+
+    await DB.Update(paquetes())
+      .set([UP(paquetes.estadopaquete, estadoPaquete)])
+      .where(eq(paquetes.idenvio, idpaquete))
+      .execute();
+  }
+
   async update(newPaquete: UpdatePaqueteDto, idpaquete: number) {
     const { paquetes } = generateTables();
 

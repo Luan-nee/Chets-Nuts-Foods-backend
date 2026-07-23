@@ -35,6 +35,7 @@ export type socketsResponses =
   | "deleteSalidaTransporte"
   | "createpaquete"
   | "updatePaquete"
+  | "updateEstadoPaquete"
   | "notificacion"
   | "newseguimientoPaquete";
 

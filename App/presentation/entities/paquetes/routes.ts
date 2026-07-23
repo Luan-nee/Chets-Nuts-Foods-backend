@@ -21,6 +21,7 @@ export class RoutesPaquetes {
     routes.post("/:id/guia", controllerGuia.create);
 
     routes.patch("/:id", controller.update);
+    routes.patch("/estado/:id", controller.estadoPaquete);
 
     return routes;
   }

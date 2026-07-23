@@ -8,6 +8,8 @@ import { UpdateParam } from "../../../consts.js";
 
 export class EstablecimientosUseCase {
   async getEstablecimientoId(id: number) {
+    console.log(id);
+
     const { establecimientos, usuarios, accesos } = generateTables();
     const response = await DB.Select([
       establecimientos.idEst,

@@ -2,11 +2,15 @@ import { Request, Response } from "express";
 import { CustomResponse } from "../../../core/res/custom.response.js";
 import { CreatePaqueteDto } from "../../../domain/dto/paquetes/createpaqueteDto.js";
 import { CreatePaqueteUseCase } from "../../../domain/use-cases/paquetes/createPaquete.use-case.js";
-import { emitSocket } from "../../../controllerSockets/globalSocket.js";
+import {
+  emitRoomSocket,
+  emitSocket,
+} from "../../../controllerSockets/globalSocket.js";
 import { NumericId } from "../../../domain/query-params/numericId-dto.js";
 import { GetAllPaqueteUseCase } from "../../../domain/use-cases/paquetes/getAllPaquete.js";
 import { getpaqueteId } from "../../../domain/use-cases/paquetes/getByIDPaquete.use-case.js";
 import { UpdatePaqueteDto } from "../../../domain/dto/paquetes/updatePaquetesDto.js";
+import { UpdateEstadoDto } from "../../../domain/dto/paquetes/updateEstadoDto.js";
 
 export class PaquetesController {
   create = (req: Request, res: Response) => {
@@ -128,6 +132,49 @@ export class PaquetesController {
       .then((data) => {
         emitSocket(req, "updatePaquete", data);
         CustomResponse.success({ res, data });
+      })
+      .catch((error) => {
+        CustomResponse.badRequest({ res, error });
+      });
+  };
+
+  estadoPaquete = (req: Request, res: Response) => {
+    if (req.authpayload === undefined) {
+      CustomResponse.badRequest({
+        res,
+        error: " No tienes permisos de estar aqui",
+      });
+      return;
+    }
+
+    const [error, idpaquete] = NumericId.create(req.params);
+
+    if (idpaquete === undefined || error !== undefined) {
+      CustomResponse.badRequest({ res, error });
+      return;
+    }
+
+    const [error2, estadoPaquete] = UpdateEstadoDto.createUpdatePaquete(
+      req.body,
+    );
+    console.log(req.body);
+    console.log(estadoPaquete);
+
+    if (error2 !== undefined || estadoPaquete === undefined) {
+      CustomResponse.badRequest({ res, error: error2 });
+      return;
+    }
+
+    const paqueteUse = new CreatePaqueteUseCase();
+
+    paqueteUse
+      .updateEstado(estadoPaquete.estado, idpaquete.id)
+      .then(() => {
+        emitSocket(req, "updateEstadoPaquete", {
+          idpaquete: idpaquete,
+          estado: estadoPaquete.estado,
+        });
+        CustomResponse.success({ res, message: "Estado actualizado" });
       })
       .catch((error) => {
         CustomResponse.badRequest({ res, error });
