@@ -14,11 +14,12 @@ export class EstablecimientosUseCase {
     const response = await DB.Select([
       establecimientos.idEst,
       `${accesos.idacceso} AS iduser`,
-      usuarios.nombres,
+      `${usuarios.nombres} AS nombreUsuario `,
       usuarios.apellidomaterno,
       usuarios.apellidopaterno,
       usuarios.dniuser,
       usuarios.numero,
+      `${establecimientos.nombreEst} AS nombreEstablecimiento`,
       establecimientos.codigoSunat,
       establecimientos.departamento,
       establecimientos.descripcion,
@@ -34,7 +35,7 @@ export class EstablecimientosUseCase {
       .from(establecimientos())
       .innerJOIN(
         accesos(),
-        eq(establecimientos.idUsuarioResponsable, accesos.idusuario, false),
+        eq(establecimientos.idUsuarioResponsable, accesos.idacceso, false),
       )
       .innerJOIN(usuarios(), eq(accesos.idusuario, usuarios.iduser, false))
       .where(eq(establecimientos.idEst, id))
