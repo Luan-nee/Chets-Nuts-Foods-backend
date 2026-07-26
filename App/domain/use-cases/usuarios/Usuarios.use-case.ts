@@ -172,7 +172,7 @@ export class UsuariosUseCase {
       usuarios.rucuser,
     ])
       .from(usuarios())
-      .LIMIT(15)
+      .LIMIT(35)
       .execute()) as Object[];
 
     if (!users) {
