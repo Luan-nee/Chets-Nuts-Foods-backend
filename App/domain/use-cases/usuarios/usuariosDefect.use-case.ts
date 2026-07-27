@@ -3,8 +3,10 @@ import ConnectionGR from "../../../connection/connectionGR.js";
 import { datosEmpresaType } from "../emisionGuia/guiaTypes.js";
 import { generateTables } from "../../../BD-Control.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
-import { ResponserUserSunat, ResponseSunatDni } from "../../../types/global.js";
+import { ResponserUserSunat } from "../../../types/global.js";
 import { UsuariosUseCase } from "./Usuarios.use-case.js";
+import { CACHE_TTL, cacheGlobal, CacheKeys } from "../../../consts.js";
+import { CacheManager } from "../../../core/cache/controller.js";
 
 interface userReturn {
   nombres: string;
@@ -21,6 +23,14 @@ export class UsuariosDefectUseCase {
   private async getDatosEmpresa(
     idDatoEmpresa?: number,
   ): Promise<datosEmpresaType> {
+    const datosLocal = CacheManager.get<datosEmpresaType>(
+      CacheKeys.dataEmpresa,
+    );
+
+    if (datosLocal) {
+      return datosLocal;
+    }
+
     const { datosempresa } = generateTables();
 
     const datosQuery = [
@@ -49,10 +59,19 @@ export class UsuariosDefectUseCase {
       throw CustomError.badRequest("Por favor ingrese los datos de la empresa");
     }
 
+    CacheManager.set(CacheKeys.dataEmpresa, response, CACHE_TTL.HOUR);
     return response;
   }
 
   private async getUserLocal(dni: string) {
+    const userLocal = CacheManager.get<ResponserUserSunat>(
+      `${CacheKeys.USUARIOSUNAT}_${dni}`,
+    );
+
+    if (userLocal) {
+      return userLocal;
+    }
+
     const { usuarios } = generateTables();
 
     const [user] = (await DB.Select([
@@ -74,7 +93,7 @@ export class UsuariosDefectUseCase {
       return null;
     }
 
-    return {
+    const usertData: ResponserUserSunat = {
       apellido_materno: user.apellidomaterno,
       apellido_paterno: user.apellidopaterno,
       dni: user.dniuser,
@@ -82,8 +101,11 @@ export class UsuariosDefectUseCase {
       edad: user.edad,
       telefono: user.numero,
       sexo: user.sexo,
-      corre: user.correo,
-    } as ResponserUserSunat;
+      correo: user.correo,
+    };
+
+    CacheManager.set(CacheKeys.USUARIOSUNAT, usertData, CACHE_TTL.TEN_MINUTES);
+    return usertData;
   }
 
   async getusuarioDNI(dni: string): Promise<ResponserUserSunat> {

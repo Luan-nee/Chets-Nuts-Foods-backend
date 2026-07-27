@@ -4,7 +4,8 @@ import { CreateDatosEmpresaDto } from "../../dto/datosEmpresa/createDatosEmpresa
 import { CustomError } from "../../../core/res/Custom.error.js";
 import { Authpayload } from "../../../types/index.js";
 import { UpdateDatosEmpresaDTO } from "../../dto/datosEmpresa/updateDatosEmpresaDto.js";
-import { UpdateParam } from "../../../consts.js";
+import { CACHE_TTL, CacheKeys, UpdateParam } from "../../../consts.js";
+import { CacheManager } from "../../../core/cache/controller.js";
 
 interface datosEmpresaResponse {
   claveAcceso: string;
@@ -96,6 +97,8 @@ export class DatosEmpresaUseCase {
       );
     }
 
+    CacheManager.del(CacheKeys.dataEmpresa);
+
     return {
       id: response,
       tipo: `${dataEmpresa.tipo === undefined ? "TEST" : dataEmpresa.tipo}`,
@@ -103,16 +106,25 @@ export class DatosEmpresaUseCase {
   }
 
   async getAll() {
+    const datoslocal = CacheManager.get<datosEmpresaResponse>(
+      CacheKeys.dataEmpresa,
+    );
+
+    if (datoslocal) {
+      return datoslocal;
+    }
+
     const { datosempresa } = generateTables();
 
     const [datos] = (await DB.Select([
-      datosempresa.claveAcceso,
       datosempresa.codigoMtc,
       datosempresa.correo,
       datosempresa.denominacion,
-      datosempresa.fechavigenciaregistro,
       datosempresa.numeroRegistroMtc,
       datosempresa.ruc,
+      datosempresa.claveAcceso,
+      datosempresa.urlApi,
+      datosempresa.tipoestadoempresa,
     ])
       .from(datosempresa())
       .where(eq(datosempresa.idDatosEmpresa, 1))
@@ -121,6 +133,7 @@ export class DatosEmpresaUseCase {
     if (datos === undefined) {
       throw CustomError.badRequest("No existe datos agregados");
     }
+    CacheManager.set(CacheKeys.dataEmpresa, datos, CACHE_TTL.HOUR);
     return datos;
   }
 
@@ -165,6 +178,8 @@ export class DatosEmpresaUseCase {
     if (update.urlApi !== undefined) {
       querys.push(UP(datosempresa.urlApi, update.urlApi));
     }
+
+    CacheManager.del(CacheKeys.dataEmpresa);
 
     await DB.Update(datosempresa())
       .set(querys)

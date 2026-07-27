@@ -71,13 +71,13 @@ export default class ConnectionGR {
 
   static async getdni(dni: string, datoEmpresa: datosEmpresaType) {
     console.log(datoEmpresa);
-    const { APISUNAT, APIPASS } = envs;
+    const { APISUNAT } = envs;
     const ruta = `${APISUNAT}/api/v1/person/dni/${dni}`;
     console.log(ruta);
     const data = await fetch(ruta, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${APIPASS}`,
+        Authorization: `Bearer ${datoEmpresa.claveAcceso}`,
         "Content-Type": "application/json",
       },
     });

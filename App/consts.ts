@@ -1,5 +1,6 @@
 import { UP } from "zormz";
 import { SchedulerTask } from "./services/schedulerTask.js";
+import NodeCache from "node-cache";
 
 export const ResponseStatus = {
   success: "success",
@@ -112,3 +113,25 @@ export const datosInicio = {
   ultimaRevision: "29-06-2026 12:00:00",
   saltoHoras: 1,
 };
+
+export const cacheGlobal = new NodeCache({
+  stdTTL: 300,
+  checkperiod: 60,
+  useClones: false,
+});
+
+export const CacheKeys = {
+  dataEmpresa: "datosEmpresa",
+  informacionEmpresa: "infoEmpresa",
+  USUARIOSUNAT: "usuario",
+};
+
+export const CACHE_TTL = {
+  MINUTE: 60,
+  FIVE_MINUTES: 60 * 5,
+  TEN_MINUTES: 60 * 10,
+  THIRTY_MINUTES: 60 * 30,
+  HOUR: 60 * 60,
+  DAY: 60 * 60 * 24,
+  WEEK: 60 * 60 * 24 * 7,
+} as const;
