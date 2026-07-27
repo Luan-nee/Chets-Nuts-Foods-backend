@@ -164,21 +164,28 @@ export class CreateGuiaUseCase {
   ): Promise<setEstablecimientoGUI> {
     const { establecimientos } = generateTables();
 
-    const datosEstablecimiento = (await DB.Select([
+    const datas = [
       establecimientos.codigoSunat,
       establecimientos.ubigeo,
       establecimientos.direccion,
       establecimientos.latitud,
       establecimientos.longitud,
       establecimientos.departamento,
-    ])
+    ];
+
+    const [datosEstablecimiento1] = (await DB.Select()
       .from(establecimientos())
-      .where(ORQ(establecimientos.idEst, idorigen, idDestino))
+      .where(eq(establecimientos.idEst, idorigen))
+      .execute()) as establecimientoType[];
+
+    const [datosEstablecimiento2] = (await DB.Select()
+      .from(establecimientos())
+      .where(eq(establecimientos.idEst, idDestino))
       .execute()) as establecimientoType[];
 
     const establecimientosData = {
-      establecimientoOrigen: datosEstablecimiento[0],
-      establecimientoDestino: datosEstablecimiento[1],
+      establecimientoOrigen: datosEstablecimiento1,
+      establecimientoDestino: datosEstablecimiento2,
     };
     return establecimientosData;
   }

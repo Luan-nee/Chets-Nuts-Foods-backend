@@ -32,10 +32,10 @@ export default class ConnectionGR {
     datos: GuiaRemisionDTO,
   ): Promise<ResponseSunat> {
     const { APIPASS, APISUNAT } = envs;
-    const data = await fetch(APISUNAT, {
+    const data = await fetch(`https://sandbox.apisunat.pe/api/v3/dispatches`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${APIPASS}`,
+        Authorization: `Bearer ${datoEmpresa.claveAcceso === undefined ? APIPASS : datoEmpresa.claveAcceso}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(datos),
@@ -198,7 +198,6 @@ export default class ConnectionGR {
         },
       ],
     };
-    //console.log(datos);
     const response = await this.consulta(dataEmpresa, datos);
     /*
     const response = {

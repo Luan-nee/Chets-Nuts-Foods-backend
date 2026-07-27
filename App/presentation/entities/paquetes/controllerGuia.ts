@@ -24,6 +24,7 @@ export class controllerGuiaRemision {
     }
 
     const [error2, guia] = CreateGuiaRemisionDto.create(req.body);
+    console.log(guia);
 
     if (error2 !== undefined || guia === undefined) {
       CustomResponse.badRequest({ res, error: error2 });

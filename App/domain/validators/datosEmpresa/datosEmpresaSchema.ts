@@ -31,5 +31,8 @@ export const datosEmpresaSchema = {
     error:
       "Solo esta permitido TEST(para pruebas) y PROD(Para emisiones legales)",
   }),
-  fechavigenciaregistro: z.coerce.date(),
+  fechavigenciaregistro: z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z.coerce.date().optional(),
+  ),
 };

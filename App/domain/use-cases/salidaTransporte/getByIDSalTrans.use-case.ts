@@ -70,6 +70,7 @@ export async function getSalidaTransporte(
     .execute()) as choferType[];
 
   const [origenEstablecimiento] = await DB.Select([
+    establecimientos.idEst,
     establecimientos.nombreEst,
     establecimientos.ubigeo,
     establecimientos.tipoestablecimiento,

@@ -264,8 +264,6 @@ export class SalidaTransporteUseCase {
       );
     }
 
-    console.log(page);
-
     const idsValores = await DB.Select([
       salidatransporte.idsalidatransporte,
       salidatransporte.estadotransporte,

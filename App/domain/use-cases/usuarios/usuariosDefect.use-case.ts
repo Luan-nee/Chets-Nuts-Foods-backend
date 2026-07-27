@@ -4,6 +4,7 @@ import { datosEmpresaType } from "../emisionGuia/guiaTypes.js";
 import { generateTables } from "../../../BD-Control.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
 import { ResponserUserSunat, ResponseSunatDni } from "../../../types/global.js";
+import { UsuariosUseCase } from "./Usuarios.use-case.js";
 
 interface userReturn {
   nombres: string;
@@ -100,6 +101,16 @@ export class UsuariosDefectUseCase {
         "Este usuario no esta registrado en el sistema",
       );
     }
+    const nuevo = new UsuariosUseCase();
+    await nuevo.create({
+      apellidomaterno: user.payload.apellido_materno,
+      apellidopaterno: user.payload.apellido_paterno,
+      nombre: user.payload.nombres,
+      dni: user.payload.dni,
+      sexo: "MASCULINO",
+      edad: 20,
+    });
+
     return user.payload;
   }
 

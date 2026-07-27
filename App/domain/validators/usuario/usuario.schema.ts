@@ -62,5 +62,8 @@ export const usuarioSchema = {
   sexo: z.enum(["MASCULINO", "FEMENINO"], {
     error: "Solo esta permitido MASCULINO o FEMENINO",
   }),
-  correo: z.string().trim().min(6),
+  correo: z.preprocess(
+    (value) => (value === "" ? undefined : value),
+    z.string().trim().min(6).optional(),
+  ),
 };
