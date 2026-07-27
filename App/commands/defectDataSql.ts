@@ -10,18 +10,18 @@ initBD();
 
 async function generarTablas() {
   const idR = await InsertUser({
-    nombre: "zain",
-    apellidomaterno: "viamonte",
-    apellidopaterno: "vilca",
-    dni: "75276127",
-    numero: "925543023",
+    nombre: "FREDI JUAN",
+    apellidomaterno: "AGUILAR",
+    apellidopaterno: "ASTETE",
+    dni: "45687841",
+    numero: "962239581",
     edad: 21,
     sexo: "MASCULINO",
   });
 
   const idAcceso1 = await CreateAccesos({
-    correo: "correoprueba@gmail.com",
-    password: "ybanacceso",
+    correo: "admin@gmail.com",
+    password: "admin",
     tipos: "ADMIN",
     idusuario: idR,
   });

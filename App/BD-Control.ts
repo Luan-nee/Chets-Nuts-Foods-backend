@@ -77,6 +77,7 @@ export function generateTables() {
       numero: varchar(50).$(),
       numeroLicenciaConducir: varchar(20).$(),
       correo: varchar(100).$(),
+      sexo: varchar(20).Default("MASCULINO").$(),
       cantenvios: int().Default(0).$(),
       fechacreado: timestamp().now().$(),
     }),

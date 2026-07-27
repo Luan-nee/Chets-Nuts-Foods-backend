@@ -13,6 +13,10 @@ interface validateUserDuplicate {
   rucuser: string | null;
   dniuser: string | null;
   numeroLicenciaConducir: string | null;
+  correo: string | null;
+  numero: string | null;
+  edad: number | null;
+  sexo: string | null;
 }
 
 export class UsuariosUseCase {
@@ -51,16 +55,20 @@ export class UsuariosUseCase {
           ? userDto.ruc
           : "",
     );
-    console.log(cantEnvios);
     const repeat = (await DB.Select([
       usuarios.iduser,
       usuarios.rucuser,
       usuarios.dniuser,
       usuarios.numeroLicenciaConducir,
+      usuarios.correo,
+      usuarios.numero,
+      usuarios.edad,
+      usuarios.sexo,
     ])
       .from(usuarios())
       .where(comparacion)
       .execute()) as validateUserDuplicate[];
+    console.log(repeat);
 
     if (repeat.length > 0) {
       const queryExec: UpdateParam[] = [];
@@ -68,12 +76,24 @@ export class UsuariosUseCase {
         queryExec.push(UP(usuarios.dniuser, userDto.dni));
       }
 
-      if (cantEnvios !== undefined) {
-        queryExec.push(UP(usuarios.cantenvios, `${cantEnvios}`));
-      }
-
       if (repeat[0].rucuser == null && userDto.ruc !== undefined) {
         queryExec.push(UP(usuarios.rucuser, userDto.ruc));
+      }
+
+      if (userDto.edad !== undefined) {
+        queryExec.push(UP(usuarios.edad, `${userDto.edad}`));
+      }
+
+      if (userDto.numero !== undefined) {
+        queryExec.push(UP(usuarios.numero, userDto.numero));
+      }
+
+      if (userDto.correo !== undefined) {
+        queryExec.push(UP(usuarios.correo, userDto.correo));
+      }
+
+      if (userDto.sexo !== undefined) {
+        queryExec.push(UP(usuarios.sexo, userDto.sexo));
       }
 
       if (

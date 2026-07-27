@@ -1,4 +1,4 @@
-import { AND, DB, eq, UP } from "zormz";
+import { AND, DB, eq, ILIKE, UP } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import { CreateProductoPaqueteDto } from "../../dto/productosPaquete/createProducto.dto.js";
 import { estadoPaquete, salidaTransType } from "../../../types/global.js";
@@ -175,6 +175,11 @@ export class CreateProductoPaqueteUseCase {
       .where(eq(paquetes.idenvio, idpaquete))
       .execute();
 
+    await this.createProductDefect(
+      productoDto.nombreproducto,
+      productoDto.observacion || "",
+    );
+
     return idProductoNuevo[0];
     /*
     if (productoVal === null) {
@@ -186,5 +191,35 @@ export class CreateProductoPaqueteUseCase {
 
       return productoVal.id;
     }*/
+  }
+
+  private async createProductDefect(nombre: string, descripcion: string) {
+    const { productsdefect } = generateTables();
+    const id = await DB.Select([productsdefect.idproductdefect])
+      .from(productsdefect())
+      .where(ILIKE(productsdefect.nombre, `%${nombre}%`))
+      .execute();
+    if (id.length !== 0) {
+      return { estado: false, id: null };
+    }
+
+    const idnuevoDefect = await DB.Insert(productsdefect(), [
+      productsdefect.nombre,
+      productsdefect.descripcion,
+      productsdefect.creatoracceso,
+    ])
+      .Values([nombre, descripcion, 1])
+      .Returning(productsdefect.idproductdefect)
+      .execute();
+    if (!idnuevoDefect) {
+      return {
+        estado: false,
+        id: null,
+      };
+    }
+    return {
+      estado: true,
+      id: idnuevoDefect[0],
+    };
   }
 }
