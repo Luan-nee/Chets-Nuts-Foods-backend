@@ -4,9 +4,10 @@ import { generateTables } from "../../../BD-Control.js";
 import { CustomError } from "../../../core/res/Custom.error.js";
 import { InsertUser } from "../../../SQL/atajosSql.js";
 import { UpdateUsuarioDto } from "../../dto/usuarios/UpdateUsuario.dto.js";
-import { UpdateParam } from "../../../consts.js";
+import { CacheKeys, UpdateParam } from "../../../consts.js";
 import ConnectionGR from "../../../connection/connectionGR.js";
 import { datosEmpresaType } from "../emisionGuia/guiaTypes.js";
+import { CacheManager } from "../../../core/cache/controller.js";
 
 interface validateUserDuplicate {
   iduser: number;
@@ -174,6 +175,8 @@ export class UsuariosUseCase {
     if (!updateUser) {
       throw CustomError.badRequest("No se pudo realizar la Actualizacion");
     }
+
+    CacheManager.del(`${CacheKeys.USUARIOSUNAT}_${userUpt.dni}`);
 
     const newUser = this.getUserByID(userUpt.iduser);
 
