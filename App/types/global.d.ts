@@ -234,6 +234,7 @@ export interface ResponserUserSunat {
   apellido_materno: string;
   edad?: number;
   telefono?: string;
+  sexo?: string;
 }
 
 export interface ResponseSunatDni {
