@@ -58,7 +58,11 @@ export class DatosEmpresaUseCase {
       dataEmpresa.numeroRegistroMtc,
       dataEmpresa.denominacion,
       dataEmpresa.correo,
-      dataEmpresa.fechaVigenciaRegistroMtc,
+      dataEmpresa.fechaVigenciaRegistroMtc
+        .toISOString()
+        .replace("T", " ")
+        .replace("Z", "")
+        .substring(0, 19),
     ];
 
     if (dataEmpresa.urlApi !== undefined) {
@@ -149,7 +153,11 @@ export class DatosEmpresaUseCase {
       querys.push(
         UP(
           datosempresa.fechavigenciaregistro,
-          update.fechaVigenciaRegistroMtc.toISOString(),
+          update.fechaVigenciaRegistroMtc
+            .toISOString()
+            .replace("T", " ")
+            .replace("Z", "")
+            .substring(0, 19),
         ),
       );
     }
