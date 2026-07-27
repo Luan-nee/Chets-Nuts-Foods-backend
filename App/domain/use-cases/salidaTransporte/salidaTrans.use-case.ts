@@ -20,7 +20,7 @@ import { getSalidaTransporte } from "./getByIDSalTrans.use-case.js";
 import { paramsDate } from "../../../types/params.js";
 import { paginationResponseSuccess } from "../../../core/config/paginationResponseSucces.js";
 import { NotificacionesUseCase } from "../notificaciones/notificaciones.use-case.js";
-import { detallesSockets } from "../../../types/global.js";
+import { detallesSockets, roleUserAcess } from "../../../types/global.js";
 import { PageDataDto } from "../../query-params/pageData.dto.js";
 
 interface validateResponse {
@@ -237,7 +237,11 @@ export class SalidaTransporteUseCase {
     return getsalidaTransporte;
   }
 
-  async getSalidas(idEstablecimiento: number, page: PageDataDto) {
+  async getSalidas(
+    idEstablecimiento: number,
+    page: PageDataDto,
+    userAcc?: roleUserAcess,
+  ) {
     const { salidatransporte } = generateTables();
 
     let condicion = "";
@@ -246,12 +250,20 @@ export class SalidaTransporteUseCase {
       condicion = eq(salidatransporte.estadotransporte, page.salida);
     }
 
-    if (idEstablecimiento !== 0) {
+    if (idEstablecimiento !== 0 && !userAcc) {
       condicion = AND(
         eq(salidatransporte.iddestinoestablecimiento, idEstablecimiento),
         page.salida ? eq(salidatransporte.estadotransporte, page.salida) : null,
       );
     }
+
+    if (userAcc && userAcc.rol === "CHOFER") {
+      condicion = AND(
+        eq(salidatransporte.idchoferacceso, userAcc.idacceso),
+        page.salida ? eq(salidatransporte.estadotransporte, page.salida) : null,
+      );
+    }
+
     console.log(page);
 
     const idsValores = await DB.Select([
@@ -322,12 +334,21 @@ export class SalidaTransporteUseCase {
     return filtrados;
   }
 
-  async getByID(id: number) {
+  async getByID(id: number, accesDataUser?: roleUserAcess) {
     const { salidatransporte } = generateTables();
+
+    let condicion = eq(salidatransporte.idsalidatransporte, id);
+
+    if (accesDataUser && accesDataUser.rol === "CHOFER") {
+      condicion = AND(
+        eq(salidatransporte.idsalidatransporte, id),
+        eq(salidatransporte.idchoferacceso, accesDataUser.idacceso),
+      );
+    }
 
     const elemento = await DB.Select([salidatransporte.idsalidatransporte])
       .from(salidatransporte())
-      .where(eq(salidatransporte.idsalidatransporte, id))
+      .where(condicion)
       .execute();
 
     if (elemento.length === 0) {

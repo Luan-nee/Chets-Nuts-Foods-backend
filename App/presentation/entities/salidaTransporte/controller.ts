@@ -64,7 +64,10 @@ export class SalidaTransporteController {
     const salTransUse = new SalidaTransporteUseCase();
 
     salTransUse
-      .getSalidas(idValor, page)
+      .getSalidas(idValor, page, {
+        idacceso: req.authpayload.id,
+        rol: req.authpayload.rol,
+      })
       .then(({ data, pagination }) => {
         CustomResponse.success({
           res,
@@ -82,6 +85,13 @@ export class SalidaTransporteController {
   };
 
   getByID = (req: Request, res: Response) => {
+    if (req.authpayload === undefined) {
+      CustomResponse.badRequest({
+        res,
+        error: "No tienes permisos de estar aqui",
+      });
+      return;
+    }
     const [error, id] = NumericId.create(req.params);
     if (error !== undefined || id === undefined) {
       CustomResponse.badRequest({ res, error });
@@ -91,7 +101,10 @@ export class SalidaTransporteController {
     const getElement = new SalidaTransporteUseCase();
 
     getElement
-      .getByID(id.id)
+      .getByID(id.id, {
+        idacceso: req.authpayload.id,
+        rol: req.authpayload.rol,
+      })
       .then((data) => {
         CustomResponse.success({ res, data });
       })

@@ -263,3 +263,8 @@ payload: {
       a4: "https://sandbox.apisunat.pe/dispatch/pdf/a4/527/5h4BwOEVRj/10752761278-09-T001-1";
     };
   };*/
+
+export interface roleUserAcess {
+  idacceso: number;
+  rol: typeRol;
+}
