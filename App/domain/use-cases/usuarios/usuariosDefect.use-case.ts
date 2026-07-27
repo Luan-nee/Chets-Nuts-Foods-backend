@@ -13,6 +13,7 @@ interface userReturn {
   dniuser: string;
   numero: string;
   sexo?: string;
+  correo?: string;
 }
 
 export class UsuariosDefectUseCase {
@@ -62,6 +63,7 @@ export class UsuariosDefectUseCase {
       usuarios.numero,
       usuarios.sexo,
       usuarios.edad,
+      usuarios.correo,
     ])
       .from(usuarios())
       .where(eq(usuarios.dniuser, dni))
@@ -79,6 +81,7 @@ export class UsuariosDefectUseCase {
       edad: user.edad,
       telefono: user.numero,
       sexo: user.sexo,
+      corre: user.correo,
     } as ResponserUserSunat;
   }
 

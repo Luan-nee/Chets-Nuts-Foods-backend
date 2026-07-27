@@ -235,6 +235,7 @@ export interface ResponserUserSunat {
   edad?: number;
   telefono?: string;
   sexo?: string;
+  correo?: string;
 }
 
 export interface ResponseSunatDni {
