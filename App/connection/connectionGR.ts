@@ -31,10 +31,11 @@ export default class ConnectionGR {
     datoEmpresa: datosEmpresaType,
     datos: GuiaRemisionDTO,
   ): Promise<ResponseSunat> {
-    const data = await fetch(datoEmpresa.urlApi, {
+    const { APIPASS, APISUNAT } = envs;
+    const data = await fetch(APISUNAT, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${datoEmpresa.claveAcceso}`,
+        Authorization: `Bearer ${APIPASS}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(datos),
@@ -69,13 +70,14 @@ export default class ConnectionGR {
   }
 
   static async getdni(dni: string, datoEmpresa: datosEmpresaType) {
-    const { APISUNAT } = envs;
+    console.log(datoEmpresa);
+    const { APISUNAT, APIPASS } = envs;
     const ruta = `${APISUNAT}/api/v1/person/dni/${dni}`;
     console.log(ruta);
     const data = await fetch(ruta, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${datoEmpresa.claveAcceso}`,
+        Authorization: `Bearer ${APIPASS}`,
         "Content-Type": "application/json",
       },
     });

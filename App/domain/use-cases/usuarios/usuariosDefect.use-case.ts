@@ -93,7 +93,6 @@ export class UsuariosDefectUseCase {
         "Este usuario no esta registrado en el sistema",
       );
     }
-    console.log(user);
     return user.payload;
   }
 

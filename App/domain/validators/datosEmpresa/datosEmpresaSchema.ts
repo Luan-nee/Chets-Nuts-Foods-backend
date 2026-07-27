@@ -19,7 +19,7 @@ export const datosEmpresaSchema = {
   numeroRegistroMtc: z
     .string()
     .trim()
-    .refine((valor) => Validator.isOnlyNumbers(valor), {
+    .refine((valor) => Validator.isValidUsername(valor), {
       error:
         "El numero de registro que le entrego la Sunat al momento de registrarse al MTC",
     }),
