@@ -326,6 +326,7 @@ export class CreateGuiaUseCase {
       vehiculo: vehiculo,
       numeroGuia: numeroTransporte,
       idpaquete,
+      paquete: paqueteData,
     });
 
     if (!response.response.success || !response.response.payload) {

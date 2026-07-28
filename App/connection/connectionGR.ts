@@ -1,6 +1,7 @@
 import {
   conductoresTypeClass,
   datosEmpresaType,
+  paqueteValidate,
   setChoferesGui,
   setEstablecimientoGUI,
   setItems,
@@ -23,6 +24,7 @@ interface getDatosGR {
   vehiculo: vehiculoTypeGR;
   dtoGuia: CreateGuiaRemisionDto;
   idpaquete: number;
+  paquete: paqueteValidate;
   numeroGuia?: number;
 }
 
@@ -101,6 +103,7 @@ export default class ConnectionGR {
     dtoGuia,
     numeroGuia,
     idpaquete,
+    paquete,
   }: getDatosGR) {
     const conductores: conductoresTypeClass[] = [
       {
@@ -176,7 +179,9 @@ export default class ConnectionGR {
       peso_bruto_unidad_de_medida: "KGM",
       peso_bruto_total: items.pesoTotal,
       punto_de_llegada_direccion:
-        establecimientos.establecimientoDestino.direccion,
+        paquete.destino === null || paquete.destino === undefined
+          ? establecimientos.establecimientoDestino.direccion
+          : paquete.destino,
       punto_de_llegada_ubigeo: establecimientos.establecimientoDestino.ubigeo,
       punto_de_partida_direccion:
         establecimientos.establecimientoOrigen.direccion,
