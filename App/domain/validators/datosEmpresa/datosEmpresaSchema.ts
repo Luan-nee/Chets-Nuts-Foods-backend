@@ -33,6 +33,6 @@ export const datosEmpresaSchema = {
   }),
   fechavigenciaregistro: z.preprocess(
     (value) => (value === "" ? undefined : value),
-    z.coerce.date().optional(),
+    z.coerce.date(),
   ),
 };

@@ -20,7 +20,7 @@ const updateDatosEmpresa = z.object({
   urlApi: datosEmpresaSchema.urlApi.optional(),
   claveAcceso: datosEmpresaSchema.claveAcceso.optional(),
   correo: datosEmpresaSchema.correo.optional(),
-  fechaVigenciaRegistroMtc: datosEmpresaSchema.fechavigenciaregistro.optional(),
+  fechaVigenciaRegistroMtc: datosEmpresaSchema.fechavigenciaregistro,
 });
 
 export const createDatosEmpresaValidator = (object: unknown) =>
