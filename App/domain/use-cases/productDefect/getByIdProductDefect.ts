@@ -1,10 +1,13 @@
 import { DB, eq } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
+import { calibreProducto, calidadProducto } from "../../../types/global.js";
 
 interface productDefect {
   idproductdefect: number;
   nombre: string;
   descripcion: string;
+  calidadproductodefect?: calidadProducto;
+  calibreproductdefect?: calibreProducto;
   fechacreation: Date;
 }
 export async function getByIDProductDefect(id: number) {
@@ -14,6 +17,8 @@ export async function getByIDProductDefect(id: number) {
     productsdefect.idproductdefect,
     productsdefect.nombre,
     productsdefect.descripcion,
+    productsdefect.calidadproductodefect,
+    productsdefect.calibreproductdefect,
     productsdefect.fechacreation,
   ])
     .from(productsdefect())

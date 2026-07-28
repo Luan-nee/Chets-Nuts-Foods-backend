@@ -26,52 +26,108 @@ async function generarTablas() {
   });
 
   await CreateProductosDefecto(
-    "castaña con cáscara",
-    "Castaña en estado natural con cáscara",
+    "castaña pelada",
+    "Castaña sin cáscara lista para procesamiento",
+    "PRIMERA",
+    "GRANDE",
   );
+
   await CreateProductosDefecto(
     "castaña pelada",
     "Castaña sin cáscara lista para procesamiento",
+    "PRIMERA",
+    "MEDIANO",
   );
+
   await CreateProductosDefecto(
-    "castaña seleccionada",
-    "Castaña clasificada por tamaño y calidad",
+    "castaña pelada",
+    "Castaña sin cáscara lista para procesamiento",
+    "SEGUNDA",
+    "GRANDE",
   );
+
   await CreateProductosDefecto(
-    "castaña seca",
-    "Castaña deshidratada para comercialización",
+    "castaña pelada",
+    "Castaña sin cáscara lista para procesamiento",
+    "SEGUNDA",
+    "MEDIANO",
   );
+
   await CreateProductosDefecto(
-    "castaña tostada",
-    "Castaña tostada para consumo",
+    "castaña con cáscara",
+    "Castaña en estado natural con cáscara",
+    "PRIMERA",
+    "GRANDE",
   );
+
   await CreateProductosDefecto(
-    "castaña envasada",
-    "Castaña empacada para distribución",
+    "castaña con cáscara",
+    "Castaña en estado natural con cáscara",
+    "PRIMERA",
+    "MEDIANO",
   );
+
+  await CreateProductosDefecto(
+    "castaña con cáscara",
+    "Castaña en estado natural con cáscara",
+    "SEGUNDA",
+    "MEDIANO",
+  );
+
+  await CreateProductosDefecto(
+    "castaña con cáscara",
+    "Castaña en estado natural con cáscara",
+    "TERCERA",
+    "ENANO",
+  );
+
+  await CreateProductosDefecto(
+    "almendra de castaña",
+    "Almendra de castaña seleccionada para exportación",
+    "PRIMERA",
+    "GRANDE",
+  );
+
+  await CreateProductosDefecto(
+    "almendra de castaña",
+    "Almendra de castaña seleccionada para exportación",
+    "PRIMERA",
+    "MEDIANO",
+  );
+
+  await CreateProductosDefecto(
+    "almendra de castaña",
+    "Almendra de castaña seleccionada para industria",
+    "SEGUNDA",
+    "MEDIANO",
+  );
+
   await CreateProductosDefecto(
     "castaña orgánica",
     "Castaña certificada de producción orgánica",
+    "PRIMERA",
+    "GRANDE",
   );
+
   await CreateProductosDefecto(
-    "castaña a granel",
-    "Castaña transportada en sacos o big bags",
+    "castaña orgánica",
+    "Castaña certificada de producción orgánica",
+    "PRIMERA",
+    "MEDIANO",
   );
+
   await CreateProductosDefecto(
-    "almendra de castaña",
-    "Semilla de castaña sin cáscara",
+    "castaña seleccionada",
+    "Castaña clasificada por tamaño y calidad",
+    "SEGUNDA",
+    "ENANO",
   );
+
   await CreateProductosDefecto(
-    "harina de castaña",
-    "Harina obtenida del procesamiento de la castaña",
-  );
-  await CreateProductosDefecto(
-    "aceite de castaña",
-    "Aceite extraído de la almendra de castaña",
-  );
-  await CreateProductosDefecto(
-    "subproductos de castaña",
-    "Residuos y derivados del procesamiento de castaña",
+    "castaña industrial",
+    "Castaña destinada para transformación industrial",
+    "TERCERA",
+    "TINY",
   );
 }
 

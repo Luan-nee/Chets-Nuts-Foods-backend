@@ -8,5 +8,7 @@ export const productsDefectSchema = {
     z.string().trim().max(250),
   ),
   descripcion: z.string().trim().max(300),
+  calidad: z.enum(["PRIMERA", "SEGUNDA", "TERCERA"]).default("PRIMERA"),
+  calibre: z.enum(["GRANDE", "MEDIANO", "ENANO", "TINY"]).default("MEDIANO"),
   fechaCreacion: z.coerce.date(),
 };

@@ -289,3 +289,6 @@ export interface getByIDUser {
   numeroLicenciaConducir: string;
   fechaCreacion: Date;
 }
+
+export type calidadProducto = "PRIMERA" | "SEGUNDA" | "TERCERA";
+export type calibreProducto = "GRANDE" | "MEDIANO" | "ENANO" | "TINY";

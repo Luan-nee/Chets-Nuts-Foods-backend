@@ -27,6 +27,14 @@ export class UpdateProductDefectUseCase {
       updateData.push(UP(productsdefect.descripcion, datos.descripcion));
     }
 
+    if (datos.calidad !== undefined) {
+      updateData.push(UP(productsdefect.calidadproductodefect, datos.calidad));
+    }
+
+    if (datos.calibre !== undefined) {
+      updateData.push(UP(productsdefect.calibreproductdefect, datos.calibre));
+    }
+
     if (updateData.length === 0) {
       throw CustomError.badRequest("No hay datos para actualizar");
     }

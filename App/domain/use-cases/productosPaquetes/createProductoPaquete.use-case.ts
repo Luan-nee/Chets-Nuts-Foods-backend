@@ -1,4 +1,4 @@
-import { AND, DB, eq, ILIKE, UP } from "zormz";
+import { AND, DB, eq, ILIKE, SUM, UP } from "zormz";
 import { generateTables } from "../../../BD-Control.js";
 import { CreateProductoPaqueteDto } from "../../dto/productosPaquete/createProducto.dto.js";
 import { estadoPaquete, salidaTransType } from "../../../types/global.js";
@@ -91,7 +91,10 @@ export class CreateProductoPaqueteUseCase {
   async validatePesoAutomovil(idPaquete: number, peso: number) {
     const { vehiculosempresa, paquetes, salidatransporte } = generateTables();
 
-    const idVehiculo = (await DB.Select([salidatransporte.idvehiculo])
+    const idVehiculo = (await DB.Select([
+      salidatransporte.idvehiculo,
+      salidatransporte.idsalidatransporte,
+    ])
       .from(salidatransporte())
       .innerJOIN(
         paquetes(),
@@ -102,7 +105,7 @@ export class CreateProductoPaqueteUseCase {
         ),
       )
       .where(eq(paquetes.idenvio, idPaquete))
-      .execute()) as { idvehiculo: number }[];
+      .execute()) as { idvehiculo: number; idsalidatransporte: number }[];
 
     if (idVehiculo.length > 1 || idVehiculo.length === 0) {
       throw CustomError.badRequest(

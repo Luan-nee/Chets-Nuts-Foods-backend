@@ -180,6 +180,14 @@ export function generateTables() {
       creatoracceso: int().Required().$(),
       nombre: varchar(250).Required().$(),
       descripcion: varchar(300).$(),
+      calidadproductodefect: varchar(30)
+        .Check(["PRIMERA", "SEGUNDA", "TERCERA"])
+        .Default("PRIMERA")
+        .$(),
+      calibreproductdefect: varchar(30)
+        .Check(["GRANDE", "MEDIANO", "ENANO", "TINY"])
+        .Default("MEDIANO")
+        .$(),
       fechacreation: timestamp().now().$(),
     }),
 

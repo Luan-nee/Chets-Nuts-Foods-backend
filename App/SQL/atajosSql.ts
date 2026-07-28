@@ -8,6 +8,7 @@ import { CreateEstablecimientoDto } from "../domain/dto/establecimientos/createE
 import { UpdateParam } from "../consts.js";
 import { datosEmpresaType } from "../domain/use-cases/emisionGuia/guiaTypes.js";
 import { CreateDatosEmpresaDto } from "../domain/dto/datosEmpresa/createDatosEmpresaDto.js";
+import { calibreProducto, calidadProducto } from "../types/global.js";
 
 interface insertarUser {
   iduser: number;
@@ -349,14 +350,28 @@ export async function CreateDatosEmpresa({
 export async function CreateProductosDefecto(
   nombre: string,
   descripcion: string,
+  calidad?: calidadProducto,
+  calibre?: calibreProducto,
 ) {
   const { productsdefect } = generateTables();
 
-  await DB.Insert(productsdefect(), [
+  const query = [
     productsdefect.creatoracceso,
     productsdefect.nombre,
     productsdefect.descripcion,
-  ])
-    .Values([1, nombre, descripcion])
-    .execute();
+  ];
+
+  const valores = [1, nombre, descripcion];
+
+  if (calidad !== undefined) {
+    query.push(productsdefect.calidadproductodefect);
+    valores.push(calidad);
+  }
+
+  if (calibre !== undefined) {
+    query.push(productsdefect.calibreproductdefect);
+    valores.push(calibre);
+  }
+
+  await DB.Insert(productsdefect(), query).Values(valores).execute();
 }

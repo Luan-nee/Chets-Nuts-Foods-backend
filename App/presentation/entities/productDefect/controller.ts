@@ -6,6 +6,7 @@ import { emitSocket } from "../../../controllerSockets/globalSocket.js";
 import { PageDataDto } from "../../../domain/query-params/pageData.dto.js";
 import { UpdateProductDefectDto } from "../../../domain/dto/productDefect/updateProductDefect.dto.js";
 import { UpdateProductDefectUseCase } from "../../../domain/use-cases/productDefect/updateProductDefect.use-case.js";
+import { ProductoDataDto } from "../../../domain/query-params/productosDefect/productoData.dto.js";
 
 export class ProductosDefectController {
   create = (req: Request, res: Response) => {
@@ -44,13 +45,14 @@ export class ProductosDefectController {
       return;
     }
 
-    const [page] = PageDataDto.create(req.query);
+    const [page, errores] = ProductoDataDto.create(req.query);
+
     const use = new CreateProductDefectUseCase();
 
     use
       .getAll(page)
       .then(({ data, pagination }) => {
-        CustomResponse.success({ res, data, pagination });
+        CustomResponse.success({ res, data, pagination, message: errores });
       })
       .catch((err) => {
         CustomResponse.badRequest({ res, error: err });

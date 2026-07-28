@@ -1,5 +1,6 @@
 import z from "zod";
 import { paramsSchema, queryBaseSchema } from "./query-Schema.js";
+import { productsDefectSchema } from "../validators/productsDefect/productsDefect.schema.js";
 
 export const queryEschemas = z.object({
   sortBy: queryBaseSchema.sortBy,
@@ -38,3 +39,12 @@ export const ParamPageValidator = (object: unknown) =>
 
 export const ParamNumericIdValidator = (object: unknown) =>
   ParamsNumericIDSchema.safeParse(object);
+
+const ParamsProductDefectSchema = z.object({
+  page: queryBaseSchema.page,
+  calidad: productsDefectSchema.calidad,
+  calibre: productsDefectSchema.calibre,
+});
+
+export const ParamProducQuerytValidator = (object: unknown) =>
+  ParamsProductDefectSchema.safeParse(object);
