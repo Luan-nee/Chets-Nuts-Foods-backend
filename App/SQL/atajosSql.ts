@@ -5,7 +5,6 @@ import { CreateAccesDto } from "../domain/dto/auth/createAcces.dto.js";
 import { CustomError } from "../core/res/Custom.error.js";
 import { CreateCarroDto } from "../domain/dto/autosEmpresa/createCarro.dto.js";
 import { CreateEstablecimientoDto } from "../domain/dto/establecimientos/createEstablecimiento.dto.js";
-import { ZynovaConnect } from "../connection/zynovaConnect.js";
 import { UpdateParam } from "../consts.js";
 import { datosEmpresaType } from "../domain/use-cases/emisionGuia/guiaTypes.js";
 import { CreateDatosEmpresaDto } from "../domain/dto/datosEmpresa/createDatosEmpresaDto.js";
@@ -92,22 +91,6 @@ export async function InsertUser(
     fields.push(correo);
     valores.push(usuarios.correo);
     query.push(UP(usuarios.correo, correo));
-  }
-
-  if (
-    edad !== undefined &&
-    dni !== undefined &&
-    correo !== undefined &&
-    numero !== undefined
-  ) {
-    ZynovaConnect.registrarUser({
-      nombre: nombre,
-      apellido: apellidopaterno + " " + apellidomaterno,
-      correos: [{ correo: correo }],
-      dni: dni,
-      sexo: sexo,
-      telefono: [{ numeroCelular: numero }],
-    });
   }
 
   const existUser = (await DB.Select([

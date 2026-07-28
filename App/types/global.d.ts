@@ -37,7 +37,8 @@ export type socketsResponses =
   | "updatePaquete"
   | "updateEstadoPaquete"
   | "notificacion"
-  | "newseguimientoPaquete";
+  | "newseguimientoPaquete"
+  | "newAcceso";
 
 export type typeRol = "ADMIN" | "CHOFER" | "CLIENTE" | "COLABORADOR";
 
@@ -269,4 +270,22 @@ payload: {
 export interface roleUserAcess {
   idacceso: number;
   rol: typeRol;
+}
+
+export interface getByIDUser {
+  idacceso: number;
+  correo: string;
+  estado: accesoEstado;
+  tipos: string;
+  idusuario: number;
+  dniuser: string;
+  nombres: string;
+  apellidomaterno: string;
+  rucuser: string;
+  numero: string;
+  correo: string;
+  edad: number;
+  contra: string;
+  numeroLicenciaConducir: string;
+  fechaCreacion: Date;
 }

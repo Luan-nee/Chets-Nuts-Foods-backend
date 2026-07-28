@@ -8,6 +8,7 @@ import { roles, UpdateParam } from "../../../consts.js";
 import { UsuarioDto } from "../../dto/usuarios/usuario.dto.js";
 import { PageDataDto } from "../../query-params/pageData.dto.js";
 import { paginationResponde } from "../../../core/core.js";
+import { getByIDUser } from "../../../types/global.js";
 
 interface accesoRepeat {
   correo: string;
@@ -92,7 +93,18 @@ export class CreateAccesoUseCase {
       tipos,
     });
 
-    return "ok";
+    const acceso = await this.getByID(idAcceso);
+    const datos = {
+      idacceso: acceso.data.idacceso,
+      correo: acceso.data.correo,
+      estado: acceso.data.estado,
+      tipos: acceso.data.tipos,
+      estadoacceso: acceso.data.estado,
+      dniuser: acceso.data.dniuser,
+      nombres: acceso.data.nombres,
+    };
+
+    return { mesage: "ok", data: datos };
   }
 
   async getAll(page: PageDataDto) {
@@ -182,7 +194,7 @@ export class CreateAccesoUseCase {
   async getByID(id: number) {
     const { accesos, usuarios } = generateTables();
     let mensaje = "consulta exitosa";
-    const dataAccess = await DB.Select([
+    const dataAccess = (await DB.Select([
       accesos.idacceso,
       accesos.correo,
       accesos.estado,
@@ -202,7 +214,7 @@ export class CreateAccesoUseCase {
       .from(accesos())
       .innerJOIN(usuarios(), eq(accesos.idusuario, usuarios.iduser, false))
       .where(eq(accesos.idacceso, id))
-      .execute(true);
+      .execute(true)) as getByIDUser[];
 
     if (dataAccess === undefined) {
       throw CustomError.internalServer(

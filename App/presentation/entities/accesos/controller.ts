@@ -6,6 +6,7 @@ import { UpdateAccesDto } from "../../../domain/dto/auth/UpdateAccess.dto.js";
 import { UsuarioDto } from "../../../domain/dto/usuarios/usuario.dto.js";
 import { PageDataDto } from "../../../domain/query-params/pageData.dto.js";
 import { NumericId } from "../../../domain/query-params/numericId-dto.js";
+import { emitSocket } from "../../../controllerSockets/globalSocket.js";
 
 export class AccesosController {
   create = (req: Request, res: Response) => {
@@ -40,6 +41,7 @@ export class AccesosController {
     accesoUseCase
       .createExec(userDto, accesoDto)
       .then((data) => {
+        emitSocket(req, "newAcceso", data.data);
         CustomResponse.success({
           res,
           data,
