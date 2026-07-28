@@ -181,10 +181,12 @@ export function generateTables() {
       nombre: varchar(250).Required().$(),
       descripcion: varchar(300).$(),
       calidadproductodefect: varchar(30)
-        .Check(["PRIMERA", "SEGUNDA", "TERCERA"])
+        .Check(["PRIMERA", "SEGUNDA", "TERCERA", "SIN DEFINIR"])
+        .Default("SIN DEFINIR")
         .$(),
       calibreproductdefect: varchar(30)
-        .Check(["GRANDE", "MEDIANO", "ENANO", "TINY"])
+        .Check(["GRANDE", "MEDIANO", "ENANO", "TINY", "SIN DEFINIR"])
+        .Default("SIN DEFINIR")
         .$(),
       fechacreation: timestamp().now().$(),
     }),
