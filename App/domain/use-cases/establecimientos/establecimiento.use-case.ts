@@ -40,11 +40,11 @@ export class EstablecimientosUseCase {
       .innerJOIN(usuarios(), eq(accesos.idusuario, usuarios.iduser, false))
       .where(eq(establecimientos.idEst, id))
       .LIMIT(1)
-      .execute(true);
+      .execute();
 
     console.log(response);
     if (response.length === 0) {
-      throw CustomError.badRequest("Error al obtener el establecimiento");
+      throw CustomError.badRequest("No existe el establecimiento");
     }
 
     return response;
