@@ -88,8 +88,6 @@ export class CreateProductDefectUseCase {
     ])
       .from(productsdefect())
       .where(condicion.length === 0 ? undefined : ANDD(condicion))
-      .LIMIT(10)
-      .OFFSET((control.page - 1) * 10)
       .execute();
 
     const [cantidad] = await DB.Select([
