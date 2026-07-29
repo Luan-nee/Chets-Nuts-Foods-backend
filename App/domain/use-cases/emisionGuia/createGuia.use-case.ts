@@ -253,7 +253,7 @@ export class CreateGuiaUseCase {
       return {
         cantidad: producto.cantidad,
         codigo_interno: `P00${producto.id}`,
-        descripcion: producto.nombreproducto,
+        descripcion: `${producto.nombreproducto} - ${producto.observacion}`,
         unidad_de_medida: "KGM",
       };
     });
