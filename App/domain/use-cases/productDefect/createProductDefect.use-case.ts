@@ -11,16 +11,6 @@ export class CreateProductDefectUseCase {
   async create(producto: CreateProductsDefectDto, creatorAcceso: number) {
     const { productsdefect, accesos } = generateTables();
     console.log(producto);
-    const validator = await DB.Select([productsdefect.idproductdefect])
-      .from(productsdefect())
-      .where(eq(productsdefect.nombre, producto.nombre))
-      .execute();
-
-    if (validator.length >= 1) {
-      throw CustomError.badRequest(
-        `El producto ${producto.nombre} ya esta registrado`,
-      );
-    }
 
     const validatorAccess = await DB.Select([accesos.idacceso])
       .from(accesos())
