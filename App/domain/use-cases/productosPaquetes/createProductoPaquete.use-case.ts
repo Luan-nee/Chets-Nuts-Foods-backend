@@ -23,6 +23,11 @@ interface productoValidate {
   cantidad: number;
 }
 
+interface productosandPeso {
+  cantidad: number;
+  peso: number;
+}
+
 export class CreateProductoPaqueteUseCase {
   private async validatePaquete(idpaquete: number) {
     const { paquetes, salidatransporte } = generateTables();
@@ -60,32 +65,33 @@ export class CreateProductoPaqueteUseCase {
     }
   }
 
-  async getProductoPaquete(
+  async getPesoProductosPaquete(
     idPaquete: number,
-    nombreproducto: string,
-  ): Promise<null | productoValidate> {
+  ): Promise<null | productosandPeso> {
     const { productos } = generateTables();
 
     const producto = (await DB.Select([
-      productos.nombreproducto,
-      productos.id,
-      productos.idenvio,
       productos.pesounitario,
       productos.cantidad,
     ])
       .from(productos())
-      .where(
-        AND(
-          eq(productos.idenvio, idPaquete),
-          eq(productos.nombreproducto, nombreproducto),
-        ),
-      )
+      .where(AND(eq(productos.idenvio, idPaquete)))
       .execute()) as productoValidate[];
 
     if (producto.length === 0) {
       return null;
     }
-    return producto[0];
+
+    let sumaPeso = 0;
+
+    producto.forEach((prod) => {
+      sumaPeso += prod.cantidad * prod.pesounitario;
+    });
+
+    return {
+      cantidad: producto.length,
+      peso: sumaPeso,
+    };
   }
 
   async validatePesoAutomovil(idPaquete: number, peso: number) {
@@ -117,6 +123,9 @@ export class CreateProductoPaqueteUseCase {
       .from(vehiculosempresa())
       .where(eq(vehiculosempresa.idvehempresa, idVehiculo[0].idvehiculo))
       .execute()) as { capacidadCarga: number }[];
+
+    console.log(validateV);
+    console.log(`peso:${peso}`);
 
     if (validateV.length === 0) {
       throw CustomError.badRequest("No existe este vehiculo");
@@ -153,14 +162,15 @@ export class CreateProductoPaqueteUseCase {
       data.push(productoDto.observacion);
     }
 
-    const productoVal = await this.getProductoPaquete(
-      idpaquete,
-      productoDto.nombreproducto,
-    );
+    const productoVal = await this.getPesoProductosPaquete(idpaquete);
 
+    let pesoProductos = productoVal === null ? 0 : productoVal.peso;
+
+    console.log(productoDto);
     const pesoTotal = productoDto.cantidad * productoDto.pesounitario;
+    console.log(`peso Producto : ${pesoTotal}`);
 
-    await this.validatePesoAutomovil(idpaquete, pesoTotal);
+    await this.validatePesoAutomovil(idpaquete, pesoTotal + pesoProductos);
 
     query.push(productos.pesototal);
     data.push(pesoTotal);
