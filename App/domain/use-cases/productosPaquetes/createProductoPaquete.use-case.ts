@@ -124,9 +124,6 @@ export class CreateProductoPaqueteUseCase {
       .where(eq(vehiculosempresa.idvehempresa, idVehiculo[0].idvehiculo))
       .execute()) as { capacidadCarga: number }[];
 
-    console.log(validateV);
-    console.log(`peso:${peso}`);
-
     if (validateV.length === 0) {
       throw CustomError.badRequest("No existe este vehiculo");
     }
@@ -166,9 +163,7 @@ export class CreateProductoPaqueteUseCase {
 
     let pesoProductos = productoVal === null ? 0 : productoVal.peso;
 
-    console.log(productoDto);
     const pesoTotal = productoDto.cantidad * productoDto.pesounitario;
-    console.log(`peso Producto : ${pesoTotal}`);
 
     await this.validatePesoAutomovil(idpaquete, pesoTotal + pesoProductos);
 
