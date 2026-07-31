@@ -43,6 +43,7 @@ export default class ConnectionGR {
       body: JSON.stringify(datos),
     });
     const response = (await data.json()) as ResponseSunat;
+    console.log(response);
     return response;
   }
   /*
@@ -150,7 +151,7 @@ export default class ConnectionGR {
       salidaTransporte.fechacreado.getSeconds(),
     ).padStart(2, "0");
 
-    const numeroGuiaD = numeroGuia === undefined ? "T001" : `T00${numeroGuia}`;
+    const numeroGuiaD = numeroGuia === undefined ? "T001" : `T0${numeroGuia}`;
 
     const datos: GuiaRemisionDTO = {
       documento: "guia_remision_remitente",
@@ -204,7 +205,6 @@ export default class ConnectionGR {
       ],
     };
     const response = await this.consulta(dataEmpresa, datos);
-    console.log(response);
     /*
     const response = {
       response: {

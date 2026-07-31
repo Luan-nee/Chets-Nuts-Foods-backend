@@ -58,7 +58,6 @@ export class PaquetesController {
     }
 
     const [error, idPaquete] = NumericId.create(req.params);
-    console.log(idPaquete);
     if (error !== undefined || idPaquete === undefined) {
       CustomResponse.badRequest({ res, error });
       return;
@@ -157,7 +156,6 @@ export class PaquetesController {
     const [error2, estadoPaquete] = UpdateEstadoDto.createUpdatePaquete(
       req.body,
     );
-    console.log(req.body);
     console.log(estadoPaquete);
 
     if (error2 !== undefined || estadoPaquete === undefined) {
