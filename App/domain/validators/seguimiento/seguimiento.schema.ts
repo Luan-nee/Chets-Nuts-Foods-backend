@@ -7,7 +7,7 @@ export const seguimientoSchema = {
   titulo: z
     .string()
     .max(100)
-    .min(5)
+    .min(3)
     .trim()
     .refine((title) => Validator.isValidFullName(title), {
       error: "El titulo no puede contener caracteres especiales",
