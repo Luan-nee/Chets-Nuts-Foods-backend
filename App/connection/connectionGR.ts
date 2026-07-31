@@ -204,6 +204,7 @@ export default class ConnectionGR {
       ],
     };
     const response = await this.consulta(dataEmpresa, datos);
+    console.log(response);
     /*
     const response = {
       response: {
